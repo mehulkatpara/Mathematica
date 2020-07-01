@@ -20,7 +20,8 @@ class ArrayVectorTest {
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[]{null, null})),
                 () -> new ArrayVector(new Number[]{1, 2}),
                 () -> new ArrayVector(1, 2),
-                () -> new ArrayVector(1, 2, 3)
+                () -> new ArrayVector(1, 2, 3),
+                () -> assertNotNull(new ArrayVector(1, 2).toString())
         );
     }
 
@@ -59,5 +60,38 @@ class ArrayVectorTest {
     @Test
     void testVectorMagnitude() {
         assertEquals(5, new ArrayVector(3, 4).getMagnitude());
+    }
+
+
+    @Test
+    void testVectorElements() {
+        assertArrayEquals(new Number[]{3, 4},  new ArrayVector(3, 4).getElements());
+    }
+
+    @Test
+    void testVectorScalar() {
+        Number[] n = new ArrayVector(3, 4).scale(3).getElements();
+
+        assertAll(
+                () -> assertEquals(9.0, n[0]),
+                () -> assertEquals(12.0, n[1])
+        );
+    }
+
+    @Test
+    void testHashCode() {
+        Vector v1 = new ArrayVector(3, 4);
+        Vector v2 = new ArrayVector(4, 5);
+        assertNotEquals(v1.hashCode(), v2.hashCode());
+    }
+
+    @Test
+    void testEqualsCode() {
+        Vector v1 = new ArrayVector(3, 4);
+        Vector v2 = new ArrayVector(4, 5);
+        assertNotEquals(v1, v2);
+
+        Vector v3 = new ArrayVector(3, 4);
+        assertEquals(v1, v3);
     }
 }
