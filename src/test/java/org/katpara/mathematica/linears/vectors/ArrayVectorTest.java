@@ -20,7 +20,8 @@ class ArrayVectorTest {
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[]{null, null})),
                 () -> new ArrayVector(new Number[]{1, 2}),
                 () -> new ArrayVector(1, 2),
-                () -> new ArrayVector(1, 2, 3)
+                () -> new ArrayVector(1, 2, 3),
+                () -> assertNotNull(new ArrayVector(1, 2).toString())
         );
     }
 

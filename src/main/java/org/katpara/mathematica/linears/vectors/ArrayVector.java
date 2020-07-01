@@ -9,8 +9,8 @@ import java.util.*;
  * The ArrayVector class is an implementations of the Vector interface.
  * The class provides vector operations by manipulating the arrays.
  *
- * @since 1.0.0
  * @author Mehul Katpara <mkatpara19@gmail.com>
+ * @since 1.0.0
  */
 public final class ArrayVector implements Vector,
         RandomAccess, Cloneable, java.io.Serializable {
@@ -18,6 +18,9 @@ public final class ArrayVector implements Vector,
     @java.io.Serial
     private static final long serialVersionUID = 6608801568539797402L;
 
+    /**
+     * The vector elements are stored as an array of numbers
+     */
     private final Number[] e;
 
     /**
@@ -48,17 +51,16 @@ public final class ArrayVector implements Vector,
 
     /**
      * The constructor creates a vector from the given {@link Number} array.
-     *
+     * <p>
      * The Number array has to have at least 2 or more elements to create a
      * vector; otherwise the {@link VectorInvalidDimension} exception is thrown.
-     *
+     * <p>
      * All the elements in the array must be not-null; fail to do so will
      * result in {@link NullArgumentProvided} exception.
      *
      * @param e the Number array
-     *
      * @throws VectorInvalidDimension if the size of Number array is less than 2
-     * @throws NullArgumentProvided when the contains null values
+     * @throws NullArgumentProvided   when the contains null values
      */
     public ArrayVector(final Number[] e) {
         if (e.length < 2)
@@ -81,18 +83,17 @@ public final class ArrayVector implements Vector,
      * {@link Long}
      * {@link Float}
      * {@link Double}
-     *
+     * <p>
      * The list must contain at least 2 Numbers or more; failed to comply
      * will result in the {@link VectorInvalidDimension} exception.
      *
      * @param l the list of elements
-     * @exception VectorInvalidDimension when the list have less than 2 elements
+     * @throws VectorInvalidDimension when the list have less than 2 elements
      */
     public ArrayVector(final List<? extends Number> l) {
-        if(l.size() < 2)
+        if ((e = new Number[l.size()]).length < 2)
             throw new VectorInvalidDimension();
 
-        e = new Number[l.size()];
         for (int i = 0; i < l.size(); i++)
             e[i] = l.get(i);
     }
@@ -107,21 +108,20 @@ public final class ArrayVector implements Vector,
      * {@link Long}
      * {@link Float}
      * {@link Double}
-     *
+     * <p>
      * The set must contain at least 2 Numbers or more; failed to comply
      * will result in the {@link VectorInvalidDimension} exception.
      *
      * @param s the list of elements
-     * @exception VectorInvalidDimension when the set have less than 2 elements
+     * @throws VectorInvalidDimension when the set have less than 2 elements
      */
     public ArrayVector(final Set<? extends Number> s) {
-        if(s.size() < 2)
+        if ((e = new Number[s.size()]).length < 2)
             throw new VectorInvalidDimension();
 
-        e = new Number[s.size()];
         Iterator<? extends Number> it = s.iterator();
         int i = 0;
-        while (it.hasNext()){
+        while (it.hasNext()) {
             e[i] = it.next();
             i++;
         }
@@ -138,20 +138,19 @@ public final class ArrayVector implements Vector,
      * {@link Long}
      * {@link Float}
      * {@link Double}
-     *
+     * <p>
      * The set must contain at least 2 kye-value pairs in the map or more; failed
      * to comply will result in the {@link VectorInvalidDimension} exception.
      *
      * @param m the map of <Any-key, Number>
-     * @exception VectorInvalidDimension when the map has less than 2 pairs
+     * @throws VectorInvalidDimension when the map has less than 2 pairs
      */
     public ArrayVector(final Map<?, ? extends Number> m) {
-        if(m.size() < 2)
+        if ((e = new Number[m.size()]).length < 2)
             throw new VectorInvalidDimension();
 
-        e = new Number[m.size()];
-        int i =0;
-        for (Number n: m.values()) {
+        int i = 0;
+        for (Number n : m.values()) {
             e[i] = n;
             i++;
         }
@@ -175,7 +174,7 @@ public final class ArrayVector implements Vector,
     @Override
     public double getMagnitude() {
         double sum = 0;
-        for (Number n: e)
+        for (Number n : e)
             sum += n.doubleValue() * n.doubleValue();
 
         return Math.sqrt(sum);
@@ -197,12 +196,11 @@ public final class ArrayVector implements Vector,
      *
      * @param scalar the scalar you want to scale the vector with.
      *               if:
-     *                  scalar > 1      -> The scaled vector will be scaled up in the same direction.
-     *                  0 < scalar > 1  -> The scaled vector is shrunk in the same direction.
-     *                  scalar = 0      -> The scaled vector becomes a zero vector.
-     *                  -1 < scalar > 0 -> The scaled vector is shrunk but in the opposite direction.
-     *                  scalar < -1     -> The scaled vector is scaled up but in the opposite direction.
-     *
+     *               scalar > 1      -> The scaled vector will be scaled up in the same direction.
+     *               0 < scalar > 1  -> The scaled vector is shrunk in the same direction.
+     *               scalar = 0      -> The scaled vector becomes a zero vector.
+     *               -1 < scalar > 0 -> The scaled vector is shrunk but in the opposite direction.
+     *               scalar < -1     -> The scaled vector is scaled up but in the opposite direction.
      * @return the self vector but scaled by the given number.
      */
     @Override
