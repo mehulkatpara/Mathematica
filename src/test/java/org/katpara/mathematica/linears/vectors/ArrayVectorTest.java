@@ -77,4 +77,21 @@ class ArrayVectorTest {
                 () -> assertEquals(12.0, n[1])
         );
     }
+
+    @Test
+    void testHashCode() {
+        Vector v1 = new ArrayVector(3, 4);
+        Vector v2 = new ArrayVector(4, 5);
+        assertNotEquals(v1.hashCode(), v2.hashCode());
+    }
+
+    @Test
+    void testEqualsCode() {
+        Vector v1 = new ArrayVector(3, 4);
+        Vector v2 = new ArrayVector(4, 5);
+        assertNotEquals(v1, v2);
+
+        Vector v3 = new ArrayVector(3, 4);
+        assertEquals(v1, v3);
+    }
 }
