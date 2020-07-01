@@ -5,7 +5,7 @@ import org.katpara.mathematica.exceptions.VectorInvalidDimension;
 
 import java.util.*;
 
-public class ArrayVector implements Vector,
+public final class ArrayVector implements Vector,
         RandomAccess, Cloneable, java.io.Serializable {
 
     @java.io.Serial
