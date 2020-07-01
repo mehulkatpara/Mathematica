@@ -60,4 +60,20 @@ class ArrayVectorTest {
     void testVectorMagnitude() {
         assertEquals(5, new ArrayVector(3, 4).getMagnitude());
     }
+
+
+    @Test
+    void testVectorElements() {
+        assertArrayEquals(new Number[]{3, 4},  new ArrayVector(3, 4).getElements());
+    }
+
+    @Test
+    void testVectorScalar() {
+        Number[] n = new ArrayVector(3, 4).scale(3).getElements();
+
+        assertAll(
+                () -> assertEquals(9.0, n[0]),
+                () -> assertEquals(12.0, n[1])
+        );
+    }
 }

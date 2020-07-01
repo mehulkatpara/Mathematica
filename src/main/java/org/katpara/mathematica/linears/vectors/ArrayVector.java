@@ -10,6 +10,7 @@ public final class ArrayVector implements Vector,
 
     @java.io.Serial
     private static final long serialVersionUID = 6608801568539797402L;
+
     private final Number[] e;
 
     public ArrayVector(final Number i, final Number j) {
@@ -82,6 +83,19 @@ public final class ArrayVector implements Vector,
             sum += n.doubleValue() * n.doubleValue();
 
         return Math.sqrt(sum);
+    }
+
+    @Override
+    public Number[] getElements() {
+        return e;
+    }
+
+    @Override
+    public Vector scale(final Number scalar) {
+        for (int i = 0; i < e.length; i++)
+            e[i] = e[i].doubleValue() * scalar.doubleValue();
+
+        return this;
     }
 
     /**
