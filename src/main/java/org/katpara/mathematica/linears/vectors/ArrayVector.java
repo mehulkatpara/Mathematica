@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.exceptions.NullArgumentProvided;
-import org.katpara.mathematica.exceptions.VectorInvalidDimension;
+import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.*;
 
@@ -53,18 +53,18 @@ public final class ArrayVector implements Vector,
      * The constructor creates a vector from the given {@link Number} array.
      * <p>
      * The Number array has to have at least 2 or more elements to create a
-     * vector; otherwise the {@link VectorInvalidDimension} exception is thrown.
+     * vector; otherwise the {@link InvalidVectorDimension} exception is thrown.
      * <p>
      * All the elements in the array must be not-null; fail to do so will
      * result in {@link NullArgumentProvided} exception.
      *
      * @param e the Number array
-     * @throws VectorInvalidDimension if the size of Number array is less than 2
+     * @throws InvalidVectorDimension if the size of Number array is less than 2
      * @throws NullArgumentProvided   when the contains null values
      */
     public ArrayVector(final Number[] e) {
         if (e.length < 2)
-            throw new VectorInvalidDimension();
+            throw new InvalidVectorDimension();
 
         for (Number n : e)
             if (n == null)
@@ -85,14 +85,14 @@ public final class ArrayVector implements Vector,
      * {@link Double}
      * <p>
      * The list must contain at least 2 Numbers or more; failed to comply
-     * will result in the {@link VectorInvalidDimension} exception.
+     * will result in the {@link InvalidVectorDimension} exception.
      *
      * @param l the list of elements
-     * @throws VectorInvalidDimension when the list have less than 2 elements
+     * @throws InvalidVectorDimension when the list have less than 2 elements
      */
     public ArrayVector(final List<? extends Number> l) {
         if ((e = new Number[l.size()]).length < 2)
-            throw new VectorInvalidDimension();
+            throw new InvalidVectorDimension();
 
         for (int i = 0; i < l.size(); i++)
             e[i] = l.get(i);
@@ -110,14 +110,14 @@ public final class ArrayVector implements Vector,
      * {@link Double}
      * <p>
      * The set must contain at least 2 Numbers or more; failed to comply
-     * will result in the {@link VectorInvalidDimension} exception.
+     * will result in the {@link InvalidVectorDimension} exception.
      *
      * @param s the list of elements
-     * @throws VectorInvalidDimension when the set have less than 2 elements
+     * @throws InvalidVectorDimension when the set have less than 2 elements
      */
     public ArrayVector(final Set<? extends Number> s) {
         if ((e = new Number[s.size()]).length < 2)
-            throw new VectorInvalidDimension();
+            throw new InvalidVectorDimension();
 
         Iterator<? extends Number> it = s.iterator();
         int i = 0;
@@ -140,14 +140,14 @@ public final class ArrayVector implements Vector,
      * {@link Double}
      * <p>
      * The set must contain at least 2 kye-value pairs in the map or more; failed
-     * to comply will result in the {@link VectorInvalidDimension} exception.
+     * to comply will result in the {@link InvalidVectorDimension} exception.
      *
      * @param m the map of <Any-key, Number>
-     * @throws VectorInvalidDimension when the map has less than 2 pairs
+     * @throws InvalidVectorDimension when the map has less than 2 pairs
      */
     public ArrayVector(final Map<?, ? extends Number> m) {
         if ((e = new Number[m.size()]).length < 2)
-            throw new VectorInvalidDimension();
+            throw new InvalidVectorDimension();
 
         int i = 0;
         for (Number n : m.values()) {

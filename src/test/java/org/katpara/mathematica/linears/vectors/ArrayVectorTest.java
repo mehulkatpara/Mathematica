@@ -2,7 +2,7 @@ package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.Test;
 import org.katpara.mathematica.exceptions.NullArgumentProvided;
-import org.katpara.mathematica.exceptions.VectorInvalidDimension;
+import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +15,7 @@ class ArrayVectorTest {
     @Test
     void testNumberConstructor() {
         assertAll(
-                () -> assertThrows(VectorInvalidDimension.class, () -> new ArrayVector(new Number[]{1})),
+                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(new Number[]{1})),
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[2])),
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[]{null, null})),
                 () -> new ArrayVector(new Number[]{1, 2}),
@@ -28,7 +28,7 @@ class ArrayVectorTest {
     @Test
     void testListConstructor() {
         assertAll(
-                () -> assertThrows(VectorInvalidDimension.class, () -> new ArrayVector(List.of(1))),
+                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(List.of(1))),
                 () -> new ArrayVector(List.of(1, 2))
         );
     }
@@ -36,7 +36,7 @@ class ArrayVectorTest {
     @Test
     void testSetConstructor() {
         assertAll(
-                () -> assertThrows(VectorInvalidDimension.class, () -> new ArrayVector(Set.of(1))),
+                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(Set.of(1))),
                 () -> new ArrayVector(Set.of(1, 2))
         );
     }
@@ -44,7 +44,7 @@ class ArrayVectorTest {
     @Test
     void testMapConstructor() {
         assertAll(
-                () -> assertThrows(VectorInvalidDimension.class, () -> new ArrayVector(Map.of(1, 1))),
+                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(Map.of(1, 1))),
                 () -> new ArrayVector(Map.of(1, 1, 2, 2))
         );
     }
