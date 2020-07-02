@@ -97,9 +97,9 @@ Please note that this operation is mutable, this will change the elements of the
 | Scalar Condition      |       The output vector                            |
 |-----------------------|:--------------------------------------------------:|
 | scalar &gt; 1         | It scales up the vector in the same direction.     |
-| 0 &lt; scalar &gt; 1  | It shrinks the vector in the same direction.       |
+| 0 &lt; scalar &lt; 1  | It shrinks the vector in the same direction.       |
 |  scalar = 0           | The scaled vector becomes a zero vector.           |
-| -1 &lt; scalar &gt; 0 | It shrinks the vector in the opposite direction.   |
+| -1 &lt; scalar &lt; 0 | It shrinks the vector in the opposite direction.   |
 | scalar &lt; -1        | It scales up the vector in the opposite direction. |
 
 
