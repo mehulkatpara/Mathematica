@@ -207,9 +207,9 @@ public final class ArrayVector implements Vector,
      *               if:
      *                <ul>
      *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
-     *                <li>0 &lt; scalar &gt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
      *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
-     *                <li>-1 &lt; scalar &gt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
      *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
      *               </ul>
      *
