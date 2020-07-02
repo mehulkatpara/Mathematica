@@ -23,6 +23,7 @@ public final class VectorOperations {
      * The method will return an inverse vector if a given vector.
      *
      * @param v the vector
+     *
      * @return the inverse vector of a given vector.
      */
     public static Vector getInverseVector(final Vector v) {
@@ -38,6 +39,7 @@ public final class VectorOperations {
      *
      * @param v1 the base vector
      * @param v2 the vector to be added
+     *
      * @return the resulting vector
      */
     public static Vector addVector(final Vector v1, final Vector v2) {
@@ -49,6 +51,7 @@ public final class VectorOperations {
      *
      * @param v1 the base vector
      * @param v2 the vector to be subtracted
+     *
      * @return the resulting vector
      */
     public static Vector subtractVector(final Vector v1, final Vector v2) {
@@ -60,6 +63,7 @@ public final class VectorOperations {
      * return a resulting vector.
      *
      * @param vl the list of vectors
+     *
      * @return the resulting vector after adding all
      */
     public static Vector addVectors(final List<? extends Vector> vl) {
@@ -71,6 +75,7 @@ public final class VectorOperations {
      * and return a resulting vector.
      *
      * @param vl the list of vectors
+     *
      * @return the resulting vector after subtracting all from the base vector
      */
     public static Vector subtractVectors(final List<? extends Vector> vl) {
@@ -86,7 +91,9 @@ public final class VectorOperations {
      *
      * @param v the vector
      * @param d dimension to be transposed
+     *
      * @return the transposed vector
+     *
      * @throws InvalidVectorDimension when the given dimension is less
      *                                than 2 or the same as the given
      *                                vector dimension
@@ -114,7 +121,9 @@ public final class VectorOperations {
      *
      * @param v1 the first vector
      * @param v2 the second vector
+     *
      * @return the resulting dot product
+     *
      * @throws InvalidVectorDimension when both products are on different
      *                                dimensions.
      */
@@ -149,7 +158,9 @@ public final class VectorOperations {
      *
      * @param v1 the first 3 dimensional vector
      * @param v2 the second 3 dimensional vector
+     *
      * @return the cross product vector
+     *
      * @throws InvalidVectorDimension when both vectors are in
      *                                the third dimension.
      */
@@ -173,6 +184,7 @@ public final class VectorOperations {
      * @param v1 the first vector
      * @param v2 the second vector
      * @param d  boolean for either in degrees or radian
+     *
      * @return the angle
      */
     public static double angle(final Vector v1, final Vector v2, final boolean d) {

@@ -34,6 +34,7 @@ public interface Vector extends Cloneable, Serializable {
      * To scale or shrink the vector.
      *
      * @param scalar the scalar
+     *
      * @return the scaled vector
      */
     Vector scale(final Number scalar);
