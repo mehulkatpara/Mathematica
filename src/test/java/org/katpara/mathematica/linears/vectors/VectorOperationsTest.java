@@ -134,4 +134,50 @@ class VectorOperationsTest {
         );
     }
 
+    @Test
+    void testDotProducts() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimension.class,
+                        () -> VectorOperations.dotProduct(
+                                new ArrayVector(1, 2),
+                                new ArrayVector(1, 2, 3)
+                        )),
+                () -> assertEquals(24, VectorOperations.dotProduct(
+                        new ArrayVector(3, 4),
+                        new ArrayVector(4, 3)
+                )),
+                () -> assertEquals(55, VectorOperations.dotProduct(
+                        new ArrayVector(7, 1, 3),
+                        new ArrayVector(5, 5, 5)
+                ))
+        );
+    }
+
+    @Test
+    void testAngle() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimension.class,
+                        () -> VectorOperations.angle(
+                                new ArrayVector(1, 2),
+                                new ArrayVector(1, 2, 3),
+                                true
+                        )),
+                () -> assertEquals(45.00000000000001, VectorOperations.angle(
+                        new ArrayVector(2, 2),
+                        new ArrayVector(0, 3),
+                        true
+                )),
+                () -> assertEquals(0.7853981633974484, VectorOperations.angle(
+                        new ArrayVector(2, 2),
+                        new ArrayVector(0, 3),
+                        false
+                )),
+                () -> assertEquals(131.647015792716, VectorOperations.angle(
+                        new ArrayVector(3, -4, 5),
+                        new ArrayVector(2, 7,-3),
+                        true
+                ))
+        );
+    }
+
 }

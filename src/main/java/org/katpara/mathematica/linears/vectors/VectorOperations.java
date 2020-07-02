@@ -3,7 +3,10 @@ package org.katpara.mathematica.linears.vectors;
 import org.katpara.mathematica.exceptions.InvalidParameterProvided;
 import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.DoubleStream;
 
 /**
  * The class provides a way to manipulate 2 or more vectors.
@@ -25,9 +28,9 @@ public final class VectorOperations {
      * @return the inverse vector of a given vector.
      */
     public static Vector getInverseVector(final Vector v) {
-        Number[] e = v.getElements(), n = new Number[e.length];
-        for (int i = 0; i < e.length; i++)
-            n[i] = -e[i].doubleValue();
+        Number[] n = Arrays.stream(v.getElements())
+                .map(el -> -el.doubleValue())
+                .toArray(Number[]::new);
 
         return new ArrayVector(n);
     }
@@ -106,15 +109,56 @@ public final class VectorOperations {
         return new ArrayVector(n);
     }
 
+    /**
+     * The method will return a dot product of two vectors.
+     * If both vectors are on different dimensions then
+     * {@link InvalidVectorDimension} exception is thrown.
+     *
+     * @param v1 the first vector
+     * @param v2 the second vector
+     * @return the resulting dot product
+     * @throws InvalidVectorDimension when both products are on different
+     *                                dimensions.
+     */
+    public static double dotProduct(final Vector v1, final Vector v2) {
+        if (v1.getDimension() != v2.getDimension())
+            throw new InvalidVectorDimension();
+
+        Number[] e1 = v1.getElements(),
+                e2 = v2.getElements(),
+                n = new Number[v1.getDimension()];
+
+        for (int i = 0; i < n.length; i++)
+            n[i] = e1[i].doubleValue() * e2[i].doubleValue();
+
+        return Arrays.stream(n)
+                .reduce(0, (s, e) -> s.doubleValue() + e.doubleValue())
+                .doubleValue();
+    }
+
+    /**
+     * The method returns an angle between two vectors.
+     * The method is capable of returning a result either in
+     * degrees of angle or in radian.
+     *
+     * @param v1 the first vector
+     * @param v2 the second vector
+     * @param d  boolean for either in degrees or radian
+     * @return the angle
+     */
+    public static double angle(final Vector v1, final Vector v2, final boolean d) {
+        double radian = Math.acos(dotProduct(v1, v2) / (v1.getMagnitude() * v2.getMagnitude()));
+        return d ? Math.toDegrees(radian) : radian;
+    }
+
     private static Vector addSubVectors(final List<? extends Vector> vl, final boolean a) {
         if (vl.size() < 2)
             throw new InvalidParameterProvided("The list must have at least 2 vectors");
 
-        Vector fv = vl.get(0);
-        for (int i = 1; i < vl.size(); i++)
-            fv = addSubVector(fv, vl.get(i), a);
+        final Vector[] fv = {vl.get(0)};
+        vl.stream().skip(1).forEach(v -> fv[0] = addSubVector(fv[0], v, a));
 
-        return fv;
+        return fv[0];
     }
 
     private static Vector addSubVector(final Vector v1, final Vector v2, final boolean a) {
