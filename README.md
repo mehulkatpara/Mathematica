@@ -3,7 +3,14 @@ This library is useful to perform complex mathematical calculations.
 
 ## Vectors
 A vector has magnitude and dimension. The library provides __Vector__ interface, and __ArrayVector__ as it's implementations.
-In order to create a vector,
+In order to create a vector; both class and interface decide in the package:
+
+```java
+package org.katpara.mathematica.linears.vectors;
+
+import org.katpara.mathematica.linears.vectors.Vector;
+import org.katpara.mathematica.linears.vectors.ArrayVector;
+```
 
 ### To Create a two-dimensional vector:
 The easiest way to create a two-dimensional vector is by using the constructor that takes 2 arguments.
@@ -25,7 +32,7 @@ You can create a two and three-dimensional constructor using this method but the
 Vector v = new ArrayVector(new Number[]{1, 2, 3, 4});
 ```
 
-### To create a vector from a list
+### To create a vector from a List
 <ul>
     <li>It should have at least two elements.
     <li>The List must be a type of java.lang.Number
