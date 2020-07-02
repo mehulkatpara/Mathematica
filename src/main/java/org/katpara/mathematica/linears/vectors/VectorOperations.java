@@ -12,7 +12,7 @@ import java.util.List;
  * any of the method will modify the given vector, it will
  * simply return a new vector at the end of the calculation.
  *
- * @author Mehul Katpara <mkatpara19@gmail.com>
+ * @author Mehul Katpara
  * @since 1.0.0
  */
 public final class VectorOperations {

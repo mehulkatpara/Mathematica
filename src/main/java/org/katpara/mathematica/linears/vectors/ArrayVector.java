@@ -6,10 +6,15 @@ import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 import java.util.*;
 
 /**
- * The ArrayVector class is an implementations of the Vector interface.
- * The class provides vector operations by manipulating the arrays.
+ * The ArrayVector class is an implementations of the Vector interface,
+ * that represent a vector in the system.
  *
- * @author Mehul Katpara <mkatpara19@gmail.com>
+ * The vector must be at least 2 dimensional or more. There are constructors
+ * to create 2 and 3 dimensional vectors with ease which we use most frequently
+ * in mathematics, however the dimensions are not limited. You can create a
+ * vector with multi dimensional by passing an array, list, set or even map instances.
+ *
+ * @author Mehul Katpara
  * @since 1.0.0
  */
 public final class ArrayVector implements Vector,

@@ -6,6 +6,7 @@ package org.katpara.mathematica.exceptions;
  * with each other and they are in different dimensions.
  *
  * @since 1.0.0
+ * @author Mehul Katpara
  */
 public class InvalidVectorDimension extends RuntimeException {
     @java.io.Serial

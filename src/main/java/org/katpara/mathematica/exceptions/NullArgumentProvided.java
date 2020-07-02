@@ -5,6 +5,7 @@ package org.katpara.mathematica.exceptions;
  * argument passed where the system doesn't expect a null argument.
  *
  * @since 1.0.0
+ * @author Mehul Katpara
  */
 public class NullArgumentProvided extends RuntimeException {
     @java.io.Serial
