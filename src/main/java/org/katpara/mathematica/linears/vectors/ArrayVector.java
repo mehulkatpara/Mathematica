@@ -6,10 +6,15 @@ import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 import java.util.*;
 
 /**
- * The ArrayVector class is an implementations of the Vector interface.
- * The class provides vector operations by manipulating the arrays.
+ * The ArrayVector class is an implementations of the Vector interface,
+ * that represent a vector in the system.
+ * <p>
+ * The vector must be at least 2 dimensional or more. There are constructors
+ * to create 2 and 3 dimensional vectors with ease which we use most frequently
+ * in mathematics, however the dimensions are not limited. You can create a
+ * vector with multi dimensional by passing an array, list, set or even map instances.
  *
- * @author Mehul Katpara <mkatpara19@gmail.com>
+ * @author Mehul Katpara
  * @since 1.0.0
  */
 public final class ArrayVector implements Vector,
@@ -59,6 +64,7 @@ public final class ArrayVector implements Vector,
      * result in {@link NullArgumentProvided} exception.
      *
      * @param e the Number array
+     *
      * @throws InvalidVectorDimension if the size of Number array is less than 2
      * @throws NullArgumentProvided   when the contains null values
      */
@@ -88,6 +94,7 @@ public final class ArrayVector implements Vector,
      * will result in the {@link InvalidVectorDimension} exception.
      *
      * @param l the list of elements
+     *
      * @throws InvalidVectorDimension when the list have less than 2 elements
      */
     public ArrayVector(final List<? extends Number> l) {
@@ -113,6 +120,7 @@ public final class ArrayVector implements Vector,
      * will result in the {@link InvalidVectorDimension} exception.
      *
      * @param s the list of elements
+     *
      * @throws InvalidVectorDimension when the set have less than 2 elements
      */
     public ArrayVector(final Set<? extends Number> s) {
@@ -142,7 +150,8 @@ public final class ArrayVector implements Vector,
      * The set must contain at least 2 kye-value pairs in the map or more; failed
      * to comply will result in the {@link InvalidVectorDimension} exception.
      *
-     * @param m the map of <Any-key, Number>
+     * @param m the map of &lt;Any-key, Number&gt;
+     *
      * @throws InvalidVectorDimension when the map has less than 2 pairs
      */
     public ArrayVector(final Map<?, ? extends Number> m) {
@@ -196,11 +205,14 @@ public final class ArrayVector implements Vector,
      *
      * @param scalar the scalar you want to scale the vector with.
      *               if:
-     *               scalar > 1      -> The scaled vector will be scaled up in the same direction.
-     *               0 < scalar > 1  -> The scaled vector is shrunk in the same direction.
-     *               scalar = 0      -> The scaled vector becomes a zero vector.
-     *               -1 < scalar > 0 -> The scaled vector is shrunk but in the opposite direction.
-     *               scalar < -1     -> The scaled vector is scaled up but in the opposite direction.
+     *                <ul>
+     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
+     *                <li>0 &lt; scalar &gt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
+     *                <li>-1 &lt; scalar &gt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
+     *               </ul>
+     *
      * @return the self vector but scaled by the given number.
      */
     @Override
@@ -280,8 +292,10 @@ public final class ArrayVector implements Vector,
      * that equal objects must have equal hash codes.
      *
      * @param obj the reference object with which to compare.
+     *
      * @return {@code true} if this object is the same as the obj
      * argument; {@code false} otherwise.
+     *
      * @see #hashCode()
      * @see HashMap
      */
@@ -291,7 +305,7 @@ public final class ArrayVector implements Vector,
         if (obj == null || getClass() != obj.getClass()) return false;
 
         final ArrayVector that = (ArrayVector) obj;
-        if(e.length != that.getDimension()) return false;
+        if (e.length != that.getDimension()) return false;
         return Arrays.equals(e, that.getElements());
     }
 
@@ -320,8 +334,7 @@ public final class ArrayVector implements Vector,
      * </ul>
      *
      * @return a hash code value for this object.
-     * @implSpec As far as is reasonably practical, the {@code hashCode} method defined
-     * by class {@code Object} returns distinct integers for distinct objects.
+     *
      * @see Object#equals(Object)
      * @see System#identityHashCode
      */
@@ -383,6 +396,7 @@ public final class ArrayVector implements Vector,
      * exception at run time.
      *
      * @return a clone of this instance.
+     *
      * @throws CloneNotSupportedException if the object's class does not
      *                                    support the {@code Cloneable} interface. Subclasses
      *                                    that override the {@code clone} method can also

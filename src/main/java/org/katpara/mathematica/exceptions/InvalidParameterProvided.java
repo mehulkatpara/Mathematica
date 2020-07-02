@@ -1,5 +1,11 @@
 package org.katpara.mathematica.exceptions;
 
+/**
+ * The exception is thrown when an invalid parameter is passed as an argument.
+ *
+ * @author Mehul Katpara
+ * @since 1.0.0
+ */
 public class InvalidParameterProvided extends RuntimeException {
     @java.io.Serial
     private static final long serialVersionUID = 3727500311644363939L;

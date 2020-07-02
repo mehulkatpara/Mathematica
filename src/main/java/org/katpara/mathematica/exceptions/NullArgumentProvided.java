@@ -4,6 +4,7 @@ package org.katpara.mathematica.exceptions;
  * The exception is thrown when the program is processing on a null
  * argument passed where the system doesn't expect a null argument.
  *
+ * @author Mehul Katpara
  * @since 1.0.0
  */
 public class NullArgumentProvided extends RuntimeException {

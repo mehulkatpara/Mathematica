@@ -5,6 +5,7 @@ package org.katpara.mathematica.exceptions;
  * with invalid dimensions, or when two or more vectors are interacting
  * with each other and they are in different dimensions.
  *
+ * @author Mehul Katpara
  * @since 1.0.0
  */
 public class InvalidVectorDimension extends RuntimeException {
