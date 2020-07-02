@@ -180,4 +180,27 @@ class VectorOperationsTest {
         );
     }
 
+    @Test
+    void testCrossProduct() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimension.class,
+                        () -> VectorOperations.crossProduct(
+                                new ArrayVector(1, 2),
+                                new ArrayVector(1, 2)
+                        )),
+                () -> assertEquals(
+                        new ArrayVector(5D, 1D, 11D),
+                        VectorOperations.crossProduct(
+                                new ArrayVector(2, 1, -1),
+                                new ArrayVector(-3, 4, 1)
+                        )),
+                () -> assertEquals(
+                        new ArrayVector(-5D, -1D, -11D),
+                        VectorOperations.crossProduct(
+                                new ArrayVector(-3, 4, 1),
+                                new ArrayVector(2, 1, -1)
+                        ))
+        );
+    }
+
 }

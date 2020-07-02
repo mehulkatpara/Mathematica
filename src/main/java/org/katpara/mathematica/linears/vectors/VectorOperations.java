@@ -135,6 +135,37 @@ public final class VectorOperations {
     }
 
     /**
+     * The method returns the cross product of two vectors.
+     * A cross product of two vectors if a new vector, this
+     * new vector is perpendicular to both vectors.
+     * <p>
+     * Please note: if two vectors M and N is given then;
+     * M x N != N x M
+     * When you switch an order, the resulting vector
+     * would be in the opposite direction.
+     * <p>
+     * If given vectors are not in 3 dimensions then,
+     * {@link InvalidVectorDimension} is thrown.
+     *
+     * @param v1 the first 3 dimensional vector
+     * @param v2 the second 3 dimensional vector
+     * @return the cross product vector
+     * @throws InvalidVectorDimension when both vectors are in
+     *                                the third dimension.
+     */
+    public static Vector crossProduct(final Vector v1, final Vector v2) {
+        if (v1.getDimension() != 3 || v2.getDimension() != 3)
+            throw new InvalidVectorDimension("The cross product is only supported for vectors in 3rd dimension");
+
+        Number[] n = new Number[3], e1 = v1.getElements(), e2 = v2.getElements();
+        n[0] = e1[1].doubleValue() * e2[2].doubleValue() - e1[2].doubleValue() * e2[1].doubleValue();
+        n[1] = e1[2].doubleValue() * e2[0].doubleValue() - e1[0].doubleValue() * e2[2].doubleValue();
+        n[2] = e1[0].doubleValue() * e2[1].doubleValue() - e1[1].doubleValue() * e2[0].doubleValue();
+
+        return new ArrayVector(n);
+    }
+
+    /**
      * The method returns an angle between two vectors.
      * The method is capable of returning a result either in
      * degrees of angle or in radian.
