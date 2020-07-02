@@ -1,2 +1,2 @@
 # Mathematica
-An Advance Mathematic Library written on Java.
+This library is written to help out people to do complex mathematical formulas.
