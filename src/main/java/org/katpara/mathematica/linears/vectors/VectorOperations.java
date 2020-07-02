@@ -5,8 +5,6 @@ import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
 
 /**
  * The class provides a way to manipulate 2 or more vectors.
