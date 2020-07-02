@@ -7,7 +7,7 @@ package org.katpara.mathematica.exceptions;
  *
  * @since 1.0.0
  */
-public class VectorInvalidDimension extends RuntimeException {
+public class InvalidVectorDimension extends RuntimeException {
     @java.io.Serial
     private static final long serialVersionUID = 2151811694623431211L;
 
@@ -21,7 +21,7 @@ public class VectorInvalidDimension extends RuntimeException {
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public VectorInvalidDimension() {
+    public InvalidVectorDimension() {
         super(MESSAGE);
     }
 
@@ -33,7 +33,7 @@ public class VectorInvalidDimension extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public VectorInvalidDimension(final String message) {
+    public InvalidVectorDimension(final String message) {
         super(message);
     }
 }
