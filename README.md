@@ -15,36 +15,38 @@ import org.katpara.mathematica.linears.vectors.ArrayVector;
 ### The basics:
 #### To Create a two-dimensional vector:
 ```
-Vector v = new ArrayVector(1, 2);
+Vector v = new ArrayVector(1, 2);                                       //=> <1, 2>
 ```
 The easiest way to create a two-dimensional vector is by using the constructor that takes 2 arguments.
 
 #### To Create a three-dimensional vector:
 ```
-Vector v = new ArrayVector(1, 2, 3);
+Vector v = new ArrayVector(1, 2, 3);                                    //=> <1, 2, 3>
 ```
 The easiest way to create a three-dimensional vector is by using the constructor that takes 3 arguments.
 
 #### To create a multi-dimensional vector
 ```
-Vector v = new ArrayVector(new Number[]{1, 2, 3, 4});
+Vector v = new ArrayVector(new Number[]{1, 2, 3, 4});                   //=> <1, 2, 3, 4>
 ```
-When you want to create a vector with more than 3 elements, you can create an array of numbers and pass it to the constructor.
-You can create a two and three-dimensional constructor using this method but the techniques above, are recommended, since it's easier and used more frequently.
+This is way preferable to create a vector with more than 3 dimensions; otherwise use the other two ways 
+for the simplicity.<br/>
+It throws __InvalidVectorDimension__ when, the array has less than 2 elements.<br/>
+It throws __NullArgumentProvided__ when, the array contains null values.
 
 #### To create a vector from a List
 ```
-Vector v = new ArrayVector(List.of(1, 2, 3));
+Vector v = new ArrayVector(List.of(1, 2, 3));                           //=> <1, 2, 3>
 ```
 <ul>
-    <li>It should have at least two elements.
+    <li>It should have at least two elements, or throws __InvalidVectorDimension__.
     <li>The List must be a type of java.lang.Number
     <li>It should have non-null values.
 </ul>
 
 #### To create a vector from a set
 ```
-Vector v = new ArrayVector(Set.of(1, 2, 3));
+Vector v = new ArrayVector(Set.of(1, 2, 3));                            //=> <1, 2, 3>
 ```
 When you create a vector from a set:
 <ul>
@@ -55,7 +57,7 @@ When you create a vector from a set:
 
 #### To create a vector from a Map
 ```
-Vector v = new ArrayVector(Map.of("one", 1, "tow", 2, "three", 3));
+Vector v = new ArrayVector(Map.of("one", 1, "tow", 2, "three", 3));     //=> <1, 2, 3>
 ```
 When you create a vector from a map:
 <ul>
