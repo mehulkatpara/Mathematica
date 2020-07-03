@@ -102,36 +102,11 @@ public final class ArrayVector implements Vector,
      *
      * @throws InvalidVectorDimension when the list have less than 2 elements
      */
-    public ArrayVector(final List<? extends Number> l) {
+    public ArrayVector(final Collection<? extends Number> l) {
         if ((e = new Number[l.size()]).length < 2)
             throw new InvalidVectorDimension();
 
         l.forEach(n -> e[i.getAndIncrement()] = n);
-    }
-
-    /**
-     * The constructor will create a vector from a {@link Set}.
-     * The elements of the set must be subclass of {@link Number}.
-     * That means the allowed classes are:
-     * {@link Short}
-     * {@link Byte}
-     * {@link Integer}
-     * {@link Long}
-     * {@link Float}
-     * {@link Double}
-     * <p>
-     * The set must contain at least 2 Numbers or more; failed to comply
-     * will result in the {@link InvalidVectorDimension} exception.
-     *
-     * @param s the list of elements
-     *
-     * @throws InvalidVectorDimension when the set have less than 2 elements
-     */
-    public ArrayVector(final Set<? extends Number> s) {
-        if ((e = new Number[s.size()]).length < 2)
-            throw new InvalidVectorDimension();
-
-        s.forEach(n -> e[i.getAndIncrement()] = n);
     }
 
     /**
