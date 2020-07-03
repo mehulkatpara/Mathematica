@@ -67,7 +67,7 @@ public final class VectorOperations {
      * @return the resulting vector
      */
     public static Vector addVectors(final Vector v1, final Vector v2) {
-        return addSubVector(v1, v2, true);
+        return addSubTwoVectors(v1, v2, true);
     }
 
     /**
@@ -79,7 +79,7 @@ public final class VectorOperations {
      * @return the resulting vector
      */
     public static Vector subtractVectors(final Vector v1, final Vector v2) {
-        return addSubVector(v1, v2, false);
+        return addSubTwoVectors(v1, v2, false);
     }
 
     /**
@@ -122,7 +122,7 @@ public final class VectorOperations {
      *                                than 2 or the same as the given
      *                                vector dimension
      */
-    public static Vector transposeDimensions(final Vector v, final int d) {
+    public static Vector transpose(final Vector v, final int d) {
         if (d < 2 || v.getDimension() == d)
             throw new InvalidVectorDimension();
 
@@ -221,12 +221,12 @@ public final class VectorOperations {
             throw new InvalidParameterProvided("The list must have at least 2 vectors");
 
         final Vector[] fv = {vl.get(0)};
-        vl.stream().skip(1).forEach(v -> fv[0] = addSubVector(fv[0], v, a));
+        vl.stream().skip(1).forEach(v -> fv[0] = addSubTwoVectors(fv[0], v, a));
 
         return fv[0];
     }
 
-    private static Vector addSubVector(final Vector v1, final Vector v2, final boolean a) {
+    private static Vector addSubTwoVectors(final Vector v1, final Vector v2, final boolean a) {
         Number[] e1 = v1.getElements(), e2 = v2.getElements(), n;
         if (e1.length != e2.length)
             throw new InvalidVectorDimension("Both vectors have different dimensions");

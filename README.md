@@ -91,13 +91,13 @@ The __VectorOperations__ is a concrete class, that contains static methods to pe
 Please note that regardless of the element types to create an initial vector, such as Integer, Long, Byte, Short, ete,
 all the methods here will return the __Double__ elements.
 
-### To get an inverse vector
+#### To get an inverse vector
 ```
 Vector v = new ArrayVector(1, 2);
 Vector i = VectorOperations.getInverseVector(v);    //=> <-1.0, -2.0>
 ```
 
-### To scale a vector
+#### To scale a vector
 ```
 Vector v = new ArrayVector(1, 2, 3);
 Vector s = VectorOperations.scale(v, 3);            //=> <3.0, 6.0, 9.0>
@@ -111,14 +111,84 @@ Please Note the following:
 | -1 &lt; scalar &lt; 0 | It shrinks the vector in the opposite direction.   |
 | scalar &lt; -1        | It scales up the vector in the opposite direction. |
 
-### Add two vectors
+#### Add vectors
 ```
 Vector v1 = new ArrayVector(0, 2, 4);
 Vector v2 = new ArrayVector(0, 4, 8);
 
-Vector a = VectorOperations.addVector(v1, v2);      //=> <0.0, 6.0, 12.0>
+// If you have 2 vectors
+Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 6.0, 12.0>
 
+// If you have a list of Vectors
 List<Vector> vl = new ArrayList<>(List.of(v1, v2));
-Vector b = VectorOperations.addVector(vl);      //=> <0.0, 6.0, 12.0>
+Vector b = VectorOperations.addVector(vl);              //=> <0.0, 6.0, 12.0>
 ```
+It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.
+It throws __InvalidVectorDimension__ when, vectors have different dimensions.
 
+#### Subtract vectors
+```
+Vector v1 = new ArrayVector(0, 4, 8);
+Vector v2 = new ArrayVector(0, 2, 4);
+
+// Subtract v2 from v1
+Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 2.0, 4.0>
+
+// Subtract all the other vectors from the vector vl[0].
+List<Vector> vl = new ArrayList<>(List.of(v1, v2));
+Vector b = VectorOperations.addVector(vl);              //=> <0.0, 2.0, 4.0>
+```
+It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.
+It throws __InvalidVectorDimension__ when, vectors have different dimensions.
+
+#### Transpose dimensions of vectors
+```
+Vector v = new ArrayVector(0, 4, 8);
+Vector l = VectorOperations.transpose(v, 5);            //=> <0.0, 4.0, 8.0, 0.0, 0.0>
+Vector s = VectorOperations.transpose(v, 2);            //=> <0.0, 4.0>
+
+Vector err1 = VectorOperations.transpose(v, 1);         //=> less than 2
+Vector err2 = VectorOperations.transpose(v, 3);         //=> the same as v.getDimension()
+```
+It throws __InvalidVectorDimension__ when,
+<ul>
+<li>The targeted dimension is less than 2.</li>
+<li>The targeted dimension is the same as the vector dimension.</li>
+</ul>
+
+#### Dot product
+```
+Vector v1 = new ArrayVector(3, 4);
+Vector v2 = new ArrayVector(4, 3);
+
+double dp = VectorOperations.dotProduct(v1, v2)         //=> 24.0
+```
+It throws __InvalidVectorDimension__ when,
+<ul>
+<li>Both vectors have different dimensions.</li>
+</ul>
+
+#### Cross product
+```
+Vector v1 = new ArrayVector(2, 1, -1);
+Vector v2 = new ArrayVector(-3, 4, 1);
+
+Vector r = VectorOperations.crossProduct(v1, v2)         //=> <5.0, 1.0, 11.0>
+```
+It throws __InvalidVectorDimension__ when,
+<ul>
+<li>Both vectors are not three-dimensional.</li>
+</ul>
+
+#### Get an angle between two products
+```
+Vector v1 = new ArrayVector(2, 2);
+Vector v2 = new ArrayVector(0, 3);
+
+double a1 = VectorOperations.angle(v1, v2, true);       //=> 45.00000000000001  in Degrees
+double a2 = VectorOperations.angle(v1, v2, false);      //=> 0.7853981633974484 in Radian
+```
+It throws __InvalidVectorDimension__ when,
+<ul>
+<li>Both vectors have different dimensions.</li>
+</ul>
