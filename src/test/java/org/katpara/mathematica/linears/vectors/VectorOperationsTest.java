@@ -200,7 +200,7 @@ class VectorOperationsTest {
                         )),
                 () -> assertThrows(InvalidVectorDimension.class,
                         () -> VectorOperations.crossProduct(
-                                new ArrayVector(1, 2 ),
+                                new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
                         )),
                 () -> assertEquals(

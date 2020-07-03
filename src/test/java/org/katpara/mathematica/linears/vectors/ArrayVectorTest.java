@@ -20,10 +20,9 @@ class ArrayVectorTest {
                 () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(new Number[]{1})),
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[2])),
                 () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[]{null, null})),
-                () -> new ArrayVector(new Number[]{1, 2}),
-                () -> new ArrayVector(1, 2),
-                () -> new ArrayVector(1, 2, 3),
-                () -> assertNotNull(new ArrayVector(1, 2).toString())
+                () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(new Number[]{1, 2})),
+                () -> assertNotNull(new ArrayVector(1, 2).toString()),
+                () -> assertNotNull(new ArrayVector(1, 2, 3).toString())
         );
     }
 
@@ -32,7 +31,7 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(List.of(1))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(List.of(1, 2))),
-                () -> assertEquals(new ArrayVector(1, 2, 3),new ArrayVector(List.of(1, 2, 3))),
+                () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(List.of(1, 2, 3))),
                 () -> assertEquals(new ArrayVector(new Number[]{1, 2, 3, 4}), new ArrayVector(List.of(1, 2, 3, 4)))
         );
     }
@@ -42,9 +41,9 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(new LinkedHashSet<>(List.of(1)))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(new LinkedHashSet<>(List.of(1, 2)))),
-                () -> assertEquals(new ArrayVector(1, 2, 3),new ArrayVector(new LinkedHashSet<>(List.of(1, 2, 3)))),
+                () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(new LinkedHashSet<>(List.of(1, 2, 3)))),
                 () -> assertEquals(new ArrayVector(new Number[]{1, 2, 3, 4})
-                        ,new ArrayVector(new LinkedHashSet<>(List.of(1, 2, 3, 4))))
+                        , new ArrayVector(new LinkedHashSet<>(List.of(1, 2, 3, 4))))
         );
     }
 
@@ -62,7 +61,7 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(Map.of(1, 1))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(m1)),
-                () -> assertEquals(new ArrayVector(1, 2, 3),new ArrayVector(m2))
+                () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(m2))
         );
     }
 

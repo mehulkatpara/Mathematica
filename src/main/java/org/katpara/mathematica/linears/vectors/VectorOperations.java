@@ -5,6 +5,8 @@ import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 /**
  * The class provides a way to manipulate 2 or more vectors.
@@ -127,12 +129,11 @@ public final class VectorOperations {
             throw new InvalidVectorDimension();
 
         Number[] n = new Number[d], e = v.getElements();
-        if (d < v.getDimension())
+        if (d < e.length)
             System.arraycopy(e, 0, n, 0, d);
         else {
             System.arraycopy(e, 0, n, 0, e.length);
-            for (int i = e.length; i < d; i++)
-                n[i] = 0;
+            IntStream.range(e.length, d).forEach(i -> n[i] = 0);
         }
 
         return new ArrayVector(n);
@@ -152,19 +153,13 @@ public final class VectorOperations {
      *                                dimensions.
      */
     public static double dotProduct(final Vector v1, final Vector v2) {
-        if (v1.getDimension() != v2.getDimension())
+        Number[] e1, e2;
+        if ((e1 = v1.getElements()).length != (e2 = v2.getElements()).length)
             throw new InvalidVectorDimension();
 
-        Number[] e1 = v1.getElements(),
-                e2 = v2.getElements(),
-                n = new Number[v1.getDimension()];
-
-        for (int i = 0; i < n.length; i++)
-            n[i] = e1[i].doubleValue() * e2[i].doubleValue();
-
-        return Arrays.stream(n)
-                .reduce(0, (s, e) -> s.doubleValue() + e.doubleValue())
-                .doubleValue();
+        return IntStream.range(0, e1.length)
+                .mapToDouble(i -> e1[i].doubleValue() * e2[i].doubleValue())
+                .reduce(0, Double::sum);
     }
 
     /**
@@ -189,10 +184,10 @@ public final class VectorOperations {
      *                                the third dimension.
      */
     public static Vector crossProduct(final Vector v1, final Vector v2) {
-        if (v1.getDimension() != 3 || v2.getDimension() != 3)
+        Number[] e1, e2, n = new Number[3];
+        if ((e1 = v1.getElements()).length != 3 || (e2 = v2.getElements()).length != 3)
             throw new InvalidVectorDimension("The cross product is only supported for vectors in 3rd dimension");
 
-        Number[] n = new Number[3], e1 = v1.getElements(), e2 = v2.getElements();
         n[0] = e1[1].doubleValue() * e2[2].doubleValue() - e1[2].doubleValue() * e2[1].doubleValue();
         n[1] = e1[2].doubleValue() * e2[0].doubleValue() - e1[0].doubleValue() * e2[2].doubleValue();
         n[2] = e1[0].doubleValue() * e2[1].doubleValue() - e1[1].doubleValue() * e2[0].doubleValue();
@@ -222,7 +217,6 @@ public final class VectorOperations {
 
         final Vector[] fv = {vl.get(0)};
         vl.stream().skip(1).forEach(v -> fv[0] = addSubTwoVectors(fv[0], v, a));
-
         return fv[0];
     }
 
@@ -232,9 +226,12 @@ public final class VectorOperations {
             throw new InvalidVectorDimension("Both vectors have different dimensions");
 
         n = new Number[e1.length];
-        for (int i = 0; i < e1.length; i++)
-            n[i] = a ? e1[i].doubleValue() + e2[i].doubleValue() :
-                    e1[i].doubleValue() - e2[i].doubleValue();
+        final AtomicInteger ai = new AtomicInteger(0);
+        IntStream.range(0, e1.length)
+                .mapToDouble(i -> a ?
+                        e1[i].doubleValue() + e2[i].doubleValue() :
+                        e1[i].doubleValue() - e2[i].doubleValue())
+                .forEach(d -> n[ai.getAndIncrement()] = d);
 
         return new ArrayVector(n);
     }
