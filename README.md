@@ -123,7 +123,7 @@ Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 6.0, 12.0>
 List<Vector> vl = new ArrayList<>(List.of(v1, v2));
 Vector b = VectorOperations.addVector(vl);              //=> <0.0, 6.0, 12.0>
 ```
-It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.
+It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.<br/>
 It throws __InvalidVectorDimension__ when, vectors have different dimensions.
 
 #### Subtract vectors
@@ -138,7 +138,7 @@ Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 2.0, 4.0>
 List<Vector> vl = new ArrayList<>(List.of(v1, v2));
 Vector b = VectorOperations.addVector(vl);              //=> <0.0, 2.0, 4.0>
 ```
-It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.
+It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.<br/>
 It throws __InvalidVectorDimension__ when, vectors have different dimensions.
 
 #### Transpose dimensions of vectors
@@ -163,10 +163,7 @@ Vector v2 = new ArrayVector(4, 3);
 
 double dp = VectorOperations.dotProduct(v1, v2)         //=> 24.0
 ```
-It throws __InvalidVectorDimension__ when,
-<ul>
-<li>Both vectors have different dimensions.</li>
-</ul>
+It throws __InvalidVectorDimension__ when, both vectors have different dimensions.
 
 #### Cross product
 ```
@@ -175,10 +172,7 @@ Vector v2 = new ArrayVector(-3, 4, 1);
 
 Vector r = VectorOperations.crossProduct(v1, v2)         //=> <5.0, 1.0, 11.0>
 ```
-It throws __InvalidVectorDimension__ when,
-<ul>
-<li>Both vectors are not three-dimensional.</li>
-</ul>
+It throws __InvalidVectorDimension__ when, both vectors are not three-dimensional.
 
 #### Get an angle between two products
 ```
@@ -188,7 +182,4 @@ Vector v2 = new ArrayVector(0, 3);
 double a1 = VectorOperations.angle(v1, v2, true);       //=> 45.00000000000001  in Degrees
 double a2 = VectorOperations.angle(v1, v2, false);      //=> 0.7853981633974484 in Radian
 ```
-It throws __InvalidVectorDimension__ when,
-<ul>
-<li>Both vectors have different dimensions.</li>
-</ul>
+It throws __InvalidVectorDimension__ when, both vectors have different dimensions.
