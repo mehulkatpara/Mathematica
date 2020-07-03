@@ -40,6 +40,7 @@ public final class VectorOperations {
      * The method will scale the vector by the given value.
      * Please not, this operation is mutable.
      *
+     * @param v the vector to be scaled
      * @param scalar the scalar you want to scale the vector with.
      *               if:
      *                <ul>
