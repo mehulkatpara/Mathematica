@@ -29,13 +29,4 @@ public interface Vector extends Cloneable, Serializable {
      * @return the number array containing elements
      */
     Number[] getElements();
-
-    /**
-     * To scale or shrink the vector.
-     *
-     * @param scalar the scalar
-     *
-     * @return the scaled vector
-     */
-    Vector scale(final Number scalar);
 }

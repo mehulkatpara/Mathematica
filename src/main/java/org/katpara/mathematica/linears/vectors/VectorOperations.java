@@ -5,6 +5,8 @@ import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
 /**
  * The class provides a way to manipulate 2 or more vectors.
@@ -35,6 +37,31 @@ public final class VectorOperations {
     }
 
     /**
+     * The method will scale the vector by the given value.
+     * Please not, this operation is mutable.
+     *
+     * @param v the vector to be scaled
+     * @param scalar the scalar you want to scale the vector with.
+     *               if:
+     *                <ul>
+     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
+     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
+     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
+     *               </ul>
+     *
+     * @return the self vector but scaled by the given number.
+     */
+    public static Vector scale(final Vector v, final Number scalar) {
+        Number[] n = Arrays.stream(v.getElements())
+                .map(e -> e.doubleValue() * scalar.doubleValue())
+                .toArray(Number[]::new);
+
+        return new ArrayVector(n);
+    }
+
+    /**
      * The method will add two vectors.
      *
      * @param v1 the base vector
@@ -42,8 +69,8 @@ public final class VectorOperations {
      *
      * @return the resulting vector
      */
-    public static Vector addVector(final Vector v1, final Vector v2) {
-        return addSubVector(v1, v2, true);
+    public static Vector addVectors(final Vector v1, final Vector v2) {
+        return addSubTwoVectors(v1, v2, true);
     }
 
     /**
@@ -54,8 +81,8 @@ public final class VectorOperations {
      *
      * @return the resulting vector
      */
-    public static Vector subtractVector(final Vector v1, final Vector v2) {
-        return addSubVector(v1, v2, false);
+    public static Vector subtractVectors(final Vector v1, final Vector v2) {
+        return addSubTwoVectors(v1, v2, false);
     }
 
     /**
@@ -98,17 +125,16 @@ public final class VectorOperations {
      *                                than 2 or the same as the given
      *                                vector dimension
      */
-    public static Vector transposeDimensions(final Vector v, final int d) {
+    public static Vector transpose(final Vector v, final int d) {
         if (d < 2 || v.getDimension() == d)
             throw new InvalidVectorDimension();
 
         Number[] n = new Number[d], e = v.getElements();
-        if (d < v.getDimension())
+        if (d < e.length)
             System.arraycopy(e, 0, n, 0, d);
         else {
             System.arraycopy(e, 0, n, 0, e.length);
-            for (int i = e.length; i < d; i++)
-                n[i] = 0;
+            IntStream.range(e.length, d).forEach(i -> n[i] = 0);
         }
 
         return new ArrayVector(n);
@@ -128,19 +154,13 @@ public final class VectorOperations {
      *                                dimensions.
      */
     public static double dotProduct(final Vector v1, final Vector v2) {
-        if (v1.getDimension() != v2.getDimension())
+        Number[] e1, e2;
+        if ((e1 = v1.getElements()).length != (e2 = v2.getElements()).length)
             throw new InvalidVectorDimension();
 
-        Number[] e1 = v1.getElements(),
-                e2 = v2.getElements(),
-                n = new Number[v1.getDimension()];
-
-        for (int i = 0; i < n.length; i++)
-            n[i] = e1[i].doubleValue() * e2[i].doubleValue();
-
-        return Arrays.stream(n)
-                .reduce(0, (s, e) -> s.doubleValue() + e.doubleValue())
-                .doubleValue();
+        return IntStream.range(0, e1.length)
+                .mapToDouble(i -> e1[i].doubleValue() * e2[i].doubleValue())
+                .reduce(0, Double::sum);
     }
 
     /**
@@ -165,10 +185,10 @@ public final class VectorOperations {
      *                                the third dimension.
      */
     public static Vector crossProduct(final Vector v1, final Vector v2) {
-        if (v1.getDimension() != 3 || v2.getDimension() != 3)
+        Number[] e1, e2, n = new Number[3];
+        if ((e1 = v1.getElements()).length != 3 || (e2 = v2.getElements()).length != 3)
             throw new InvalidVectorDimension("The cross product is only supported for vectors in 3rd dimension");
 
-        Number[] n = new Number[3], e1 = v1.getElements(), e2 = v2.getElements();
         n[0] = e1[1].doubleValue() * e2[2].doubleValue() - e1[2].doubleValue() * e2[1].doubleValue();
         n[1] = e1[2].doubleValue() * e2[0].doubleValue() - e1[0].doubleValue() * e2[2].doubleValue();
         n[2] = e1[0].doubleValue() * e2[1].doubleValue() - e1[1].doubleValue() * e2[0].doubleValue();
@@ -197,20 +217,22 @@ public final class VectorOperations {
             throw new InvalidParameterProvided("The list must have at least 2 vectors");
 
         final Vector[] fv = {vl.get(0)};
-        vl.stream().skip(1).forEach(v -> fv[0] = addSubVector(fv[0], v, a));
-
+        vl.stream().skip(1).forEach(v -> fv[0] = addSubTwoVectors(fv[0], v, a));
         return fv[0];
     }
 
-    private static Vector addSubVector(final Vector v1, final Vector v2, final boolean a) {
+    private static Vector addSubTwoVectors(final Vector v1, final Vector v2, final boolean a) {
         Number[] e1 = v1.getElements(), e2 = v2.getElements(), n;
         if (e1.length != e2.length)
             throw new InvalidVectorDimension("Both vectors have different dimensions");
 
         n = new Number[e1.length];
-        for (int i = 0; i < e1.length; i++)
-            n[i] = a ? e1[i].doubleValue() + e2[i].doubleValue() :
-                    e1[i].doubleValue() - e2[i].doubleValue();
+        final AtomicInteger ai = new AtomicInteger(0);
+        IntStream.range(0, e1.length)
+                .mapToDouble(i -> a ?
+                        e1[i].doubleValue() + e2[i].doubleValue() :
+                        e1[i].doubleValue() - e2[i].doubleValue())
+                .forEach(d -> n[ai.getAndIncrement()] = d);
 
         return new ArrayVector(n);
     }

@@ -18,17 +18,22 @@ class VectorOperationsTest {
     }
 
     @Test
+    void testVectorScalar() {
+        assertEquals(new ArrayVector(2D, 4D), VectorOperations.scale(new ArrayVector(1, 2), 2));
+    }
+
+    @Test
     void testAddVector() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.addVector(
+                        () -> VectorOperations.addVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
                         )
                 ),
                 () -> assertArrayEquals(new Number[]{2D, 4D, 6D},
                         VectorOperations
-                                .addVector(
+                                .addVectors(
                                         new ArrayVector(1, 2, 3),
                                         new ArrayVector(1, 2, 3))
                                 .getElements()
@@ -40,14 +45,14 @@ class VectorOperationsTest {
     void testSubtractVector() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.subtractVector(
+                        () -> VectorOperations.subtractVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
                         )
                 ),
                 () -> assertArrayEquals(new Number[]{0D, 0D, 0D},
                         VectorOperations
-                                .subtractVector(
+                                .subtractVectors(
                                         new ArrayVector(1, 2, 3),
                                         new ArrayVector(1, 2, 3))
                                 .getElements()
@@ -120,17 +125,17 @@ class VectorOperationsTest {
     void testTransposeDimension() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.transposeDimensions(new ArrayVector(2, 3), 1)),
+                        () -> VectorOperations.transpose(new ArrayVector(2, 3), 1)),
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.transposeDimensions(new ArrayVector(1, 2, 3), 3)),
+                        () -> VectorOperations.transpose(new ArrayVector(1, 2, 3), 3)),
                 () ->
                         assertEquals(
                                 new ArrayVector(1, 2),
-                                VectorOperations.transposeDimensions(new ArrayVector(1, 2, 3), 2)),
+                                VectorOperations.transpose(new ArrayVector(1, 2, 3), 2)),
                 () ->
                         assertEquals(
                                 new ArrayVector(new Number[]{1, 2, 3, 0, 0}),
-                                VectorOperations.transposeDimensions(new ArrayVector(1, 2, 3), 5))
+                                VectorOperations.transpose(new ArrayVector(1, 2, 3), 5))
         );
     }
 
@@ -174,7 +179,7 @@ class VectorOperationsTest {
                 )),
                 () -> assertEquals(131.647015792716, VectorOperations.angle(
                         new ArrayVector(3, -4, 5),
-                        new ArrayVector(2, 7,-3),
+                        new ArrayVector(2, 7, -3),
                         true
                 ))
         );
@@ -187,6 +192,16 @@ class VectorOperationsTest {
                         () -> VectorOperations.crossProduct(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2)
+                        )),
+                () -> assertThrows(InvalidVectorDimension.class,
+                        () -> VectorOperations.crossProduct(
+                                new ArrayVector(1, 2, 3),
+                                new ArrayVector(1, 2)
+                        )),
+                () -> assertThrows(InvalidVectorDimension.class,
+                        () -> VectorOperations.crossProduct(
+                                new ArrayVector(1, 2),
+                                new ArrayVector(1, 2, 3)
                         )),
                 () -> assertEquals(
                         new ArrayVector(5D, 1D, 11D),

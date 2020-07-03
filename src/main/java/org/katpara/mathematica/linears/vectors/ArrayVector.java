@@ -4,6 +4,7 @@ import org.katpara.mathematica.exceptions.NullArgumentProvided;
 import org.katpara.mathematica.exceptions.InvalidVectorDimension;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The ArrayVector class is an implementations of the Vector interface,
@@ -27,6 +28,11 @@ public final class ArrayVector implements Vector,
      * The vector elements are stored as an array of numbers
      */
     private final Number[] e;
+
+    /**
+     * Just an accumulator for collection constructors.
+     */
+    private final AtomicInteger i = new AtomicInteger();
 
     /**
      * The constructor will create a vector with the dimension of 2.
@@ -72,10 +78,9 @@ public final class ArrayVector implements Vector,
         if (e.length < 2)
             throw new InvalidVectorDimension();
 
-        for (Number n : e)
-            if (n == null)
-                throw new NullArgumentProvided();
-
+        Arrays.stream(e).forEach(n -> {
+            if (n == null) throw new NullArgumentProvided();
+        });
         this.e = e;
     }
 
@@ -101,8 +106,7 @@ public final class ArrayVector implements Vector,
         if ((e = new Number[l.size()]).length < 2)
             throw new InvalidVectorDimension();
 
-        for (int i = 0; i < l.size(); i++)
-            e[i] = l.get(i);
+        l.forEach(n -> e[i.getAndIncrement()] = n);
     }
 
     /**
@@ -127,12 +131,7 @@ public final class ArrayVector implements Vector,
         if ((e = new Number[s.size()]).length < 2)
             throw new InvalidVectorDimension();
 
-        Iterator<? extends Number> it = s.iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            e[i] = it.next();
-            i++;
-        }
+        s.forEach(n -> e[i.getAndIncrement()] = n);
     }
 
     /**
@@ -158,11 +157,7 @@ public final class ArrayVector implements Vector,
         if ((e = new Number[m.size()]).length < 2)
             throw new InvalidVectorDimension();
 
-        int i = 0;
-        for (Number n : m.values()) {
-            e[i] = n;
-            i++;
-        }
+        m.values().forEach(n -> e[i.getAndIncrement()] = n);
     }
 
     /**
@@ -182,11 +177,9 @@ public final class ArrayVector implements Vector,
      */
     @Override
     public double getMagnitude() {
-        double sum = 0;
-        for (Number n : e)
-            sum += n.doubleValue() * n.doubleValue();
-
-        return Math.sqrt(sum);
+        return Math.sqrt(Arrays.stream(e)
+                .map(n -> n.doubleValue() * n.doubleValue())
+                .reduce(0.0, Double::sum));
     }
 
     /**
@@ -197,30 +190,6 @@ public final class ArrayVector implements Vector,
     @Override
     public Number[] getElements() {
         return e;
-    }
-
-    /**
-     * The method will scale the vector by the given value.
-     * Please not, this operation is mutable.
-     *
-     * @param scalar the scalar you want to scale the vector with.
-     *               if:
-     *                <ul>
-     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
-     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
-     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
-     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
-     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
-     *               </ul>
-     *
-     * @return the self vector but scaled by the given number.
-     */
-    @Override
-    public Vector scale(final Number scalar) {
-        for (int i = 0; i < e.length; i++)
-            e[i] = e[i].doubleValue() * scalar.doubleValue();
-
-        return this;
     }
 
     /**
