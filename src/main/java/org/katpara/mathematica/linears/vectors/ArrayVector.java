@@ -200,30 +200,6 @@ public final class ArrayVector implements Vector,
     }
 
     /**
-     * The method will scale the vector by the given value.
-     * Please not, this operation is mutable.
-     *
-     * @param scalar the scalar you want to scale the vector with.
-     *               if:
-     *                <ul>
-     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
-     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
-     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
-     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
-     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
-     *               </ul>
-     *
-     * @return the self vector but scaled by the given number.
-     */
-    @Override
-    public Vector scale(final Number scalar) {
-        for (int i = 0; i < e.length; i++)
-            e[i] = e[i].doubleValue() * scalar.doubleValue();
-
-        return this;
-    }
-
-    /**
      * Returns a string representation of the object. In general, the
      * {@code toString} method returns a string that
      * "textually represents" this object. The result should

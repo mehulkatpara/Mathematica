@@ -35,6 +35,30 @@ public final class VectorOperations {
     }
 
     /**
+     * The method will scale the vector by the given value.
+     * Please not, this operation is mutable.
+     *
+     * @param scalar the scalar you want to scale the vector with.
+     *               if:
+     *                <ul>
+     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
+     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
+     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
+     *               </ul>
+     *
+     * @return the self vector but scaled by the given number.
+     */
+    public static Vector scale(final Vector v, final Number scalar) {
+        Number[] n = Arrays.stream(v.getElements())
+                .map(e -> e.doubleValue() * scalar.doubleValue())
+                .toArray(Number[]::new);
+
+        return new ArrayVector(n);
+    }
+
+    /**
      * The method will add two vectors.
      *
      * @param v1 the base vector

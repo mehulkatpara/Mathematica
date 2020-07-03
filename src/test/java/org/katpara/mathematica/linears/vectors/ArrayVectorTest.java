@@ -69,16 +69,6 @@ class ArrayVectorTest {
     }
 
     @Test
-    void testVectorScalar() {
-        Number[] n = new ArrayVector(3, 4).scale(3).getElements();
-
-        assertAll(
-                () -> assertEquals(9.0, n[0]),
-                () -> assertEquals(12.0, n[1])
-        );
-    }
-
-    @Test
     void testHashCode() {
         Vector v1 = new ArrayVector(3, 4);
         Vector v2 = new ArrayVector(4, 5);

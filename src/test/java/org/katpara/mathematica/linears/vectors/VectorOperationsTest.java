@@ -18,6 +18,11 @@ class VectorOperationsTest {
     }
 
     @Test
+    void testVectorScalar() {
+        assertEquals(new ArrayVector(2D, 4D), VectorOperations.scale(new ArrayVector(1, 2), 2));
+    }
+
+    @Test
     void testAddVector() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
@@ -174,7 +179,7 @@ class VectorOperationsTest {
                 )),
                 () -> assertEquals(131.647015792716, VectorOperations.angle(
                         new ArrayVector(3, -4, 5),
-                        new ArrayVector(2, 7,-3),
+                        new ArrayVector(2, 7, -3),
                         true
                 ))
         );
