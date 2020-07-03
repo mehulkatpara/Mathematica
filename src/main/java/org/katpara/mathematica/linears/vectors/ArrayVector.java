@@ -98,15 +98,15 @@ public final class ArrayVector implements Vector,
      * The list must contain at least 2 Numbers or more; failed to comply
      * will result in the {@link InvalidVectorDimension} exception.
      *
-     * @param l the list of elements
+     * @param c the list of elements
      *
      * @throws InvalidVectorDimension when the list have less than 2 elements
      */
-    public ArrayVector(final Collection<? extends Number> l) {
-        if ((e = new Number[l.size()]).length < 2)
+    public ArrayVector(final Collection<? extends Number> c) {
+        if ((e = new Number[c.size()]).length < 2)
             throw new InvalidVectorDimension();
 
-        l.forEach(n -> e[i.getAndIncrement()] = n);
+        c.forEach(n -> e[i.getAndIncrement()] = n);
     }
 
     /**
