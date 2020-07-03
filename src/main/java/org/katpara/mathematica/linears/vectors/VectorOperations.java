@@ -66,7 +66,7 @@ public final class VectorOperations {
      *
      * @return the resulting vector
      */
-    public static Vector addVector(final Vector v1, final Vector v2) {
+    public static Vector addVectors(final Vector v1, final Vector v2) {
         return addSubVector(v1, v2, true);
     }
 
@@ -78,7 +78,7 @@ public final class VectorOperations {
      *
      * @return the resulting vector
      */
-    public static Vector subtractVector(final Vector v1, final Vector v2) {
+    public static Vector subtractVectors(final Vector v1, final Vector v2) {
         return addSubVector(v1, v2, false);
     }
 

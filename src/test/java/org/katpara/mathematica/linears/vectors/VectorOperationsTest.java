@@ -26,14 +26,14 @@ class VectorOperationsTest {
     void testAddVector() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.addVector(
+                        () -> VectorOperations.addVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
                         )
                 ),
                 () -> assertArrayEquals(new Number[]{2D, 4D, 6D},
                         VectorOperations
-                                .addVector(
+                                .addVectors(
                                         new ArrayVector(1, 2, 3),
                                         new ArrayVector(1, 2, 3))
                                 .getElements()
@@ -45,14 +45,14 @@ class VectorOperationsTest {
     void testSubtractVector() {
         assertAll(
                 () -> assertThrows(InvalidVectorDimension.class,
-                        () -> VectorOperations.subtractVector(
+                        () -> VectorOperations.subtractVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
                         )
                 ),
                 () -> assertArrayEquals(new Number[]{0D, 0D, 0D},
                         VectorOperations
-                                .subtractVector(
+                                .subtractVectors(
                                         new ArrayVector(1, 2, 3),
                                         new ArrayVector(1, 2, 3))
                                 .getElements()
