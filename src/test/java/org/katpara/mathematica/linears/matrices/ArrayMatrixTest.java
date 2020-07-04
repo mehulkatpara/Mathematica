@@ -2,8 +2,8 @@ package org.katpara.mathematica.linears.matrices;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.exceptions.InvalidMatrixDimension;
-import org.katpara.mathematica.exceptions.NullArgumentProvided;
+import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
@@ -21,20 +21,18 @@ class ArrayMatrixTest {
 
         Number[][] t1 = new Number[0][0];
         Number[][] t2 = new Number[1][0];
-        Number[][] t3 = new Number[1][1];
-        Number[][] t4 = new Number[2][0];
-        Number[][] t5 = new Number[][]{{1, null}, {2, 0}};
-        Number[][] t6 = new Number[][]{{1, 2}, {null, 0}};
-        Number[][] t7 = new Number[][]{{1, 2}, {1, 0}};
+        Number[][] t3 = new Number[][]{{1}};
+        Number[][] t4 = new Number[][]{{1, null}, {2, 0}};
+        Number[][] t5 = new Number[][]{{1, 2}, {null, 0}};
+        Number[][] t6 = new Number[][]{{1, 2}, {1, 0}};
 
         assertAll(
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(t1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(t2)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(t3)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(t4)),
-                () -> assertThrows(NullArgumentProvided.class, () -> new ArrayMatrix(t5)),
-                () -> assertThrows(NullArgumentProvided.class, () -> new ArrayMatrix(t6)),
-                () -> new ArrayMatrix(t7)
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(t1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(t2)),
+                () -> new ArrayMatrix(t3),
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix(t4)),
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix(t5)),
+                () -> new ArrayMatrix(t6)
         );
     }
 
@@ -42,10 +40,9 @@ class ArrayMatrixTest {
     void testCollectionConstructor() {
 
         List<List<Number>> l1 = List.of(Collections.emptyList());
-        List<List<Number>> l2 = List.of(Collections.emptyList(), Collections.emptyList());
-        List<List<Number>> l3 = List.of(List.of(1), Collections.emptyList());
-        List<List<Number>> l4 = List.of(List.of(1), List.of(1, 2));
-        List<List<Number>> l5 = List.of(List.of(1), List.of(1));
+        List<List<Number>> l2 = List.of(List.of(1), Collections.emptyList());
+        List<List<Number>> l3 = List.of(List.of(1), List.of(1, 2));
+        List<List<Number>> l4 = List.of(List.of(1), List.of(1));
 
         Set<List<Number>> s1 = Set.of(Collections.emptyList());
         Set<List<Number>> s2 = Set.of(List.of(1), Collections.emptyList());
@@ -53,15 +50,14 @@ class ArrayMatrixTest {
         Set<List<Number>> s4 = Set.of(List.of(1), List.of(2));
 
         assertAll(
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(l1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(l2)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(l3)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(l4)),
-                () -> new ArrayMatrix(l5),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l2)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l3)),
+                () -> new ArrayMatrix(l4),
 
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(s1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(s2)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(s3)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s2)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s3)),
                 () -> new ArrayMatrix(s4)
         );
     }
@@ -84,18 +80,18 @@ class ArrayMatrixTest {
         Map<Integer, Vector> vm4 = Map.of(1, new ArrayVector(1, 2), 2, new ArrayVector(1, 2));
 
         assertAll(
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vl1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vl2)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vl1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vl2)),
                 () -> new ArrayMatrix(vl3),
                 () -> new ArrayMatrix(vl4),
 
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vs1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vs2)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vs1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vs2)),
                 () -> new ArrayMatrix(vs3),
                 () -> new ArrayMatrix(vs4),
 
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vm1)),
-                () -> assertThrows(InvalidMatrixDimension.class, () -> new ArrayMatrix(vm2)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vm1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vm2)),
                 () -> new ArrayMatrix(vm3),
                 () -> new ArrayMatrix(vm4)
         );

@@ -1,10 +1,12 @@
 package org.katpara.mathematica.linears.matrices;
 
-import org.katpara.mathematica.exceptions.InvalidMatrixDimension;
-import org.katpara.mathematica.exceptions.InvalidParameterProvided;
-import org.katpara.mathematica.exceptions.NullArgumentProvided;
+import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
+import org.katpara.mathematica.exceptions.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -28,19 +30,17 @@ public final class ArrayMatrix implements Matrix,
      *
      * @param e the matrix array.
      *
-     * @throws InvalidMatrixDimension when array has less than 1 row
+     * @throws InvalidMatrixDimensionException when array has less than 1 row
      *                                when array has less then 1 column
      */
     public ArrayMatrix(final Number[][] e) {
-        if (e.length == 0 ||
-                (e.length == 1 && e[0].length < 2) ||
-                (e.length == 2 && e[0].length < 1))
-            throw new InvalidMatrixDimension();
+        if (e.length == 0 || e.length + e[0].length < 2 )
+            throw new InvalidMatrixDimensionException();
 
         Arrays.stream(e).forEach(i ->
                 Arrays.stream(i).forEach(ie -> {
                     if (ie == null)
-                        throw new NullArgumentProvided();
+                        throw new NullArgumentProvidedException();
                 }));
 
         this.e = e;
@@ -54,10 +54,10 @@ public final class ArrayMatrix implements Matrix,
      */
     public ArrayMatrix(final Collection<List<Number>> c) {
         if (!(c instanceof List) && !(c instanceof Set))
-            throw new InvalidParameterProvided("The matrix can only be a type of List or Set");
+            throw new InvalidParameterProvidedException("The matrix can only be a type of List or Set");
 
         if (c.size() == 0)
-            throw new InvalidMatrixDimension();
+            throw new InvalidMatrixDimensionException();
 
         var _ref = new Object() {
             int _i = 0;
@@ -66,15 +66,14 @@ public final class ArrayMatrix implements Matrix,
         };
 
         c.forEach(r -> {
-            if ((c.size() == 1 && r.size() < 2) ||
-                    (c.size() == 2 && r.size() < 1))
-                throw new InvalidMatrixDimension();
+            if (r.size() == 0)
+                throw new InvalidMatrixDimensionException();
 
             if (_ref.d[1] == 0) {
                 _ref.d[1] = r.size();
                 _ref.n = new Number[_ref.d[0]][_ref.d[1]];
             } else if (_ref.d[1] != r.size()) {
-                throw new InvalidMatrixDimension("The rows have multiple sizes");
+                throw new InvalidMatrixDimensionException("The rows have multiple sizes");
             }
 
             var _i = i.getAndIncrement();
@@ -85,9 +84,9 @@ public final class ArrayMatrix implements Matrix,
         e = _ref.n;
     }
 
-    public ArrayMatrix(final List<Vector> vl) {
+    public ArrayMatrix(final List<? extends Vector> vl) {
         if (vl.size() < 1)
-            throw new InvalidMatrixDimension();
+            throw new InvalidMatrixDimensionException();
 
         var _ref = new Object() {
             final int[] d = new int[]{vl.size(), 0};
@@ -98,7 +97,7 @@ public final class ArrayMatrix implements Matrix,
                 _ref.d[1] = v.getDimension();
                 _ref.n = new Number[_ref.d[0]][_ref.d[1]];
             } else if (_ref.d[1] != v.getDimension()) {
-                throw new InvalidMatrixDimension("The vectors have different dimensions.");
+                throw new InvalidMatrixDimensionException("The vectors have different dimensions.");
             }
 
             _ref.n[i.getAndIncrement()] = v.getElements();
@@ -113,6 +112,18 @@ public final class ArrayMatrix implements Matrix,
 
     public ArrayMatrix(final Map<?, ? extends Vector> vm) {
         this(new ArrayList<>(vm.values()));
+    }
+
+    /**
+     * In linear algebra, a zero matrix or null matrix is a matrix whose
+     * all the elements are zero.
+     *
+     * @return true if the matrix is zero or null matrix.
+     */
+    @Override
+    public boolean isZeroMatrix() {
+        //TODO: Implement the zero matrix check logic.
+        return false;
     }
 
     /**
@@ -166,6 +177,22 @@ public final class ArrayMatrix implements Matrix,
     @Override
     public boolean isSquareMatrix() {
         return e.length == e[0].length;
+    }
+
+    /**
+     * The trace of the matrix is defined as the sum of all the elements,
+     * on the main diagonal.
+     * <p>
+     * The trace only exist for a square matrix.
+     *
+     * @return the trace of matrix
+     */
+    @Override
+    public double trace() {
+        if(!isSquareMatrix())
+            throw new NotSquareMatrixException();
+
+        return 0;
     }
 
     @Override

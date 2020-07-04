@@ -1,13 +1,13 @@
 package org.katpara.mathematica.exceptions;
 
 /**
- * The exception is useful when dealing with Matrices. It is ususally
+ * The exception is useful when dealing with Matrices. It is usually
  * thrown when the matrices are not on the same dimensions.
  *
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public class InvalidMatrixDimension extends RuntimeException {
+public class InvalidMatrixDimensionException extends RuntimeException {
     @java.io.Serial
     private static final long serialVersionUID = 8141142525669921693L;
 
@@ -21,7 +21,7 @@ public class InvalidMatrixDimension extends RuntimeException {
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public InvalidMatrixDimension() {
+    public InvalidMatrixDimensionException() {
         super(MESSAGE);
     }
 
@@ -33,7 +33,7 @@ public class InvalidMatrixDimension extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public InvalidMatrixDimension(final String message) {
+    public InvalidMatrixDimensionException(final String message) {
         super(message);
     }
 }

@@ -1,8 +1,8 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.exceptions.InvalidParameterProvided;
-import org.katpara.mathematica.exceptions.InvalidVectorDimension;
+import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
+import org.katpara.mathematica.exceptions.InvalidVectorDimensionException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ class VectorOperationsTest {
     @Test
     void testAddVector() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.addVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
@@ -44,7 +44,7 @@ class VectorOperationsTest {
     @Test
     void testSubtractVector() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.subtractVectors(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
@@ -64,7 +64,7 @@ class VectorOperationsTest {
     @Test
     void testAddListOfVectors() {
         assertAll(
-                () -> assertThrows(InvalidParameterProvided.class,
+                () -> assertThrows(InvalidParameterProvidedException.class,
                         () -> VectorOperations.addVectors(
                                 new ArrayList<>(List.of(new ArrayVector(2, 3))))),
                 () -> {
@@ -94,7 +94,7 @@ class VectorOperationsTest {
     @Test
     void testSubtractListOfVectors() {
         assertAll(
-                () -> assertThrows(InvalidParameterProvided.class,
+                () -> assertThrows(InvalidParameterProvidedException.class,
                         () -> VectorOperations.addVectors(
                                 new ArrayList<>(List.of(new ArrayVector(2, 3))))),
                 () -> {
@@ -124,9 +124,9 @@ class VectorOperationsTest {
     @Test
     void testTransposeDimension() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.transpose(new ArrayVector(2, 3), 1)),
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.transpose(new ArrayVector(1, 2, 3), 3)),
                 () ->
                         assertEquals(
@@ -142,7 +142,7 @@ class VectorOperationsTest {
     @Test
     void testDotProducts() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.dotProduct(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
@@ -161,7 +161,7 @@ class VectorOperationsTest {
     @Test
     void testAngle() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.angle(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3),
@@ -188,17 +188,17 @@ class VectorOperationsTest {
     @Test
     void testCrossProduct() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.crossProduct(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2)
                         )),
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.crossProduct(
                                 new ArrayVector(1, 2, 3),
                                 new ArrayVector(1, 2)
                         )),
-                () -> assertThrows(InvalidVectorDimension.class,
+                () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> VectorOperations.crossProduct(
                                 new ArrayVector(1, 2),
                                 new ArrayVector(1, 2, 3)
