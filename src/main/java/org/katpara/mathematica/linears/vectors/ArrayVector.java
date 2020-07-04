@@ -30,11 +30,6 @@ public final class ArrayVector implements Vector,
     private final Number[] e;
 
     /**
-     * Just an accumulator for collection constructors.
-     */
-    private final AtomicInteger i = new AtomicInteger();
-
-    /**
      * The constructor will create a vector with the dimension of 2.
      *
      * @param i the i-hat of a vector (x axis value)
@@ -98,15 +93,38 @@ public final class ArrayVector implements Vector,
      * The list must contain at least 2 Numbers or more; failed to comply
      * will result in the {@link InvalidVectorDimension} exception.
      *
-     * @param c the list of elements
+     * @param l the list of elements
      *
      * @throws InvalidVectorDimension when the list have less than 2 elements
      */
-    public ArrayVector(final Collection<? extends Number> c) {
-        if ((e = new Number[c.size()]).length < 2)
+    public ArrayVector(final List<? extends Number> l) {
+        if ((e = new Number[l.size()]).length < 2)
             throw new InvalidVectorDimension();
 
-        c.forEach(n -> e[i.getAndIncrement()] = n);
+        var i = new AtomicInteger();
+        l.forEach(n -> e[i.getAndIncrement()] = n);
+    }
+
+    /**
+     * The constructor will create a vector from a {@link Set}.
+     * The elements of the set must be subclass of {@link Number}.
+     * That means the allowed classes are:
+     * {@link Short}
+     * {@link Byte}
+     * {@link Integer}
+     * {@link Long}
+     * {@link Float}
+     * {@link Double}
+     * <p>
+     * The set must contain at least 2 Numbers or more; failed to comply
+     * will result in the {@link InvalidVectorDimension} exception.
+     *
+     * @param s the list of elements
+     *
+     * @throws InvalidVectorDimension when the set have less than 2 elements
+     */
+    public ArrayVector(final Set<? extends Number> s) {
+        this(new ArrayList<>(s));
     }
 
     /**
@@ -129,10 +147,7 @@ public final class ArrayVector implements Vector,
      * @throws InvalidVectorDimension when the map has less than 2 pairs
      */
     public ArrayVector(final Map<?, ? extends Number> m) {
-        if ((e = new Number[m.size()]).length < 2)
-            throw new InvalidVectorDimension();
-
-        m.values().forEach(n -> e[i.getAndIncrement()] = n);
+        this(new ArrayList<>(m.values()));
     }
 
     /**
@@ -190,7 +205,7 @@ public final class ArrayVector implements Vector,
      */
     @Override
     public String toString() {
-        List<String> l = new LinkedList<>();
+        var l = new LinkedList<String>();
         Arrays.stream(e).forEach(v -> l.add(v.toString()));
         return "<" + String.join(", ", l) + ">";
     }
@@ -248,7 +263,7 @@ public final class ArrayVector implements Vector,
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        final ArrayVector that = (ArrayVector) obj;
+        final var that = (ArrayVector) obj;
         if (e.length != that.getDimension()) return false;
         return Arrays.equals(e, that.getElements());
     }
@@ -352,7 +367,7 @@ public final class ArrayVector implements Vector,
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
 
-        Number[] n = new Number[e.length];
+        var n = new Number[e.length];
         System.arraycopy(e, 0, n, 0, e.length);
 
         return new ArrayVector(n);
