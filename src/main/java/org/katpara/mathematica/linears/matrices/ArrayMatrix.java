@@ -8,10 +8,17 @@ import org.katpara.mathematica.linears.vectors.Vector;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * The class is an implementations of the Matrix interface.
+ * The class uses two dimensional array to create a matrix.
+ *
+ * @author Mehul Katpara
+ * @since 1.0.0
+ */
 public final class ArrayMatrix implements Matrix,
         RandomAccess, Cloneable, java.io.Serializable {
     @java.io.Serial
-    private static final long serialVersionUID = 8141142525669921693L;
+    private static final long serialVersionUID = 3493256845029049971L;
 
     private final Number[][] e;
     private final AtomicInteger i = new AtomicInteger(0);
@@ -43,7 +50,7 @@ public final class ArrayMatrix implements Matrix,
      * The constructor creats a matrix out of the list containing a list of numbers,
      * or a set containing a list of numbers.
      *
-     * @param c
+     * @param c the collection of list of numbers
      */
     public ArrayMatrix(final Collection<List<Number>> c) {
         if (!(c instanceof List) && !(c instanceof Set))
@@ -201,8 +208,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return a hash code value for this object.
      *
-     * @implSpec As far as is reasonably practical, the {@code hashCode} method defined
-     * by class {@code Object} returns distinct integers for distinct objects.
      * @see Object#equals(Object)
      * @see System#identityHashCode
      */

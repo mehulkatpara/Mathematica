@@ -1,5 +1,12 @@
 package org.katpara.mathematica.exceptions;
 
+/**
+ * The exception is useful when dealing with Matrices. It is ususally
+ * thrown when the matrices are not on the same dimensions.
+ *
+ * @author Mehul Katpara
+ * @since 1.0.0
+ */
 public class InvalidMatrixDimension extends RuntimeException {
     @java.io.Serial
     private static final long serialVersionUID = 8141142525669921693L;
