@@ -1,2 +1,3 @@
 org.katpara.mathematica.exceptions
+org.katpara.mathematica.linears.matrices
 org.katpara.mathematica.linears.vectors
