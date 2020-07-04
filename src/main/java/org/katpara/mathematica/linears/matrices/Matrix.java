@@ -1,4 +1,4 @@
-package org.katpara.mathematica.linears.vectors;
+package org.katpara.mathematica.linears.matrices;
 
 /**
  * The interface defines a Matrix in the system, and it's operations.
