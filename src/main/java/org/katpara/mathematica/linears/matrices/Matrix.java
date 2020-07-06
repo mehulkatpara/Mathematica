@@ -20,14 +20,6 @@ import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 public interface Matrix {
 
     /**
-     * In linear algebra, a zero matrix or null matrix is a matrix whose
-     * all the elements are zero.
-     *
-     * @return true if the matrix is zero or null matrix.
-     */
-    boolean isZeroMatrix();
-
-    /**
      * The method returns the dimension of a matrix.
      *
      * @return the dimension of the matrix
@@ -85,6 +77,51 @@ public interface Matrix {
     double determinant();
 
     /**
+     * In linear algebra, a zero matrix or null matrix is a matrix whose
+     * all the elements are zero.
+     *
+     * @return true if the matrix is zero or null matrix.
+     */
+    boolean isZeroMatrix();
+
+    /**
+     * The Enum is used to create a type of pascal matrix.
+     *
+     * <ul>
+     *      <li> UPPER creates an upper triangular matrix.
+     *      <li> LOWER creates a lower triangular matrix.
+     *      <li> SYMMETRIC creates a symmetric matrix.
+     * </ul>
+     */
+    enum PascalMatrixType {UPPER, LOWER, SYMMETRIC}
+
+    /**
+     * The enum is used to create a type of shift matrix.
+     *
+     * <ul>
+     *     <li>Upper shift matrix is a matrix only on the superdiagonal is 1, else 0</li>
+     *     <li>Upper shift matrix is a matrix only on the subdiagonal is 1, else 0</li>
+     * </ul>
+     */
+    enum ShiftMatrixType {UPPER, LOWER}
+
+    /**
+     * The type of matrix created by the sytem.
+     */
+    enum MatrixType {
+        ONE,
+        ZERO,
+        SHIFT,
+        PASCAL,
+        LEHMER,
+        HILBERT,
+        EXCHANGE,
+        IDENTITY,
+        REDHEFFER,
+        NOT_SPECIFIED
+    }
+
+    /**
      * The method will return a zero or null matrix, whose all the elements are zero.
      *
      * @param m the number of rows
@@ -115,31 +152,6 @@ public interface Matrix {
             throw new InvalidMatrixDimensionException("The dimension must contain 2 elements.");
 
         return getZeroMatrix(d[0], d[1]);
-    }
-
-    /**
-     * The Enum is used to create a type of pascal matrix.
-     *
-     * <ul>
-     *  <li> UPPER creates an upper triangular matrix.
-     *  <li> LOWER creates a lower triangular matrix.
-     *  <li> SYMMETRIC creates a symmetric matrix.
-     * </ul>
-     */
-    enum PascalMatrixType {UPPER, LOWER, SYMMETRIC}
-
-    /**
-     * The type of matrix created by the sytem.
-     */
-    enum MatrixType {
-        ONE,
-        ZERO,
-        PASCAL,
-        LEHMER,
-        HILBERT,
-        EXCHANGE,
-        IDENTITY,
-        NOT_SPECIFIED
     }
 
     /**
@@ -240,5 +252,34 @@ public interface Matrix {
      */
     static ArrayMatrix getExchangeMatrix(final int n) {
         return MatrixUtility.getExchangeMatrix(n);
+    }
+
+    /**
+     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
+     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return a redheffer {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getRedhefferMatrix(final int n) {
+        return MatrixUtility.getRedhefferMatrix(n);
+    }
+
+    /**
+     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
+     * super diagonal matrix, or lower diagonal matrix.
+     *
+     * @param n the number of rows and columns
+     * @param t the type of matrix, i.e UPPER or LOWER
+     *
+     * @return a shift {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getShiftMatrix(final int n, final ShiftMatrixType t) {
+        return MatrixUtility.getShiftMatrix(n, t);
     }
 }

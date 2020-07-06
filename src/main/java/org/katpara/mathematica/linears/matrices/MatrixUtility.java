@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 
 import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
 
-public class MatrixUtility {
+final class MatrixUtility {
     /**
      * The method will return a zero or null matrix, whose all the elements are zero.
      *
@@ -102,7 +102,7 @@ public class MatrixUtility {
      *
      * @return InvalidMatrixDimensionException if n < 1
      */
-    public static ArrayMatrix getLehmerMatrix(final int n) {
+    static ArrayMatrix getLehmerMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Lehmer matrix should have at least one element");
 
@@ -125,7 +125,7 @@ public class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    public static ArrayMatrix getIdentityMatrix(final int n) {
+    static ArrayMatrix getIdentityMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Identity matrix should have at least one element");
 
@@ -143,7 +143,7 @@ public class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    public static ArrayMatrix getHilbertMatrix(final int n) {
+    static ArrayMatrix getHilbertMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Hilbert matrix should have at least one element");
 
@@ -163,12 +163,58 @@ public class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    public static ArrayMatrix getExchangeMatrix(final int n) {
+    static ArrayMatrix getExchangeMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Exchange matrix should have at least one element");
 
         var e = new Number[n][n];
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j -> e[i][j] = (j == n - i - 1) ? 1 : 0));
         return new ArrayMatrix(e, EXCHANGE);
+    }
+
+    /**
+     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
+     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return a redheffer {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getRedhefferMatrix(final int n) {
+        if (n < 1)
+            throw new InvalidMatrixDimensionException("Redheffer matrix should have at least one element");
+
+        var e = new Number[n][n];
+        IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
+                e[i][j] = (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)));
+        return new ArrayMatrix(e, REDHEFFER);
+    }
+
+    /**
+     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
+     * super diagonal matrix, or lower diagonal matrix.
+     *
+     * @param n the number of rows and columns
+     * @param t the type of matrix, i.e UPPER or LOWER
+     *
+     * @return a shift {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getShiftMatrix(final int n, final Matrix.ShiftMatrixType t) {
+        if (n < 1)
+            throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
+
+        var e = new Number[n][n];
+        if (t == Matrix.ShiftMatrixType.UPPER)
+            IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
+                    e[i][j] = (j == i + 1) ? 1 : 0));
+        else
+            IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
+                    e[i][j] = (j == i - 1) ? 1 : 0));
+
+        return new ArrayMatrix(e, SHIFT);
     }
 }

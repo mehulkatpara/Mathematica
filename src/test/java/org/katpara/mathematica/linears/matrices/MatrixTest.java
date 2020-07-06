@@ -75,8 +75,32 @@ class MatrixTest {
     void testExchangeMatrix() {
         assertAll(
                 () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.getExchangeMatrix(0)),
-                () -> System.out.println(Matrix.getExchangeMatrix(1)),
-                () -> System.out.println(Matrix.getExchangeMatrix(4))
+                () -> Matrix.getExchangeMatrix(1),
+                () -> Matrix.getExchangeMatrix(4)
+        );
+    }
+
+    @Test
+    void testRedhefferMatrix() {
+        assertAll(
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.getRedhefferMatrix(0)),
+                () -> Matrix.getRedhefferMatrix(1),
+                () -> Matrix.getRedhefferMatrix(4),
+                () -> Matrix.getRedhefferMatrix(12)
+        );
+    }
+
+    @Test
+    void testShiftMatrix() {
+        assertAll(
+                () -> assertThrows(InvalidMatrixDimensionException.class,
+                        () -> Matrix.getShiftMatrix(0, Matrix.ShiftMatrixType.UPPER)),
+                () -> System.out.println(Matrix.getShiftMatrix(1, Matrix.ShiftMatrixType.UPPER)),
+                () -> System.out.println(Matrix.getShiftMatrix(5, Matrix.ShiftMatrixType.UPPER)),
+                () -> assertThrows(InvalidMatrixDimensionException.class,
+                        () -> Matrix.getShiftMatrix(0, Matrix.ShiftMatrixType.LOWER)),
+                () -> System.out.println(Matrix.getShiftMatrix(1, Matrix.ShiftMatrixType.LOWER)),
+                () -> System.out.println(Matrix.getShiftMatrix(5, Matrix.ShiftMatrixType.LOWER))
         );
     }
 }

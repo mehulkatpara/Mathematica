@@ -27,7 +27,7 @@ public final class ArrayMatrix implements Matrix,
     private final MatrixType t;
     private final AtomicInteger i = new AtomicInteger(0);
 
-    ArrayMatrix( final Number[][] e, final MatrixType t) {
+    ArrayMatrix(final Number[][] e, final MatrixType t) {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
 
