@@ -6,9 +6,10 @@ import org.katpara.mathematica.exceptions.NotSquareMatrixException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.NOT_SPECIFIED;
 
 /**
  * The class is an implementations of the Matrix interface.
@@ -23,18 +24,11 @@ public final class ArrayMatrix implements Matrix,
     private static final long serialVersionUID = 3493256845029049971L;
 
     private final Number[][] e;
+    private final MatrixType t;
     private final AtomicInteger i = new AtomicInteger(0);
 
-    /**
-     * The constructor creates a Matrix.
-     *
-     * @param e the matrix array.
-     *
-     * @throws InvalidMatrixDimensionException when array has less than 1 row
-     *                                when array has less then 1 column
-     */
-    public ArrayMatrix(final Number[][] e) {
-        if (e.length == 0 || e.length + e[0].length < 2 )
+    ArrayMatrix( final Number[][] e, final MatrixType t) {
+        if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
 
         Arrays.stream(e).forEach(i ->
@@ -44,6 +38,29 @@ public final class ArrayMatrix implements Matrix,
                 }));
 
         this.e = e;
+        this.t = t;
+    }
+
+    /**
+     * The constructor creates a Matrix.
+     *
+     * @param e the matrix array.
+     *
+     * @throws InvalidMatrixDimensionException when array has less than 1 row
+     *                                         when array has less then 1 column
+     */
+    public ArrayMatrix(final Number[][] e) {
+        if (e.length == 0 || e.length + e[0].length < 2)
+            throw new InvalidMatrixDimensionException();
+
+        Arrays.stream(e).forEach(i ->
+                Arrays.stream(i).forEach(ie -> {
+                    if (ie == null)
+                        throw new NullArgumentProvidedException();
+                }));
+
+        this.e = e;
+        this.t = NOT_SPECIFIED;
     }
 
     /**
@@ -82,6 +99,7 @@ public final class ArrayMatrix implements Matrix,
         });
 
         e = _ref.n;
+        this.t = NOT_SPECIFIED;
     }
 
     public ArrayMatrix(final List<? extends Vector> vl) {
@@ -104,6 +122,7 @@ public final class ArrayMatrix implements Matrix,
         });
 
         e = _ref.n;
+        this.t = NOT_SPECIFIED;
     }
 
     public ArrayMatrix(final Set<Vector> vs) {
@@ -189,9 +208,23 @@ public final class ArrayMatrix implements Matrix,
      */
     @Override
     public double trace() {
-        if(!isSquareMatrix())
+        if (!isSquareMatrix())
             throw new NotSquareMatrixException();
 
+        // TODO: Implement trace
+        return 0;
+    }
+
+    /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @return the determinant of the square matrix
+     */
+    @Override
+    public double determinant() {
+        // TODO: Implement determinant
         return 0;
     }
 
@@ -202,7 +235,7 @@ public final class ArrayMatrix implements Matrix,
             var ls = new LinkedList<String>();
             Arrays.stream(r).forEach(e -> ls.add(e.toString()));
             s.append("|");
-            s.append(String.join(", ", ls));
+            s.append(String.join(",\t\t", ls));
             s.append("|\n");
         });
         return s.toString();

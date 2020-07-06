@@ -1,5 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 
 /**
@@ -70,9 +71,18 @@ public interface Matrix {
      * <p>
      * The trace only exist for a square matrix.
      *
-     * @return the trace of matrix
+     * @return the trace of the square matrix
      */
     double trace();
+
+    /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @return the determinant of the square matrix
+     */
+    double determinant();
 
     /**
      * The method will return a zero or null matrix, whose all the elements are zero.
@@ -82,9 +92,9 @@ public interface Matrix {
      *
      * @return a {@link Matrix} with all 0 entries
      *
-     * @throws InvalidParameterProvidedException when # of row + # of column < 1;
-     *                                           this ensures that at least one element
-     *                                           exist all the time.
+     * @throws InvalidMatrixDimensionException when # of row + # of column < 2;
+     *                                         this ensures that at least one element
+     *                                         exist all the time.
      */
     static ArrayMatrix getZeroMatrix(final int m, final int n) {
         return MatrixUtility.getZeroMatrix(m, n);
@@ -98,12 +108,137 @@ public interface Matrix {
      *
      * @return an {@link ArrayMatrix} with all 0 entries
      *
-     * @throws InvalidParameterProvidedException if d.length != 2.
+     * @throws InvalidMatrixDimensionException if d.length != 2.
      */
     static ArrayMatrix getZeroMatrix(final int[] d) {
         if (d.length != 2)
-            throw new InvalidParameterProvidedException("The dimension must contain 2 elements.");
+            throw new InvalidMatrixDimensionException("The dimension must contain 2 elements.");
 
         return getZeroMatrix(d[0], d[1]);
+    }
+
+    /**
+     * The Enum is used to create a type of pascal matrix.
+     *
+     * <ul>
+     *  <li> UPPER creates an upper triangular matrix.
+     *  <li> LOWER creates a lower triangular matrix.
+     *  <li> SYMMETRIC creates a symmetric matrix.
+     * </ul>
+     */
+    enum PascalMatrixType {UPPER, LOWER, SYMMETRIC}
+
+    /**
+     * The type of matrix created by the sytem.
+     */
+    enum MatrixType {
+        ONE,
+        ZERO,
+        PASCAL,
+        LEHMER,
+        HILBERT,
+        EXCHANGE,
+        IDENTITY,
+        NOT_SPECIFIED
+    }
+
+    /**
+     * The method will return a zero or null matrix, whose all the elements are zero.
+     *
+     * @param n the number of rows and columns
+     * @param t the type of matrix;
+     *          LOWER       - Lover triangular
+     *          UPPER       - Upper triangular
+     *          SYMMETRIC   - a symmetric matrix
+     *
+     * @return a Pascal's {@link Matrix}
+     *
+     * @throws InvalidMatrixDimensionException when n < 1, at least one element should exist.
+     */
+    static ArrayMatrix getPascalMatrix(final int n, final PascalMatrixType t) {
+        return MatrixUtility.getPascalMatrix(n, t);
+    }
+
+    /**
+     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     *
+     * @return a one matrix
+     *
+     * @throws InvalidMatrixDimensionException when m + n < 2
+     */
+    static ArrayMatrix getOneMatrix(final int m, final int n) {
+        return MatrixUtility.getOneMatrix(m, n);
+    }
+
+    /**
+     * A dummy method that internally calls {@link #getOneMatrix(int, int)} to get an
+     * all-one matrix.
+     *
+     * @param d an array of 2 elements, # of rows and # of columns.
+     *
+     * @return an {@link ArrayMatrix} with all 1 entries
+     *
+     * @throws InvalidMatrixDimensionException if d.length != 2.
+     */
+    static ArrayMatrix getOneMatrix(final int[] d) {
+        if (d.length != 2)
+            throw new InvalidMatrixDimensionException("The dimension must contain 2 elements.");
+
+        return getOneMatrix(d[0], d[1]);
+    }
+
+    /**
+     * A lehmer matrix is a constant systematic square matrix.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return the lehmer {@link ArrayMatrix}
+     */
+    static ArrayMatrix getLehmerMatrix(final int n) {
+        return MatrixUtility.getLehmerMatrix(n);
+    }
+
+    /**
+     * The identity matrix is a square matrix whose diagonal is always 1 and all the
+     * other elements are 0.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return an identity {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getIdentityMatrix(final int n) {
+        return MatrixUtility.getIdentityMatrix(n);
+    }
+
+    /**
+     * A Hilbert matrix is a square matrix with entries being the unit fractions.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return a hilbert {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getHilbertMatrix(final int n) {
+        return MatrixUtility.getHilbertMatrix(n);
+    }
+
+    /**
+     * An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+     * rest of the elements are 0.
+     *
+     * @param n the square matrix
+     *
+     * @return an exchange {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n < 1
+     */
+    static ArrayMatrix getExchangeMatrix(final int n) {
+        return MatrixUtility.getExchangeMatrix(n);
     }
 }
