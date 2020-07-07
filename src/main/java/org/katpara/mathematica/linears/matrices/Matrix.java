@@ -34,6 +34,14 @@ public interface Matrix {
     Number[][] getElements();
 
     /**
+     * The method returns the type of a matrix.
+     * For more details see {@link MatrixType}
+     *
+     * @return the type of matrix
+     */
+    MatrixType getType();
+
+    /**
      * The method will return true if the matrix is a
      * row vector, which is 1 x n
      *
@@ -65,7 +73,15 @@ public interface Matrix {
      *
      * @return the trace of the square matrix
      */
-    double trace();
+    double getTrace();
+
+    /**
+     * A rank of a matrix is independent rows of a matrix. That shows that how many
+     * rows of a matrix are totally independent, or co-dependent on other rows.
+     *
+     * @return the rank of matrix
+     */
+    int getRank();
 
     /**
      * A determinant is a scalar value computed for a square matrix; that
@@ -74,15 +90,14 @@ public interface Matrix {
      *
      * @return the determinant of the square matrix
      */
-    double determinant();
+    double getDeterminant();
 
     /**
-     * In linear algebra, a zero matrix or null matrix is a matrix whose
-     * all the elements are zero.
+     * A permanent of a square matrix is similar to determinant.
      *
-     * @return true if the matrix is zero or null matrix.
+     * @return the permanent of a matrix
      */
-    boolean isZeroMatrix();
+    double getPermanent();
 
     /**
      * The Enum is used to create a type of pascal matrix.
@@ -109,16 +124,26 @@ public interface Matrix {
      * The type of matrix created by the sytem.
      */
     enum MatrixType {
-        ONE,
-        ZERO,
-        SHIFT,
-        PASCAL,
-        LEHMER,
-        HILBERT,
-        EXCHANGE,
-        IDENTITY,
-        REDHEFFER,
-        NOT_SPECIFIED
+        ONE("one"),
+        ZERO("zero"),
+        SHIFT("shift"),
+        PASCAL("pascal"),
+        LEHMER("lehmer"),
+        HILBERT("hilbert"),
+        EXCHANGE("exchange"),
+        IDENTITY("identity"),
+        REDHEFFER("redheffer"),
+        NOT_SPECIFIED("not_specified");
+
+        private final String name;
+
+        MatrixType(final String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 
     /**

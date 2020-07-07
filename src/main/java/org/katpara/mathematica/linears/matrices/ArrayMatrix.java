@@ -1,19 +1,36 @@
 package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.InvalidMatrixOperationException;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
-import org.katpara.mathematica.exceptions.NotSquareMatrixException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.IntStream;
 
-import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.NOT_SPECIFIED;
+import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
 
 /**
  * The class is an implementations of the Matrix interface.
- * The class uses two dimensional array to create a matrix.
+ * Internally the class has two properties;
+ * <ul>
+ *     <li>e: a two dimensional array</li>
+ *     <li>t: a type of Matrix</li>
+ * </ul>
+ * <p>
+ * e: It is a two-dimensional array that holds all the elements of a matrix.
+ * t: It is a type defined as {@link org.katpara.mathematica.linears.matrices.Matrix.MatrixType}.
+ * <p>
+ * When you create a matrix using one of these constructors, the type is absolutely "NOT_SPECIFIED".
+ * Which means that I have no way to predetermine the type of matrix you are creating.
+ * However, the things get interesting when you are creating a matrix using {@link Matrix} interface.
+ * I have already implemented a logic to create almost all kind of constant matrices. So if you are
+ * creating a matrix of a certain kind, that I have already coded, please use the interface.
+ * <p>
+ * The reason is that, I am doing many calculations based on the type of matrix. If I already know
+ * the type of the matrix, I can optimize the process to work really really fast. Thank you :)
  *
  * @author Mehul Katpara
  * @since 1.0.0
@@ -27,6 +44,24 @@ public final class ArrayMatrix implements Matrix,
     private final MatrixType t;
     private final AtomicInteger i = new AtomicInteger(0);
 
+    /**
+     * The constructor creates a matrix out of two-dimensional array and
+     * {@link org.katpara.mathematica.linears.matrices.Matrix.MatrixType} parameter.
+     * <p>
+     * The {@link org.katpara.mathematica.linears.matrices.Matrix.MatrixType} is useful to
+     * calculate various properties much faster than going through all the necessary calculations.
+     * <p>
+     * When a user creates the type of a matrix is usually "NOT_SPECIFIED", since I have no way to
+     * figure out what kind of constant matrix you are defining. The only way I can figure out the
+     * type is by when you use {@link Matrix} interface to create a predefined matrix for you.
+     * So if you are creating a matrix that is already pre-defined, please use {@link Matrix} interface.
+     *
+     * @param e a two-dimensional elements array
+     * @param t a type of matrix
+     *
+     * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
+     * @throws NullArgumentProvidedException   when the array has a null value
+     */
     ArrayMatrix(final Number[][] e, final MatrixType t) {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
@@ -42,12 +77,19 @@ public final class ArrayMatrix implements Matrix,
     }
 
     /**
-     * The constructor creates a Matrix.
+     * The constructor creates a Matrix using two-dimensional array.
+     * The type of created matrix is "NOT_SPECIFIED"; since it's user generated.
+     * <p>
+     * If you are creating a predefined matrix, please use {@link Matrix} interface
+     * to create a matrix for you, it's easy and helps me to optimize various calculations
+     * much faster. I have many predefined matrices for you to use out of the box, to help
+     * you create various matrices with ease, please check
+     * {@link org.katpara.mathematica.linears.matrices.Matrix.MatrixType} for more information.
      *
      * @param e the matrix array.
      *
-     * @throws InvalidMatrixDimensionException when array has less than 1 row
-     *                                         when array has less then 1 column
+     * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
+     * @throws NullArgumentProvidedException   when the array has a null value
      */
     public ArrayMatrix(final Number[][] e) {
         if (e.length == 0 || e.length + e[0].length < 2)
@@ -64,10 +106,20 @@ public final class ArrayMatrix implements Matrix,
     }
 
     /**
-     * The constructor creats a matrix out of the list containing a list of numbers,
-     * or a set containing a list of numbers.
+     * The constructor creates a matrix out of the list containing a list of numbers,
+     * or a set containing a list of numbers. The type of this matrix is "NOT_SPECIFIED".
+     * <p>
+     * If you are creating a predefined matrix, please use {@link Matrix} interface
+     * to create a matrix for you, it's easy and helps me to optimize various calculations
+     * much faster. I have many predefined matrices for you to use out of the box, to help
+     * you create various matrices with ease, please check
+     * {@link org.katpara.mathematica.linears.matrices.Matrix.MatrixType} for more information.
      *
      * @param c the collection of list of numbers
+     *
+     * @throws InvalidParameterProvidedException when a collection is not a type of List or Set
+     * @throws InvalidMatrixDimensionException   when the collection is empty
+     * @throws InvalidMatrixDimensionException   when rows are of variable length
      */
     public ArrayMatrix(final Collection<List<Number>> c) {
         if (!(c instanceof List) && !(c instanceof Set))
@@ -102,6 +154,16 @@ public final class ArrayMatrix implements Matrix,
         this.t = NOT_SPECIFIED;
     }
 
+    /**
+     * The constructor is used to create a matrix out of a list of {@link Vector}.
+     * Each row of a matrix is a {@link Vector}.
+     * The type of the matrix is "NOT_SPECIFIED".
+     *
+     * @param vl the {@link Vector} List
+     *
+     * @throws InvalidMatrixDimensionException if the list is empty
+     * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
+     */
     public ArrayMatrix(final List<? extends Vector> vl) {
         if (vl.size() < 1)
             throw new InvalidMatrixDimensionException();
@@ -125,24 +187,36 @@ public final class ArrayMatrix implements Matrix,
         this.t = NOT_SPECIFIED;
     }
 
+    /**
+     * The constructor is used to create a matrix out of a set of matrices.
+     * The constructor internally relies on {@link #ArrayMatrix(List)} to
+     * create a matrix, please note.
+     *
+     * @param vs a set of {@link Vector}
+     *
+     * @throws InvalidMatrixDimensionException if the set is empty
+     * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
+     */
     public ArrayMatrix(final Set<Vector> vs) {
         this(new ArrayList<>(vs));
     }
 
+    /**
+     * The constructor creates a matrix out of a map of vectors. The keys of the map
+     * is disregarded when creating a matrix out of a Map. In that case, the keys
+     * can be anything as long as it makes a valid map, however the values must be
+     * a type of {@link Vector}.
+     * <p>
+     * Please note, that this constructor internally relies on {@link #ArrayMatrix(List)}
+     * to create a matrix.
+     *
+     * @param vm a map of {@link Vector}
+     *
+     * @throws InvalidMatrixDimensionException if the map is empty
+     * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
+     */
     public ArrayMatrix(final Map<?, ? extends Vector> vm) {
         this(new ArrayList<>(vm.values()));
-    }
-
-    /**
-     * In linear algebra, a zero matrix or null matrix is a matrix whose
-     * all the elements are zero.
-     *
-     * @return true if the matrix is zero or null matrix.
-     */
-    @Override
-    public boolean isZeroMatrix() {
-        //TODO: Implement the zero matrix check logic.
-        return false;
     }
 
     /**
@@ -166,6 +240,17 @@ public final class ArrayMatrix implements Matrix,
     }
 
     /**
+     * The method returns the type of a matrix.
+     * For more details see {@link MatrixType}
+     *
+     * @return the type of matrix
+     */
+    @Override
+    public MatrixType getType() {
+        return t;
+    }
+
+    /**
      * The method will return true if the matrix is a
      * row vector, which is 1 x n
      *
@@ -173,7 +258,7 @@ public final class ArrayMatrix implements Matrix,
      */
     @Override
     public boolean isRowVector() {
-        return e.length == 1;
+        return e.length == 1 && e[0].length > 1;
     }
 
     /**
@@ -184,7 +269,7 @@ public final class ArrayMatrix implements Matrix,
      */
     @Override
     public boolean isColumnVector() {
-        return e[0].length == 1;
+        return e.length > 1 && e[0].length == 1;
     }
 
     /**
@@ -195,7 +280,10 @@ public final class ArrayMatrix implements Matrix,
      */
     @Override
     public boolean isSquareMatrix() {
-        return e.length == e[0].length;
+        return switch (t) {
+            case SHIFT, EXCHANGE, HILBERT, REDHEFFER, IDENTITY, LEHMER, PASCAL -> true;
+            default -> e.length == e[0].length;
+        };
     }
 
     /**
@@ -204,15 +292,51 @@ public final class ArrayMatrix implements Matrix,
      * <p>
      * The trace only exist for a square matrix.
      *
-     * @return the trace of matrix
+     * @return the trace of the square matrix
+     *
+     * @throws InvalidMatrixOperationException when the matrix is not a square matrix
      */
     @Override
-    public double trace() {
+    public double getTrace() {
         if (!isSquareMatrix())
-            throw new NotSquareMatrixException();
+            throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
-        // TODO: Implement trace
-        return 0;
+        return switch (t) {
+            case IDENTITY, LEHMER, ONE -> e.length;
+            case SHIFT -> 0;
+            case EXCHANGE -> (e.length % 2 == 0) ? 0 : 1;
+            case PASCAL -> ((e[0].length > 1 && e[0][1].intValue() == 0)
+                    || (e.length > 1 && e[1][0].intValue() == 0)) ? e.length : calculateTrace();
+            default -> calculateTrace();
+        };
+    }
+
+    /**
+     * The method will calculate a trace of the square matrix.
+     *
+     * @return the trace of the matrix
+     */
+    private double calculateTrace() {
+        return IntStream.range(0, e.length)
+                .mapToDouble(i -> e[i][i].doubleValue())
+                .sum();
+    }
+
+    /**
+     * A rank of a matrix is independent rows of a matrix. That shows that how many
+     * rows of a matrix are totally independent, or co-dependent on other rows.
+     *
+     * @return the rank of matrix
+     */
+    @Override
+    public int getRank() {
+        //TODO: Rank calculation for other matrices.
+        return switch (t) {
+            case ONE -> 1;
+            case IDENTITY -> e.length;
+            case SHIFT -> e.length - 1;
+            default -> 0;
+        };
     }
 
     /**
@@ -223,11 +347,86 @@ public final class ArrayMatrix implements Matrix,
      * @return the determinant of the square matrix
      */
     @Override
-    public double determinant() {
-        // TODO: Implement determinant
+    public double getDeterminant() {
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException();
+
+        return switch (e.length) {
+            case 1 -> e[0][0].doubleValue();
+            case 2 -> getDeterminant2(e);
+            case 3 -> getDeterminant3(e, 0, true);
+            default -> 0;
+        };
+    }
+
+    private double getDeterminant2(final Number[][] e) {
+        return (e[0][0].doubleValue() * e[1][1].doubleValue()) -
+                (e[0][1].doubleValue() * e[1][0].doubleValue());
+    }
+
+    private double getDeterminant3(final Number[][] e, final int o, final boolean r) {
+        var _ref = new Object() {
+            double d = 0;
+            int[] n;
+            int[] m;
+        };
+
+        if (r) {
+            _ref.m = IntStream.range(0, e.length).filter(k -> k != o).toArray();
+            IntStream.range(0, e.length).forEach(k -> {
+                _ref.n = IntStream.range(0, e.length).filter(l -> l != k).toArray();
+
+                _ref.d += (e[o][k].doubleValue() == 0) ? 0 :
+                        ((k % 2 == 0) ? e[o][k].doubleValue()
+                                : -e[o][k].doubleValue()) *
+                                Matrices.getSubMatrix(this, _ref.m, _ref.n).getDeterminant();
+            });
+        } else {
+            _ref.n = IntStream.range(0, e.length).filter(k -> k != o).toArray();
+            IntStream.range(0, e.length).forEach(k -> {
+                _ref.m = IntStream.range(0, e.length).filter(l -> l != k).toArray();
+
+                _ref.d += (e[k][o].doubleValue() == 0) ? 0 :
+                        ((k % 2 == 0) ? e[k][o].doubleValue()
+                                : -e[k][o].doubleValue()) *
+                                Matrices.getSubMatrix(this, _ref.m, _ref.n).getDeterminant();
+            });
+        }
+
+        return (o % 2 == 0) ? _ref.d : -_ref.d;
+    }
+
+    /**
+     * A permanent of a square matrix is similar to determinant.
+     *
+     * @return the permanent of a matrix
+     */
+    @Override
+    public double getPermanent() {
         return 0;
     }
 
+    /**
+     * Returns a string representation of the object. In general, the
+     * {@code toString} method returns a string that
+     * "textually represents" this object. The result should
+     * be a concise but informative representation that is easy for a
+     * person to read.
+     * It is recommended that all subclasses override this method.
+     * <p>
+     * The {@code toString} method for class {@code Object}
+     * returns a string consisting of the name of the class of which the
+     * object is an instance, the at-sign character `{@code @}', and
+     * the unsigned hexadecimal representation of the hash code of the
+     * object. In other words, this method returns a string equal to the
+     * value of:
+     * <blockquote>
+     * <pre>
+     * getClass().getName() + '@' + Integer.toHexString(hashCode())
+     * </pre></blockquote>
+     *
+     * @return a string representation of the object.
+     */
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer();
@@ -240,7 +439,6 @@ public final class ArrayMatrix implements Matrix,
         });
         return s.toString();
     }
-
 
     /**
      * Returns a hash code value for the object. This method is

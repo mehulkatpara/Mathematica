@@ -2,6 +2,7 @@ package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
 
+import java.util.Arrays;
 import java.util.stream.IntStream;
 
 import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
@@ -20,12 +21,49 @@ final class MatrixUtility {
      *                                         exist all the time.
      */
     static ArrayMatrix getZeroMatrix(final int m, final int n) {
+        return getZeroOneMatrix(m, n, ZERO);
+    }
+
+    /**
+     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     *
+     * @return a one matrix
+     *
+     * @throws InvalidMatrixDimensionException when m + n < 2
+     */
+    static ArrayMatrix getOneMatrix(final int m, final int n) {
+        return getZeroOneMatrix(m, n, ONE);
+    }
+
+    /**
+     * The method produces Zero or One matrix, based on the type argument.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     * @param t the type of matrix, i. e. Zero or One
+     *
+     * @return a one matrix
+     *
+     * @throws InvalidMatrixDimensionException when m + n < 2
+     */
+    private static ArrayMatrix getZeroOneMatrix(final int m, final int n, final Matrix.MatrixType t) {
         if (m + n < 2)
-            throw new InvalidMatrixDimensionException("Zero matrix should have at least one element");
+            throw new InvalidMatrixDimensionException("One matrix should have at least one element");
 
         var e = new Number[m][n];
-        IntStream.range(0, m).forEach(i -> IntStream.range(0, n).forEach(j -> e[i][j] = 0));
-        return new ArrayMatrix(e, ZERO);
+
+        if (t == ZERO)
+            Arrays.fill(e[0], 0);
+        else
+            Arrays.fill(e[0], 1);
+
+        for (int i = 1; i < e.length; i++)
+            System.arraycopy(e[0], 0, e[i], 0, e[0].length);
+
+        return new ArrayMatrix(e, t);
     }
 
     /**
@@ -74,25 +112,6 @@ final class MatrixUtility {
         }
 
         return new ArrayMatrix(_ref.e, PASCAL);
-    }
-
-    /**
-     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
-     *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return a one matrix
-     *
-     * @throws InvalidMatrixDimensionException when m + n < 2
-     */
-    static ArrayMatrix getOneMatrix(final int m, final int n) {
-        if (m + n < 2)
-            throw new InvalidMatrixDimensionException("One matrix should have at least one element");
-
-        var e = new Number[m][n];
-        IntStream.range(0, m).forEach(i -> IntStream.range(0, n).forEach(j -> e[i][j] = 1));
-        return new ArrayMatrix(e, ONE);
     }
 
     /**
