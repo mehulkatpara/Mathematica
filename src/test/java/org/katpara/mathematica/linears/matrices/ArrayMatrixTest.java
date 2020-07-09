@@ -265,74 +265,29 @@ class ArrayMatrixTest {
 
     @Test
     void testDeterminant() {
-//        long s = System.nanoTime();
-        double d =new ArrayMatrix(new Number[][]{
-//                {97,4,100,8,67},
-//                {95,89,35,46,26},
-//                {15,72,78,98,78},
-//                {9,87,2,19,15},
-//                {39,94,44,56,54}
-                {16, 30, 56, 49, 93},
-                {20, 25, 69, 92, 10}, // {20, 21, 22, 23, 24}
-                {2, 3, 4, 5, 6},
-                {22, 36, 61, 46, 57},
-                {12, 8, 98, 75, 54}
-        }).getDeterminant();
-
-        System.out.println(d);
-//        long e = System.nanoTime();
-//        System.out.println(e - s);
-//
-//
-
-//        System.out.println(
-//                new ArrayMatrix(new Number[][]{
-//                        {1, -4, -1},
-//                        {1, 3, -3},
-//                        {0, 3, 5}
-//                }).getDeterminant()
-//        );
-//
-//        System.out.println(
-//                new ArrayMatrix(new Number[][]{
-//                        {-3, 9, 5},
-//                        {-4, 0, 1},
-//                        {6, 3, 0}
-//                }).getDeterminant()
-//        );
-//
-//        System.out.println(
-//                new ArrayMatrix(new Number[][]{
-//                        {3, 7, 0},
-//                        {8, 0, -2},
-//                        {0, -4, -5}
-//                }).getDeterminant()
-//        );
-//
-//        System.out.println(
-//                new ArrayMatrix(new Number[][]{
-//                        {-1, 1, 4, 2},
-//                        {2, -1, 2, 5},
-//                        {1, 2, 3, 4},
-//                        {3, 4, -1, 2}
-//                }).getDeterminant()
-//        );
-//
-//        System.out.println(
-//                new ArrayMatrix(new Number[][]{
-//                        {1, 2, 1, 0},
-//                        {0, 3, 1, 1},
-//                        {-1, 0, 3, 1},
-//                        {3, 1, 2, 0}
-//                }).getDeterminant()
-//        );
-
-
-//        assertAll(
-//                () -> assertThrows(InvalidMatrixOperationException.class, () ->
-//                        new ArrayMatrix(new Number[][]{{1, 2, 3},{1, 2, 3}}).getDeterminant()),
-//                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
-//                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
-//        );
+        assertAll(
+                () -> assertThrows(InvalidMatrixOperationException.class, () ->
+                        new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
+                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
+                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
+                () -> assertEquals(16D, new ArrayMatrix(new Number[][]{
+                        {1, 2, 1, 0},
+                        {0, 3, 1, 1},
+                        {-1, 0, 3, 1},
+                        {3, 1, 2, 0}
+                }).getDeterminant()),
+                () -> assertEquals(256, new ArrayMatrix(new Number[][]{
+                        {3, 7, 0},
+                        {8, 0, -2},
+                        {0, -4, -5}
+                }).getDeterminant()),
+                () -> assertEquals(-49964D, new ArrayMatrix(new Number[][]{
+                        {6, 3, -6, -4, 9},
+                        {-2, -5, 9, 2, 10},
+                        {2, 3, 4, -5, 6},
+                        {8, 6, 1, 4, 7},
+                        {12, 8, -20, 17, 4}
+                }).getDeterminant())
+        );
     }
 }
