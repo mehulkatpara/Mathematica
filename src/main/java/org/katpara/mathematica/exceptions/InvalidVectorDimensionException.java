@@ -9,7 +9,6 @@ package org.katpara.mathematica.exceptions;
  * @since 1.0.0
  */
 public class InvalidVectorDimensionException extends RuntimeException {
-    @java.io.Serial
     private static final long serialVersionUID = 2151811694623431211L;
 
     /**

@@ -37,7 +37,7 @@ import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
  */
 public final class ArrayMatrix implements Matrix,
         RandomAccess, Cloneable, java.io.Serializable {
-    @java.io.Serial
+
     private static final long serialVersionUID = 3493256845029049971L;
 
     private final Number[][] e;
@@ -280,10 +280,18 @@ public final class ArrayMatrix implements Matrix,
      */
     @Override
     public boolean isSquareMatrix() {
-        return switch (t) {
-            case SHIFT, EXCHANGE, HILBERT, REDHEFFER, IDENTITY, LEHMER, PASCAL -> true;
-            default -> e.length == e[0].length;
-        };
+        switch (t) {
+            case SHIFT:
+            case EXCHANGE:
+            case HILBERT:
+            case REDHEFFER:
+            case IDENTITY:
+            case LEHMER:
+            case PASCAL:
+                return true;
+            default:
+                return e.length == e[0].length;
+        }
     }
 
     /**
@@ -301,14 +309,21 @@ public final class ArrayMatrix implements Matrix,
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
-        return switch (t) {
-            case IDENTITY, LEHMER, ONE -> e.length;
-            case SHIFT -> 0;
-            case EXCHANGE -> (e.length % 2 == 0) ? 0 : 1;
-            case PASCAL -> ((e[0].length > 1 && e[0][1].intValue() == 0)
-                    || (e.length > 1 && e[1][0].intValue() == 0)) ? e.length : calculateTrace();
-            default -> calculateTrace();
-        };
+        switch (t) {
+            case IDENTITY:
+            case LEHMER:
+            case ONE:
+                return e.length;
+            case SHIFT:
+                return 0;
+            case EXCHANGE:
+                return (e.length % 2 == 0) ? 0 : 1;
+            case PASCAL:
+                return ((e[0].length > 1 && e[0][1].intValue() == 0)
+                        || (e.length > 1 && e[1][0].intValue() == 0)) ? e.length : calculateTrace();
+            default:
+                return calculateTrace();
+        }
     }
 
     /**
@@ -331,12 +346,16 @@ public final class ArrayMatrix implements Matrix,
     @Override
     public int getRank() {
         //TODO: Rank calculation for other matrices.
-        return switch (t) {
-            case ONE -> 1;
-            case IDENTITY -> e.length;
-            case SHIFT -> e.length - 1;
-            default -> 0;
-        };
+        switch (t) {
+            case ONE:
+                return 1;
+            case IDENTITY:
+                return e.length;
+            case SHIFT:
+                return e.length - 1;
+            default:
+                return 0;
+        }
     }
 
     /**
@@ -351,49 +370,70 @@ public final class ArrayMatrix implements Matrix,
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
 
-        return switch (e.length) {
-            case 1 -> e[0][0].doubleValue();
-            case 2 -> getDeterminant2(e);
-            case 3 -> getDeterminant3(e, 0, true);
-            default -> 0;
-        };
-    }
-
-    private double getDeterminant2(final Number[][] e) {
-        return (e[0][0].doubleValue() * e[1][1].doubleValue()) -
-                (e[0][1].doubleValue() * e[1][0].doubleValue());
-    }
-
-    private double getDeterminant3(final Number[][] e, final int o, final boolean r) {
-        var _ref = new Object() {
-            double d = 0;
-            int[] n;
-            int[] m;
-        };
-
-        if (r) {
-            _ref.m = IntStream.range(0, e.length).filter(k -> k != o).toArray();
-            IntStream.range(0, e.length).forEach(k -> {
-                _ref.n = IntStream.range(0, e.length).filter(l -> l != k).toArray();
-
-                _ref.d += (e[o][k].doubleValue() == 0) ? 0 :
-                        ((k % 2 == 0) ? e[o][k].doubleValue()
-                                : -e[o][k].doubleValue()) *
-                                Matrices.getSubMatrix(this, _ref.m, _ref.n).getDeterminant();
-            });
+        if (e.length == 1) {
+            return e[0][0].doubleValue();
         } else {
-            _ref.n = IntStream.range(0, e.length).filter(k -> k != o).toArray();
-            IntStream.range(0, e.length).forEach(k -> {
-                _ref.m = IntStream.range(0, e.length).filter(l -> l != k).toArray();
-
-                _ref.d += (e[k][o].doubleValue() == 0) ? 0 :
-                        ((k % 2 == 0) ? e[k][o].doubleValue()
-                                : -e[k][o].doubleValue()) *
-                                Matrices.getSubMatrix(this, _ref.m, _ref.n).getDeterminant();
-            });
+            return getDeterminant(e);
         }
+    }
 
-        return (o % 2 == 0) ? _ref.d : -_ref.d;
+    /**
+     * The method is responsible to sort, refine, replace rows.
+     * This is very crusial for determinant optimization.
+     *
+     * @param e the two dimensional array
+     *
+     * @return the determinant of the matrix.
+     */
+    private double getDeterminant(final Number[][] e) {
+        if (e.length == 2) {
+            return (e[0][0].doubleValue() * e[1][1].doubleValue())
+                    - (e[0][1].doubleValue() * e[1][0].doubleValue());
+        } else {
+            return calculateDeterminant(e);
+        }
+    }
+
+    /**
+     * The method calculates the determinant of a given matrix.
+     *
+     * @param e the two-dimensional array
+     *
+     * @return the determinant of the matrix
+     */
+    private double calculateDeterminant(final Number[][] e) {
+        var _ref = new Object() {
+            final int l = e.length;
+            double d = 0;
+            int[] m, n;
+        };
+
+        _ref.m = IntStream.range(0, _ref.l).filter(m -> m != 0).toArray();
+
+        IntStream.range(0, _ref.l).forEach(i -> {
+            _ref.n = IntStream.range(0, _ref.l).filter(n -> n != i).toArray();
+
+            _ref.d += (e[0][i].doubleValue() == 0) ? 0 :
+                    ((i % 2 == 0) ? e[0][i].doubleValue() : -e[0][i].doubleValue())
+                            * getDeterminant(subset(e, _ref.m, _ref.n));
+        });
+
+        return _ref.d;
+    }
+
+    /**
+     * The method returns the subset matrix by given rows and columns.
+     *
+     * @param e The two-dimensional matrix elements
+     * @param m an array containing the rows to pick
+     * @param n an array containing the columns to pick
+     *
+     * @return the subset of given two-dimensional array
+     */
+    private Number[][] subset(final Number[][] e, final int[] m, final int[] n) {
+        var _e = new Number[m.length][n.length];
+        IntStream.range(0, m.length).forEach(i -> IntStream.range(0, n.length).forEach(j -> _e[i][j] = e[m[i]][n[j]]));
+        return _e;
     }
 
     /**
@@ -517,7 +557,7 @@ public final class ArrayMatrix implements Matrix,
      * @param obj the reference object with which to compare.
      *
      * @return {@code true} if this object is the same as the obj
-     * argument; {@code false} otherwise.
+     *         argument; {@code false} otherwise.
      *
      * @see #hashCode()
      * @see HashMap

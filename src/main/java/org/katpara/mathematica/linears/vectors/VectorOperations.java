@@ -18,7 +18,6 @@ import java.util.stream.IntStream;
  * @since 1.0.0
  */
 public class VectorOperations {
-    @java.io.Serial
     private static final long serialVersionUID = 4042529171225355742L;
 
     /**

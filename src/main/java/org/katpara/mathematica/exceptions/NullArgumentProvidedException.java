@@ -8,7 +8,6 @@ package org.katpara.mathematica.exceptions;
  * @since 1.0.0
  */
 public class NullArgumentProvidedException extends RuntimeException {
-    @java.io.Serial
     private static final long serialVersionUID = 1392183545974749989L;
 
     /**

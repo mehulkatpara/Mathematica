@@ -7,7 +7,6 @@ package org.katpara.mathematica.exceptions;
  * @since 1.0.0
  */
 public class InvalidParameterProvidedException extends RuntimeException {
-    @java.io.Serial
     private static final long serialVersionUID = 3727500311644363939L;
 
     /**

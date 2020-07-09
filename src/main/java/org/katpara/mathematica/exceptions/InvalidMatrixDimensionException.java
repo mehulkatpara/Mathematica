@@ -8,7 +8,6 @@ package org.katpara.mathematica.exceptions;
  * @since 1.0.0
  */
 public class InvalidMatrixDimensionException extends RuntimeException {
-    @java.io.Serial
     private static final long serialVersionUID = 8141142525669921693L;
 
     /**

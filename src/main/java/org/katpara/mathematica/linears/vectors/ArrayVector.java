@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class ArrayVector implements Vector,
         RandomAccess, Cloneable, java.io.Serializable {
 
-    @java.io.Serial
     private static final long serialVersionUID = 6608801568539797402L;
 
     /**

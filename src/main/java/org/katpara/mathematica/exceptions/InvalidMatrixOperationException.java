@@ -9,7 +9,6 @@ package org.katpara.mathematica.exceptions;
  * @since 1.0.0
  */
 public class InvalidMatrixOperationException extends RuntimeException {
-    @java.io.Serial
     private static final long serialVersionUID = 3852013709139213781L;
 
     /**

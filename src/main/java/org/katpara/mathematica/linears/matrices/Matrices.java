@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public final class Matrices {
-    @java.io.Serial
     private static final long serialVersionUID = 7021020217611144484L;
 
     public static ArrayMatrix getSubMatrix(final Matrix e, final int[] m, final int[] n) {
