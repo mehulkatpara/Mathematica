@@ -1,9 +1,8 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.linears.annotations.Angle;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -461,7 +460,7 @@ public final class ArrayVector implements Vector {
      * @param obj the reference object with which to compare.
      *
      * @return {@code true} if this object is the same as the obj
-     * argument; {@code false} otherwise.
+     *         argument; {@code false} otherwise.
      *
      * @see #hashCode()
      * @see HashMap
