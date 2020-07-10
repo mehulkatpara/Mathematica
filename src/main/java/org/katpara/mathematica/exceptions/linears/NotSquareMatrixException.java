@@ -1,4 +1,4 @@
-package org.katpara.mathematica.exceptions;
+package org.katpara.mathematica.exceptions.linears;
 
 /**
  * Certain operations are only performed on a square matrix.

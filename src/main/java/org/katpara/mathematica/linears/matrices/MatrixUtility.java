@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
-import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 
 import java.util.Arrays;
 import java.util.stream.IntStream;

@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.matrices;
 
-import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
-import org.katpara.mathematica.exceptions.InvalidMatrixOperationException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.linears.vectors.Vector;
@@ -180,7 +180,7 @@ public final class ArrayMatrix implements Matrix,
                 throw new InvalidMatrixDimensionException("The vectors have different dimensions.");
             }
 
-            _ref.n[i.getAndIncrement()] = v.getElements();
+            _ref.n[i.getAndIncrement()] = v.toArray();
         });
 
         e = _ref.n;

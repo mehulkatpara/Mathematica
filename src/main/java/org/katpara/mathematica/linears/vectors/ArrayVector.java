@@ -1,10 +1,11 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.exceptions.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 /**
  * The ArrayVector class is an implementations of the Vector interface,
@@ -18,9 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public final class ArrayVector implements Vector,
-        RandomAccess, Cloneable, java.io.Serializable {
-
+public final class ArrayVector implements Vector {
     private static final long serialVersionUID = 6608801568539797402L;
 
     /**
@@ -29,30 +28,14 @@ public final class ArrayVector implements Vector,
     private final Number[] e;
 
     /**
-     * The constructor will create a vector with the dimension of 2.
-     *
-     * @param i the i-hat of a vector (x axis value)
-     * @param j the j-hat of a vector (y axis value)
+     * The dimension of the vector
      */
-    public ArrayVector(final Number i, final Number j) {
-        e = new Number[2];
-        e[0] = i;
-        e[1] = j;
-    }
+    private final int dimension;
 
     /**
-     * The constructor will create a vector with the dimension of 3.
-     *
-     * @param i the i-hat of a vector (x axis value)
-     * @param j the j-hat of a vector (y axis value)
-     * @param k the k-hat of a vector (z axis value)
+     * The array stores new processed values of e
      */
-    public ArrayVector(final Number i, final Number j, final Number k) {
-        e = new Number[3];
-        e[0] = i;
-        e[1] = j;
-        e[2] = k;
-    }
+    private Number[] n;
 
     /**
      * The constructor creates a vector from the given {@link Number} array.
@@ -72,10 +55,11 @@ public final class ArrayVector implements Vector,
         if (e.length < 2)
             throw new InvalidVectorDimensionException();
 
-        Arrays.stream(e).forEach(n -> {
+        for (var n : e)
             if (n == null) throw new NullArgumentProvidedException();
-        });
+
         this.e = e;
+        this.dimension = e.length;
     }
 
     /**
@@ -92,38 +76,19 @@ public final class ArrayVector implements Vector,
      * The list must contain at least 2 Numbers or more; failed to comply
      * will result in the {@link InvalidVectorDimensionException} exception.
      *
-     * @param l the list of elements
+     * @param numbers the list of elements
      *
      * @throws InvalidVectorDimensionException when the list have less than 2 elements
      */
-    public ArrayVector(final List<? extends Number> l) {
-        if ((e = new Number[l.size()]).length < 2)
+    public ArrayVector(final Collection<? extends Number> numbers) {
+        if ((e = new Number[numbers.size()]).length < 2)
             throw new InvalidVectorDimensionException();
 
-        var i = new AtomicInteger();
-        l.forEach(n -> e[i.getAndIncrement()] = n);
-    }
+        var i = 0;
+        for (var n : numbers)
+            e[i++] = n;
 
-    /**
-     * The constructor will create a vector from a {@link Set}.
-     * The elements of the set must be subclass of {@link Number}.
-     * That means the allowed classes are:
-     * {@link Short}
-     * {@link Byte}
-     * {@link Integer}
-     * {@link Long}
-     * {@link Float}
-     * {@link Double}
-     * <p>
-     * The set must contain at least 2 Numbers or more; failed to comply
-     * will result in the {@link InvalidVectorDimensionException} exception.
-     *
-     * @param s the list of elements
-     *
-     * @throws InvalidVectorDimensionException when the set have less than 2 elements
-     */
-    public ArrayVector(final Set<? extends Number> s) {
-        this(new ArrayList<>(s));
+        this.dimension = e.length;
     }
 
     /**
@@ -150,35 +115,279 @@ public final class ArrayVector implements Vector,
     }
 
     /**
-     * The method will tell on which dimension the vector resides.
+     * A dimension of a vector is determined based on the number of elements
+     * it holds. Such as, a two-dimensional vector could be represented as,
+     * (v1, v12); the same as an n-dimensional vector can be represented
+     * as (v1, v2,...., vn), where n belongs to the set of natural numbers "N".
+     * <p>
+     * Many vector operations are dimension dependant, such as addition,
+     * subtraction, and multiplication. Which requires two vectors must be
+     * in the same dimension.
      *
      * @return the dimension of the vector
      */
     @Override
     public int getDimension() {
-        return e.length;
+        return dimension;
     }
 
     /**
-     * The method will calculate the magnitude of the vector.
+     * The magnitude of a vector, also known as "norm", is square root of
+     * the sum all the vector elements powered by 2. A magnitude of a vector
+     * is represented by the length of a vector and written as |V| for vector V.
+     * <p>
+     * For n-dimensional vector, the magnitude is defined as;
+     * |v| = sqrt(v1^2 + v2^2 + ... + vn^2).
      *
-     * @return the double value representing the magnitude
+     * @return the magnitude of the vector
      */
     @Override
     public double getMagnitude() {
-        return Math.sqrt(Arrays.stream(e)
-                .map(n -> n.doubleValue() * n.doubleValue())
-                .reduce(0.0, Double::sum));
+        var sum = 0;
+
+        for (var n : e)
+            sum += n.doubleValue() * n.doubleValue();
+
+        return Math.sqrt(sum);
     }
 
     /**
-     * The method will return all the elements of the vectors as an array.
+     * The method returns the elements of a vector as an array.
      *
-     * @return the array of all the elements.
+     * @return the array of {@link Number}
      */
     @Override
-    public Number[] getElements() {
+    public Number[] toArray() {
         return e;
+    }
+
+    /**
+     * The method returns the elements of a vector as a list of {@link Number}.
+     *
+     * @return the list of {@link Number}
+     */
+    @Override
+    public List<Number> toList() {
+        return Arrays.stream(e).collect(Collectors.toList());
+    }
+
+    /**
+     * The method returns the angle between two vectors.
+     * The second parameter can be true/false, depending on if you want the angle
+     * in degrees (true) or in radian (false).
+     *
+     * @param vector the another vector to calculate
+     * @param degree the angle either in degree or radian
+     *
+     * @return the angle in degrees or radian.
+     */
+    @Override
+    public double angle(final Vector vector, final boolean degree) {
+        double radian = Math.acos(dot(vector) / (getMagnitude() * vector.getMagnitude()));
+        return degree ? Math.toDegrees(radian) : radian;
+    }
+
+    /**
+     * The method will return the inverse vector.
+     * The inverse vector satisfy the following equation:
+     * V + inverse(V) = 0 (Zero Vector).
+     *
+     * @return the inverse vector
+     */
+    @Override
+    public Vector inverse() {
+        n = new Number[dimension];
+        for (var i = 0; i < dimension; i++)
+            n[i] = -e[i].doubleValue();
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will scale the vector by the given value.
+     * Please not, this operation is mutable.
+     *
+     * @param scalar the scalar you want to scale the vector with.
+     *               if:
+     *                <ul>
+     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
+     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
+     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
+     *               </ul>
+     *
+     * @return the self vector but scaled by the given number.
+     */
+    @Override
+    public Vector scale(final double scalar) {
+        n = new Number[dimension];
+        for (var i = 0; i < dimension; i++)
+            n[i] = e[i].doubleValue() * scalar;
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will transpose vector to another dimension. If the given dimension
+     * is less then 2 or the same as the vector's dimension then the method will
+     * throw {@link InvalidVectorDimensionException} exception.
+     * <p>
+     * If I have a two-dimensional vector V = (x, y) and if I transpose the dimension
+     * to the 5th dimension then the resulting vector will be, (x, y, 0, 0, 0); the
+     * same as if I have a 4-dimensional vector v = (x, y, z, t) and if I try to
+     * transpose the vector to the 2nd dimension then the resulting vector will be
+     * (x, y).
+     *
+     * @param dimension the dimension to be transposed to
+     *
+     * @return the transposed vector
+     *
+     * @throws InvalidVectorDimensionException when the given dimension is less
+     *                                         than 2 or the same as the given
+     *                                         vector dimension
+     */
+    @Override
+    public Vector transpose(final int dimension) {
+        if (dimension < 2 || this.dimension == dimension)
+            throw new InvalidVectorDimensionException();
+
+        n = new Number[dimension];
+        if (dimension < this.dimension)
+            System.arraycopy(e, 0, n, 0, dimension);
+        else {
+            System.arraycopy(e, 0, n, 0, this.dimension);
+            for (var i = this.dimension; i < dimension; i++) {
+                n[i] = 0;
+            }
+        }
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will add a vector to the current vector.
+     * In order to add another vector, both vectors must in the same dimension.
+     *
+     * @param vector the vector to be added
+     *
+     * @return the resulting vector
+     *
+     * @throws InvalidVectorDimensionException if the vectors have different dimensions
+     */
+    @Override
+    public Vector add(final Vector vector) {
+        return new ArrayVector(addElements(e, vector.toArray()));
+    }
+
+    /**
+     * The method will add a list of vectors to the current vector.
+     * In order to vectors from the list, all vectors must in the same dimension.
+     *
+     * @param vectors the list of vector
+     *
+     * @return the resulting vector
+     */
+    @Override
+    public Vector add(final List<Vector> vectors) {
+        if (vectors.size() < 2)
+            throw new InvalidParameterProvidedException("The list must have at least 2 vectors");
+
+        n = e;
+        for (Vector vector : vectors)
+            addElements(n, vector.toArray());
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method adds two array together.
+     *
+     * @param e  the base array
+     * @param _e the array to be added
+     *
+     * @return the array addition
+     */
+    private Number[] addElements(final Number[] e, final Number[] _e) {
+        if (e.length != _e.length)
+            throw new InvalidVectorDimensionException("Both vectors have different dimensions");
+
+        for (var i = 0; i < e.length; i++)
+            e[i] = e[i].doubleValue() + _e[i].doubleValue();
+
+        return e;
+    }
+
+    /**
+     * The method will subtract a vector from the current vector.
+     * In order to subtract another vector, both vectors must in the same dimension.
+     *
+     * @param vector the vector to be subtracted
+     *
+     * @return the resulting vector
+     */
+    @Override
+    public Vector subtract(final Vector vector) {
+        return add(vector.inverse());
+    }
+
+    /**
+     * The method will return a dot product of two vectors.
+     * If both vectors are on different dimensions then
+     * {@link InvalidVectorDimensionException} exception is thrown.
+     *
+     * @param vector the second vector
+     *
+     * @return the resulting dot product
+     *
+     * @throws InvalidVectorDimensionException when both products are on different
+     *                                         dimensions.
+     */
+    @Override
+    public double dot(final Vector vector) {
+        Number[] _e;
+        if (dimension != (_e = vector.toArray()).length)
+            throw new InvalidVectorDimensionException();
+
+        var sum = 0;
+        for (var i = 0; i < dimension; i++) {
+            sum += e[i].doubleValue() * _e[i].doubleValue();
+        }
+
+        return sum;
+    }
+
+    /**
+     * The method returns the cross product of two vectors.
+     * A cross product of two vectors if a new vector, this
+     * new vector is perpendicular to both vectors.
+     * <p>
+     * Please note: if two vectors M and N is given then;
+     * M x N != N x M
+     * When you switch an order, the resulting vector
+     * would be in the opposite direction.
+     * <p>
+     * If given vectors are not in 3 dimensions then,
+     * {@link InvalidVectorDimensionException} is thrown.
+     *
+     * @param vector the second 3 dimensional vector
+     *
+     * @return the cross product vector
+     *
+     * @throws InvalidVectorDimensionException when both vectors are in
+     *                                         the third dimension.
+     */
+    @Override
+    public Vector cross(final Vector vector) {
+        Number[] _e, n = new Number[3];
+        if (dimension != 3 || (_e = vector.toArray()).length != 3)
+            throw new InvalidVectorDimensionException("The cross product is only supported for vectors in 3rd dimension");
+
+        n[0] = e[1].doubleValue() * _e[2].doubleValue() - e[2].doubleValue() * _e[1].doubleValue();
+        n[1] = e[2].doubleValue() * _e[0].doubleValue() - e[0].doubleValue() * _e[2].doubleValue();
+        n[2] = e[0].doubleValue() * _e[1].doubleValue() - e[1].doubleValue() * _e[0].doubleValue();
+
+        return new ArrayVector(n);
     }
 
     /**
@@ -202,7 +411,6 @@ public final class ArrayVector implements Vector,
      *
      * @return a string representation of the object.
      */
-    @Override
     public String toString() {
         var l = new LinkedList<String>();
         Arrays.stream(e).forEach(v -> l.add(v.toString()));
@@ -257,14 +465,13 @@ public final class ArrayVector implements Vector,
      * @see #hashCode()
      * @see HashMap
      */
-    @Override
     public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        final var that = (ArrayVector) obj;
-        if (e.length != that.getDimension()) return false;
-        return Arrays.equals(e, that.getElements());
+        var that = (ArrayVector) obj;
+        if (dimension != that.getDimension()) return false;
+        return Arrays.equals(e, that.toArray());
     }
 
     /**
@@ -296,7 +503,6 @@ public final class ArrayVector implements Vector,
      * @see Object#equals(Object)
      * @see System#identityHashCode
      */
-    @Override
     public int hashCode() {
         return Arrays.hashCode(e);
     }
@@ -362,12 +568,11 @@ public final class ArrayVector implements Vector,
      *                                    be cloned.
      * @see Cloneable
      */
-    @Override
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
 
-        var n = new Number[e.length];
-        System.arraycopy(e, 0, n, 0, e.length);
+        n = new Number[dimension];
+        System.arraycopy(e, 0, n, 0, dimension);
 
         return new ArrayVector(n);
     }

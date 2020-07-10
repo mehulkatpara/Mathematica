@@ -1,7 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
-import org.katpara.mathematica.exceptions.InvalidMatrixDimensionException;
-import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 
 /**
  * The interface defines a Matrix in the system, and it's operations.
