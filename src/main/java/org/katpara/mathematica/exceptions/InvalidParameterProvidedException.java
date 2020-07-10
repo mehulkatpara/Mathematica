@@ -1,27 +1,25 @@
 package org.katpara.mathematica.exceptions;
 
 /**
- * The exception is thrown when the program is processing on a null
- * argument passed where the system doesn't expect a null argument.
+ * The exception is thrown when an invalid parameter is passed as an argument.
  *
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public class NullArgumentProvided extends RuntimeException {
-    @java.io.Serial
-    private static final long serialVersionUID = 1392183545974749989L;
+public class InvalidParameterProvidedException extends RuntimeException {
+    private static final long serialVersionUID = 3727500311644363939L;
 
     /**
      * The default message in case of the specialized message is not provided.
      */
-    private static final String MESSAGE = "Null argument provided";
+    private static final String MESSAGE = "Invalid parameters";
 
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public NullArgumentProvided() {
+    public InvalidParameterProvidedException() {
         super(MESSAGE);
     }
 
@@ -33,7 +31,7 @@ public class NullArgumentProvided extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public NullArgumentProvided(final String message) {
+    public InvalidParameterProvidedException(final String message) {
         super(message);
     }
 }

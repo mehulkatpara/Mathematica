@@ -1,28 +1,26 @@
 package org.katpara.mathematica.exceptions;
 
 /**
- * The exception is thrown when the program wants to create a vector
- * with invalid dimensions, or when two or more vectors are interacting
- * with each other and they are in different dimensions.
+ * The exception is thrown when the program is processing on a null
+ * argument passed where the system doesn't expect a null argument.
  *
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public class InvalidVectorDimension extends RuntimeException {
-    @java.io.Serial
-    private static final long serialVersionUID = 2151811694623431211L;
+public class NullArgumentProvidedException extends RuntimeException {
+    private static final long serialVersionUID = 1392183545974749989L;
 
     /**
      * The default message in case of the specialized message is not provided.
      */
-    private static final String MESSAGE = "The vector dimension is invalid";
+    private static final String MESSAGE = "Null argument provided";
 
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public InvalidVectorDimension() {
+    public NullArgumentProvidedException() {
         super(MESSAGE);
     }
 
@@ -34,7 +32,7 @@ public class InvalidVectorDimension extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public InvalidVectorDimension(final String message) {
+    public NullArgumentProvidedException(final String message) {
         super(message);
     }
 }

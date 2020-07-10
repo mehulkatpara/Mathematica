@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.exceptions.InvalidParameterProvided;
-import org.katpara.mathematica.exceptions.InvalidVectorDimension;
+import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
+import org.katpara.mathematica.exceptions.InvalidVectorDimensionException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,8 +17,7 @@ import java.util.stream.IntStream;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public final class VectorOperations {
-    @java.io.Serial
+public class VectorOperations {
     private static final long serialVersionUID = 4042529171225355742L;
 
     /**
@@ -114,20 +113,20 @@ public final class VectorOperations {
      * The method will transpose vector to another dimension.
      * If the given dimension is less then 2 or the same as
      * the vector's dimension then the method will throw
-     * {@link InvalidVectorDimension} exception.
+     * {@link InvalidVectorDimensionException} exception.
      *
      * @param v the vector
      * @param d dimension to be transposed
      *
      * @return the transposed vector
      *
-     * @throws InvalidVectorDimension when the given dimension is less
+     * @throws InvalidVectorDimensionException when the given dimension is less
      *                                than 2 or the same as the given
      *                                vector dimension
      */
     public static Vector transpose(final Vector v, final int d) {
         if (d < 2 || v.getDimension() == d)
-            throw new InvalidVectorDimension();
+            throw new InvalidVectorDimensionException();
 
         Number[] n = new Number[d], e = v.getElements();
         if (d < e.length)
@@ -143,20 +142,20 @@ public final class VectorOperations {
     /**
      * The method will return a dot product of two vectors.
      * If both vectors are on different dimensions then
-     * {@link InvalidVectorDimension} exception is thrown.
+     * {@link InvalidVectorDimensionException} exception is thrown.
      *
      * @param v1 the first vector
      * @param v2 the second vector
      *
      * @return the resulting dot product
      *
-     * @throws InvalidVectorDimension when both products are on different
+     * @throws InvalidVectorDimensionException when both products are on different
      *                                dimensions.
      */
     public static double dotProduct(final Vector v1, final Vector v2) {
         Number[] e1, e2;
         if ((e1 = v1.getElements()).length != (e2 = v2.getElements()).length)
-            throw new InvalidVectorDimension();
+            throw new InvalidVectorDimensionException();
 
         return IntStream.range(0, e1.length)
                 .mapToDouble(i -> e1[i].doubleValue() * e2[i].doubleValue())
@@ -174,20 +173,20 @@ public final class VectorOperations {
      * would be in the opposite direction.
      * <p>
      * If given vectors are not in 3 dimensions then,
-     * {@link InvalidVectorDimension} is thrown.
+     * {@link InvalidVectorDimensionException} is thrown.
      *
      * @param v1 the first 3 dimensional vector
      * @param v2 the second 3 dimensional vector
      *
      * @return the cross product vector
      *
-     * @throws InvalidVectorDimension when both vectors are in
+     * @throws InvalidVectorDimensionException when both vectors are in
      *                                the third dimension.
      */
     public static Vector crossProduct(final Vector v1, final Vector v2) {
         Number[] e1, e2, n = new Number[3];
         if ((e1 = v1.getElements()).length != 3 || (e2 = v2.getElements()).length != 3)
-            throw new InvalidVectorDimension("The cross product is only supported for vectors in 3rd dimension");
+            throw new InvalidVectorDimensionException("The cross product is only supported for vectors in 3rd dimension");
 
         n[0] = e1[1].doubleValue() * e2[2].doubleValue() - e1[2].doubleValue() * e2[1].doubleValue();
         n[1] = e1[2].doubleValue() * e2[0].doubleValue() - e1[0].doubleValue() * e2[2].doubleValue();
@@ -214,7 +213,7 @@ public final class VectorOperations {
 
     private static Vector addSubVectors(final List<? extends Vector> vl, final boolean a) {
         if (vl.size() < 2)
-            throw new InvalidParameterProvided("The list must have at least 2 vectors");
+            throw new InvalidParameterProvidedException("The list must have at least 2 vectors");
 
         final Vector[] fv = {vl.get(0)};
         vl.stream().skip(1).forEach(v -> fv[0] = addSubTwoVectors(fv[0], v, a));
@@ -224,7 +223,7 @@ public final class VectorOperations {
     private static Vector addSubTwoVectors(final Vector v1, final Vector v2, final boolean a) {
         Number[] e1 = v1.getElements(), e2 = v2.getElements(), n;
         if (e1.length != e2.length)
-            throw new InvalidVectorDimension("Both vectors have different dimensions");
+            throw new InvalidVectorDimensionException("Both vectors have different dimensions");
 
         n = new Number[e1.length];
         final AtomicInteger ai = new AtomicInteger(0);

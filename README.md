@@ -31,15 +31,15 @@ Vector v = new ArrayVector(new Number[]{1, 2, 3, 4});               //=> <1, 2, 
 ```
 This is way preferable to create a vector with more than 3 dimensions; otherwise use the other two ways 
 for the simplicity.<br/>
-It throws __InvalidVectorDimension__ when, the array has less than 2 elements.<br/>
-It throws __NullArgumentProvided__ when, the array contains null values.
+It throws __InvalidVectorDimensionException__ when, the array has less than 2 elements.<br/>
+It throws __NullArgumentProvidedException__ when, the array contains null values.
 
 #### To create a vector from a List
 ```
 Vector v = new ArrayVector(List.of(1, 2, 3));                       //=> <1, 2, 3>
 ```
 <ul>
-    <li>It should have at least two elements, or throws __InvalidVectorDimension__.
+    <li>It should have at least two elements, or throws __InvalidVectorDimensionException__.
     <li>The List must be a type of java.lang.Number
     <li>It should have non-null values.
 </ul>
@@ -131,8 +131,8 @@ Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 6.0, 12.0>
 List<Vector> vl = new ArrayList<>(List.of(v1, v2));
 Vector b = VectorOperations.addVector(vl);              //=> <0.0, 6.0, 12.0>
 ```
-It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.<br/>
-It throws __InvalidVectorDimension__ when, vectors have different dimensions.
+It throws __InvalidParameterProvidedException__ when, the list contains 1 or 0 elements.<br/>
+It throws __InvalidVectorDimensionException__ when, vectors have different dimensions.
 
 #### Subtract vectors
 ```
@@ -146,8 +146,8 @@ Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 2.0, 4.0>
 List<Vector> vl = new ArrayList<>(List.of(v1, v2));
 Vector b = VectorOperations.addVector(vl);              //=> <0.0, 2.0, 4.0>
 ```
-It throws __InvalidParameterProvided__ when, the list contains 1 or 0 elements.<br/>
-It throws __InvalidVectorDimension__ when, vectors have different dimensions.
+It throws __InvalidParameterProvidedException__ when, the list contains 1 or 0 elements.<br/>
+It throws __InvalidVectorDimensionException__ when, vectors have different dimensions.
 
 #### Transpose dimensions of vectors
 ```
@@ -158,7 +158,7 @@ Vector s = VectorOperations.transpose(v, 2);            //=> <0.0, 4.0>
 Vector err1 = VectorOperations.transpose(v, 1);         //=> less than 2
 Vector err2 = VectorOperations.transpose(v, 3);         //=> the same as v.getDimension()
 ```
-It throws __InvalidVectorDimension__ when,
+It throws __InvalidVectorDimensionException__ when,
 <ul>
 <li>The targeted dimension is less than 2.</li>
 <li>The targeted dimension is the same as the vector dimension.</li>
@@ -171,7 +171,7 @@ Vector v2 = new ArrayVector(4, 3);
 
 double dp = VectorOperations.dotProduct(v1, v2)         //=> 24.0
 ```
-It throws __InvalidVectorDimension__ when, both vectors have different dimensions.
+It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.
 
 #### Cross product
 ```
@@ -180,7 +180,7 @@ Vector v2 = new ArrayVector(-3, 4, 1);
 
 Vector r = VectorOperations.crossProduct(v1, v2)         //=> <5.0, 1.0, 11.0>
 ```
-It throws __InvalidVectorDimension__ when, both vectors are not three-dimensional.
+It throws __InvalidVectorDimensionException__ when, both vectors are not three-dimensional.
 
 #### Get an angle between two products
 ```
@@ -190,4 +190,4 @@ Vector v2 = new ArrayVector(0, 3);
 double a1 = VectorOperations.angle(v1, v2, true);       //=> 45.00000000000001  in Degrees
 double a2 = VectorOperations.angle(v1, v2, false);      //=> 0.7853981633974484 in Radian
 ```
-It throws __InvalidVectorDimension__ when, both vectors have different dimensions.
+It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.

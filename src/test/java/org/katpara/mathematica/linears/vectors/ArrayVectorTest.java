@@ -2,8 +2,8 @@ package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.exceptions.InvalidVectorDimension;
-import org.katpara.mathematica.exceptions.NullArgumentProvided;
+import org.katpara.mathematica.exceptions.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -17,9 +17,9 @@ class ArrayVectorTest {
     @Test
     void testNumberConstructor() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(new Number[]{1})),
-                () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[2])),
-                () -> assertThrows(NullArgumentProvided.class, () -> new ArrayVector(new Number[]{null, null})),
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> new ArrayVector(new Number[]{1})),
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayVector(new Number[2])),
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayVector(new Number[]{null, null})),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(new Number[]{1, 2})),
                 () -> assertNotNull(new ArrayVector(1, 2).toString()),
                 () -> assertNotNull(new ArrayVector(1, 2, 3).toString())
@@ -29,7 +29,7 @@ class ArrayVectorTest {
     @RepeatedTest(100)
     void testListConstructor() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(List.of(1))),
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> new ArrayVector(List.of(1))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(List.of(1, 2))),
                 () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(List.of(1, 2, 3))),
                 () -> assertEquals(new ArrayVector(new Number[]{1, 2, 3, 4}), new ArrayVector(List.of(1, 2, 3, 4)))
@@ -39,7 +39,7 @@ class ArrayVectorTest {
     @RepeatedTest(100)
     void testSetConstructor() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(new LinkedHashSet<>(List.of(1)))),
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> new ArrayVector(new LinkedHashSet<>(List.of(1)))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(new LinkedHashSet<>(List.of(1, 2)))),
                 () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(new LinkedHashSet<>(List.of(1, 2, 3)))),
                 () -> assertEquals(new ArrayVector(new Number[]{1, 2, 3, 4})
@@ -59,7 +59,7 @@ class ArrayVectorTest {
         m2.put(3, 3);
 
         assertAll(
-                () -> assertThrows(InvalidVectorDimension.class, () -> new ArrayVector(Map.of(1, 1))),
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> new ArrayVector(Map.of(1, 1))),
                 () -> assertEquals(new ArrayVector(1, 2), new ArrayVector(m1)),
                 () -> assertEquals(new ArrayVector(1, 2, 3), new ArrayVector(m2))
         );
