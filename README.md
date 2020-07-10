@@ -9,7 +9,7 @@ In order to create a vector; both class and interface decide in the package:
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.linears.vectors.Vector;
-import org.katpara.mathematica.linears.vectors.ArrayVector;
+import org.katpara.mathematica.linears.vectors.ArrayVector_Old;
 ```
 
 ### The basics:
