@@ -14,13 +14,13 @@ final class MatrixUtility {
      * @param m the number of rows
      * @param n the number of columns
      *
-     * @return an {@link ArrayMatrix} with all 0 entries
+     * @return an {@link ArrayMatrix_old} with all 0 entries
      *
      * @throws InvalidMatrixDimensionException when # of row + # of column < 2;
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
-    static ArrayMatrix getZeroMatrix(final int m, final int n) {
+    static ArrayMatrix_old getZeroMatrix(final int m, final int n) {
         return getZeroOneMatrix(m, n, ZERO);
     }
 
@@ -34,7 +34,7 @@ final class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException when m + n < 2
      */
-    static ArrayMatrix getOneMatrix(final int m, final int n) {
+    static ArrayMatrix_old getOneMatrix(final int m, final int n) {
         return getZeroOneMatrix(m, n, ONE);
     }
 
@@ -49,7 +49,7 @@ final class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException when m + n < 2
      */
-    private static ArrayMatrix getZeroOneMatrix(final int m, final int n, final Matrix.MatrixType t) {
+    private static ArrayMatrix_old getZeroOneMatrix(final int m, final int n, final Matrix.MatrixType t) {
         if (m + n < 2)
             throw new InvalidMatrixDimensionException("One matrix should have at least one element");
 
@@ -63,7 +63,7 @@ final class MatrixUtility {
         for (int i = 1; i < e.length; i++)
             System.arraycopy(e[0], 0, e[i], 0, e[0].length);
 
-        return new ArrayMatrix(e, t);
+        return new ArrayMatrix_old(e, t);
     }
 
     /**
@@ -77,7 +77,7 @@ final class MatrixUtility {
      *
      * @throws InvalidMatrixDimensionException when n < 1, at least one element should exist.
      */
-    static ArrayMatrix getPascalMatrix(final int n, final Matrix.PascalMatrixType t) {
+    static ArrayMatrix_old getPascalMatrix(final int n, final Matrix.PascalMatrixType t) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Pascal's matrix should have at least one element");
 
@@ -111,7 +111,7 @@ final class MatrixUtility {
             });
         }
 
-        return new ArrayMatrix(_ref.e, PASCAL);
+        return new ArrayMatrix_old(_ref.e, PASCAL);
     }
 
     /**
@@ -121,7 +121,7 @@ final class MatrixUtility {
      *
      * @return InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getLehmerMatrix(final int n) {
+    static ArrayMatrix_old getLehmerMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Lehmer matrix should have at least one element");
 
@@ -131,7 +131,7 @@ final class MatrixUtility {
                         ((double) i + 1) / ((double) j + 1) :
                         ((double) j + 1) / ((double) i + 1)));
 
-        return new ArrayMatrix(e, LEHMER);
+        return new ArrayMatrix_old(e, LEHMER);
     }
 
     /**
@@ -140,17 +140,17 @@ final class MatrixUtility {
      *
      * @param n the number of rows and columns
      *
-     * @return an identity {@link ArrayMatrix}
+     * @return an identity {@link ArrayMatrix_old}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getIdentityMatrix(final int n) {
+    static ArrayMatrix_old getIdentityMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Identity matrix should have at least one element");
 
         var e = new Number[n][n];
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j -> e[i][j] = (i == j) ? 1 : 0));
-        return new ArrayMatrix(e, IDENTITY);
+        return new ArrayMatrix_old(e, IDENTITY);
     }
 
     /**
@@ -158,18 +158,18 @@ final class MatrixUtility {
      *
      * @param n the number of rows and columns
      *
-     * @return a hilbert {@link ArrayMatrix}
+     * @return a hilbert {@link ArrayMatrix_old}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getHilbertMatrix(final int n) {
+    static ArrayMatrix_old getHilbertMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Hilbert matrix should have at least one element");
 
         var e = new Number[n][n];
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
                 e[i][j] = 1 / ((double) (i + 1) + (double) (j + 1) - 1)));
-        return new ArrayMatrix(e, HILBERT);
+        return new ArrayMatrix_old(e, HILBERT);
     }
 
     /**
@@ -178,17 +178,17 @@ final class MatrixUtility {
      *
      * @param n the square matrix
      *
-     * @return an exchange {@link ArrayMatrix}
+     * @return an exchange {@link ArrayMatrix_old}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getExchangeMatrix(final int n) {
+    static ArrayMatrix_old getExchangeMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Exchange matrix should have at least one element");
 
         var e = new Number[n][n];
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j -> e[i][j] = (j == n - i - 1) ? 1 : 0));
-        return new ArrayMatrix(e, EXCHANGE);
+        return new ArrayMatrix_old(e, EXCHANGE);
     }
 
     /**
@@ -197,18 +197,18 @@ final class MatrixUtility {
      *
      * @param n the number of rows and columns
      *
-     * @return a redheffer {@link ArrayMatrix}
+     * @return a redheffer {@link ArrayMatrix_old}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getRedhefferMatrix(final int n) {
+    static ArrayMatrix_old getRedhefferMatrix(final int n) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Redheffer matrix should have at least one element");
 
         var e = new Number[n][n];
         IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
                 e[i][j] = (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)));
-        return new ArrayMatrix(e, REDHEFFER);
+        return new ArrayMatrix_old(e, REDHEFFER);
     }
 
     /**
@@ -218,11 +218,11 @@ final class MatrixUtility {
      * @param n the number of rows and columns
      * @param t the type of matrix, i.e UPPER or LOWER
      *
-     * @return a shift {@link ArrayMatrix}
+     * @return a shift {@link ArrayMatrix_old}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getShiftMatrix(final int n, final Matrix.ShiftMatrixType t) {
+    static ArrayMatrix_old getShiftMatrix(final int n, final Matrix.ShiftMatrixType t) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
 
@@ -234,6 +234,6 @@ final class MatrixUtility {
             IntStream.range(0, n).forEach(i -> IntStream.range(0, n).forEach(j ->
                     e[i][j] = (j == i - 1) ? 1 : 0));
 
-        return new ArrayMatrix(e, SHIFT);
+        return new ArrayMatrix_old(e, SHIFT);
     }
 }

@@ -53,6 +53,39 @@ public interface Vector extends Cloneable, Serializable {
     List<Number> toList();
 
     /**
+     * If the given vector is orthogonal to the current vector, then it returns true;
+     * otherwise it would be false.
+     * <p>
+     * Orthogonality is known as a vector that is perpendicular to the given matrix,
+     * i.e. if the vector makes the 90 degrees angle with the current matrix.
+     *
+     * @param vector the vector to check orthogonality
+     *
+     * @return true if it's orthogonal
+     */
+    boolean isOrthogonal(Vector vector);
+
+    /**
+     * If the given vector is parallel to the current vector then it returns the factor;
+     * otherwise it will be -1.
+     * <p>
+     * The parallel vectors have the same direction but different magnitudes, which
+     * means the given vector is scaled up or down in the same or opposite direction
+     * of the current vector.
+     * <p>
+     * If a vector V1 = (v1, v2, ... , vn), and a vector W = (w1, w2, ..., wn);
+     * where n belongs to the set of Integers. Then the parallel vectors can be
+     * written as;
+     * W = a(V); where a is a constant (here "the factor").
+     * i.e (w1, w2, ..., wn) = (av1, av2, ..., avn)
+     *
+     * @param vector the vector to check parallelism
+     *
+     * @return if it's parallel then returns the factor, otherwise -1
+     */
+    double isParallel(Vector vector);
+
+    /**
      * The method returns the angle between two vectors.
      * The second parameter can be true/false, depending on if you want the angle
      * in degrees (true) or in radian (false).

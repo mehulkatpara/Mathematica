@@ -28,12 +28,12 @@
 //        Number[][] t6 = new Number[][]{{1, 2}, {1, 0}};
 //
 //        assertAll(
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(t1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(t2)),
-//                () -> new ArrayMatrix(t3),
-//                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix(t4)),
-//                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix(t5)),
-//                () -> new ArrayMatrix(t6)
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(t1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(t2)),
+//                () -> new ArrayMatrix_old(t3),
+//                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix_old(t4)),
+//                () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayMatrix_old(t5)),
+//                () -> new ArrayMatrix_old(t6)
 //        );
 //    }
 //
@@ -51,15 +51,15 @@
 //        Set<List<Number>> s4 = Set.of(List.of(1), List.of(2));
 //
 //        assertAll(
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l2)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(l3)),
-//                () -> new ArrayMatrix(l4),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(l1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(l2)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(l3)),
+//                () -> new ArrayMatrix_old(l4),
 //
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s2)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(s3)),
-//                () -> new ArrayMatrix(s4)
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(s1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(s2)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(s3)),
+//                () -> new ArrayMatrix_old(s4)
 //        );
 //    }
 //
@@ -81,29 +81,29 @@
 //        Map<Integer, Vector> vm4 = Map.of(1, new ArrayVector_Old(1, 2), 2, new ArrayVector_Old(1, 2));
 //
 //        assertAll(
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vl1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vl2)),
-//                () -> new ArrayMatrix(vl3),
-//                () -> new ArrayMatrix(vl4),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vl1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vl2)),
+//                () -> new ArrayMatrix_old(vl3),
+//                () -> new ArrayMatrix_old(vl4),
 //
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vs1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vs2)),
-//                () -> new ArrayMatrix(vs3),
-//                () -> new ArrayMatrix(vs4),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vs1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vs2)),
+//                () -> new ArrayMatrix_old(vs3),
+//                () -> new ArrayMatrix_old(vs4),
 //
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vm1)),
-//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vm2)),
-//                () -> new ArrayMatrix(vm3),
-//                () -> new ArrayMatrix(vm4)
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vm1)),
+//                () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix_old(vm2)),
+//                () -> new ArrayMatrix_old(vm3),
+//                () -> new ArrayMatrix_old(vm4)
 //        );
 //
 //    }
 //
 //    @Test
 //    void testDimension() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1, 2}}).getDimension();
-//        var _d2 = new ArrayMatrix(new Number[][]{{1}, {1}}).getDimension();
-//        var _d3 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1, 2}}).getDimension();
+//        var _d2 = new ArrayMatrix_old(new Number[][]{{1}, {1}}).getDimension();
+//        var _d3 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2, 3),
 //                new ArrayVector_Old(4, 5, 6))
 //        ).getDimension();
@@ -120,8 +120,8 @@
 //
 //    @RepeatedTest(100)
 //    void testElements() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
-//        var _d2 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1, 2}, {3, 4}});
+//        var _d2 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2, 3),
 //                new ArrayVector_Old(4, 5, 6),
 //                new ArrayVector_Old(7, 8, 9)));
@@ -147,11 +147,11 @@
 //
 //    @Test
 //    void testMatrixEquals() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
-//        var _d2 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
-//        var _d3 = new ArrayMatrix(new Number[][]{{11, 20}, {23, 34}});
-//        var _d4 = new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}});
-//        var _d5 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1, 2}, {3, 4}});
+//        var _d2 = new ArrayMatrix_old(new Number[][]{{1, 2}, {3, 4}});
+//        var _d3 = new ArrayMatrix_old(new Number[][]{{11, 20}, {23, 34}});
+//        var _d4 = new ArrayMatrix_old(new Number[][]{{1, 2, 3}, {4, 5, 6}});
+//        var _d5 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2),
 //                new ArrayVector_Old(3, 4)));
 //
@@ -166,7 +166,7 @@
 //    @Test
 //    void testType() {
 //        assertAll(
-//                () -> assertEquals(Matrix.MatrixType.NOT_SPECIFIED, new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}}).getType()),
+//                () -> assertEquals(Matrix.MatrixType.NOT_SPECIFIED, new ArrayMatrix_old(new Number[][]{{1, 2}, {3, 4}}).getType()),
 //                () -> assertEquals(Matrix.MatrixType.IDENTITY, Matrix.getIdentityMatrix(5).getType()),
 //                () -> assertEquals(Matrix.MatrixType.PASCAL, Matrix.getPascalMatrix(5, Matrix.PascalMatrixType.SYMMETRIC).getType()),
 //                () -> assertEquals(Matrix.MatrixType.EXCHANGE, Matrix.getExchangeMatrix(5).getType())
@@ -175,9 +175,9 @@
 //
 //    @Test
 //    void testIsRowVector() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1, 2}});
-//        var _d2 = new ArrayMatrix(List.of(new ArrayVector_Old(1, 2, 3)));
-//        var _d3 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1, 2}});
+//        var _d2 = new ArrayMatrix_old(List.of(new ArrayVector_Old(1, 2, 3)));
+//        var _d3 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2, 3),
 //                new ArrayVector_Old(4, 5, 6)));
 //
@@ -190,9 +190,9 @@
 //
 //    @Test
 //    void testIsColumnVector() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1}, {2}});
-//        var _d2 = new ArrayMatrix(List.of(List.of(1), List.of(2), List.of(3)));
-//        var _d3 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1}, {2}});
+//        var _d2 = new ArrayMatrix_old(List.of(List.of(1), List.of(2), List.of(3)));
+//        var _d3 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2, 3),
 //                new ArrayVector_Old(4, 5, 6)));
 //
@@ -205,12 +205,12 @@
 //
 //    @Test
 //    void testIsSquareMatrix() {
-//        var _d1 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
-//        var _d2 = new ArrayMatrix(List.of(
+//        var _d1 = new ArrayMatrix_old(new Number[][]{{1, 2}, {3, 4}});
+//        var _d2 = new ArrayMatrix_old(List.of(
 //                new ArrayVector_Old(1, 2, 3),
 //                new ArrayVector_Old(4, 5, 6),
 //                new ArrayVector_Old(7, 8, 9)));
-//        var _d3 = new ArrayMatrix(List.of(List.of(1, 2), List.of(3, 4), List.of(5, 6)));
+//        var _d3 = new ArrayMatrix_old(List.of(List.of(1, 2), List.of(3, 4), List.of(5, 6)));
 //
 //        assertAll(
 //                () -> assertTrue(_d1.isSquareMatrix()),
@@ -230,7 +230,7 @@
 //                () -> assertThrows(InvalidMatrixOperationException.class,
 //                        () -> Matrix.getOneMatrix(5, 10).getTrace()),
 //                () -> assertThrows(InvalidMatrixOperationException.class,
-//                        () -> new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}}).getTrace()),
+//                        () -> new ArrayMatrix_old(new Number[][]{{1, 2, 3}, {4, 5, 6}}).getTrace()),
 //                () -> assertEquals(5, Matrix.getIdentityMatrix(5).getTrace()),
 //                () -> assertEquals(5, Matrix.getOneMatrix(5, 5).getTrace()),
 //                () -> assertEquals(0, Matrix.getShiftMatrix(3, Matrix.ShiftMatrixType.LOWER).getTrace()),
@@ -238,13 +238,13 @@
 //                () -> assertEquals(1, Matrix.getExchangeMatrix(7).getTrace()),
 //                () -> assertEquals(12, Matrix.getPascalMatrix(12, Matrix.PascalMatrixType.UPPER).getTrace()),
 //                () -> assertEquals(8, Matrix.getPascalMatrix(8, Matrix.PascalMatrixType.LOWER).getTrace()),
-//                () -> assertEquals(5D, new ArrayMatrix(new Number[][]{
+//                () -> assertEquals(5D, new ArrayMatrix_old(new Number[][]{
 //                        {3, 2, 0, 4},
 //                        {4, 1, -2, 3},
 //                        {-3, -2, -4, 7},
 //                        {3, 1, 1, 5}
 //                }).getTrace()),
-//                () -> assertEquals(30D, new ArrayMatrix(new Number[][]{
+//                () -> assertEquals(30D, new ArrayMatrix_old(new Number[][]{
 //                        {1, 2, 3, 4, 2},
 //                        {-4, 11, 5, 2, 0},
 //                        {-1, 0, 3, 2, 3},
@@ -267,21 +267,21 @@
 //    void testDeterminant() {
 //        assertAll(
 //                () -> assertThrows(InvalidMatrixOperationException.class, () ->
-//                        new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
-//                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
-//                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
-//                () -> assertEquals(16D, new ArrayMatrix(new Number[][]{
+//                        new ArrayMatrix_old(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
+//                () -> assertEquals(1D, new ArrayMatrix_old(new Number[][]{{1}}).getDeterminant()),
+//                () -> assertEquals(-4D, new ArrayMatrix_old(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
+//                () -> assertEquals(16D, new ArrayMatrix_old(new Number[][]{
 //                        {1, 2, 1, 0},
 //                        {0, 3, 1, 1},
 //                        {-1, 0, 3, 1},
 //                        {3, 1, 2, 0}
 //                }).getDeterminant()),
-//                () -> assertEquals(256, new ArrayMatrix(new Number[][]{
+//                () -> assertEquals(256, new ArrayMatrix_old(new Number[][]{
 //                        {3, 7, 0},
 //                        {8, 0, -2},
 //                        {0, -4, -5}
 //                }).getDeterminant()),
-//                () -> assertEquals(-49964D, new ArrayMatrix(new Number[][]{
+//                () -> assertEquals(-49964D, new ArrayMatrix_old(new Number[][]{
 //                        {6, 3, -6, -4, 9},
 //                        {-2, -5, 9, 2, 10},
 //                        {2, 3, 4, -5, 6},

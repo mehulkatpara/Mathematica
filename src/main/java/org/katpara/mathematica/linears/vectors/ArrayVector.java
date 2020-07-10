@@ -172,6 +172,59 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * If the given vector is orthogonal to the current vector, then it returns true;
+     * otherwise it would be false.
+     * <p>
+     * Orthogonality is known as a vector that is perpendicular to the given matrix,
+     * i.e. if the vector makes the 90 degrees angle with the current matrix.
+     *
+     * @param vector the vector to check orthogonality
+     *
+     * @return true if it's orthogonal
+     */
+    @Override
+    public boolean isOrthogonal(final Vector vector) {
+        return angle(vector, true) != 0;
+    }
+
+    /**
+     * If the given vector is parallel to the current vector then it returns the factor;
+     * otherwise it will be -1.
+     * <p>
+     * The parallel vectors have the same direction but different magnitudes, which
+     * means the given vector is scaled up or down in the same or opposite direction
+     * of the current vector.
+     * <p>
+     * If a vector V1 = (v1, v2, ... , vn), and a vector W = (w1, w2, ..., wn);
+     * where n belongs to the set of Integers. Then the parallel vectors can be
+     * written as;
+     * W = a(V); where a is a constant (here "the factor").
+     * i.e (w1, w2, ..., wn) = (av1, av2, ..., avn)
+     *
+     * @param vector the vector to check parallelism
+     *
+     * @return if it's parallel then returns the factor, otherwise -1
+     */
+    @Override
+    public double isParallel(final Vector vector) {
+        if(dimension != vector.getDimension())
+            throw new InvalidVectorDimensionException("Vectors have different dimensions");
+
+        var _e = vector.toArray();
+        var a = -1.0;
+
+        for (int i = 0; i < dimension; i++) {
+            var _a = _e[i].doubleValue()/e[i].doubleValue();
+
+            if(a == -1)
+                a = _a;
+            else if(a != _a)
+                return -1;
+        }
+        return a;
+    }
+
+    /**
      * The method returns the angle between two vectors.
      * The second parameter can be true/false, depending on if you want the angle
      * in degrees (true) or in radian (false).

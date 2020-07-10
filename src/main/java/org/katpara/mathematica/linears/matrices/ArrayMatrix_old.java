@@ -35,13 +35,12 @@ import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public final class ArrayMatrix implements Matrix,
-        RandomAccess, Cloneable, java.io.Serializable {
+public final class ArrayMatrix_old {
 
     private static final long serialVersionUID = 3493256845029049971L;
 
     private final Number[][] e;
-    private final MatrixType t;
+    private final Matrix.MatrixType t;
     private final AtomicInteger i = new AtomicInteger(0);
 
     /**
@@ -62,7 +61,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
      * @throws NullArgumentProvidedException   when the array has a null value
      */
-    ArrayMatrix(final Number[][] e, final MatrixType t) {
+    ArrayMatrix_old(final Number[][] e, final Matrix.MatrixType t) {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
 
@@ -91,7 +90,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
      * @throws NullArgumentProvidedException   when the array has a null value
      */
-    public ArrayMatrix(final Number[][] e) {
+    public ArrayMatrix_old(final Number[][] e) {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
 
@@ -121,7 +120,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException   when the collection is empty
      * @throws InvalidMatrixDimensionException   when rows are of variable length
      */
-    public ArrayMatrix(final Collection<List<Number>> c) {
+    public ArrayMatrix_old(final Collection<List<Number>> c) {
         if (!(c instanceof List) && !(c instanceof Set))
             throw new InvalidParameterProvidedException("The matrix can only be a type of List or Set");
 
@@ -164,7 +163,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException if the list is empty
      * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
      */
-    public ArrayMatrix(final List<? extends Vector> vl) {
+    public ArrayMatrix_old(final List<? extends Vector> vl) {
         if (vl.size() < 1)
             throw new InvalidMatrixDimensionException();
 
@@ -189,7 +188,7 @@ public final class ArrayMatrix implements Matrix,
 
     /**
      * The constructor is used to create a matrix out of a set of matrices.
-     * The constructor internally relies on {@link #ArrayMatrix(List)} to
+     * The constructor internally relies on {@link #ArrayMatrix_old(List)} to
      * create a matrix, please note.
      *
      * @param vs a set of {@link Vector}
@@ -197,7 +196,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException if the set is empty
      * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
      */
-    public ArrayMatrix(final Set<Vector> vs) {
+    public ArrayMatrix_old(final Set<Vector> vs) {
         this(new ArrayList<>(vs));
     }
 
@@ -207,7 +206,7 @@ public final class ArrayMatrix implements Matrix,
      * can be anything as long as it makes a valid map, however the values must be
      * a type of {@link Vector}.
      * <p>
-     * Please note, that this constructor internally relies on {@link #ArrayMatrix(List)}
+     * Please note, that this constructor internally relies on {@link #ArrayMatrix_old(List)}
      * to create a matrix.
      *
      * @param vm a map of {@link Vector}
@@ -215,7 +214,7 @@ public final class ArrayMatrix implements Matrix,
      * @throws InvalidMatrixDimensionException if the map is empty
      * @throws InvalidMatrixDimensionException when given vectors are on various dimensions
      */
-    public ArrayMatrix(final Map<?, ? extends Vector> vm) {
+    public ArrayMatrix_old(final Map<?, ? extends Vector> vm) {
         this(new ArrayList<>(vm.values()));
     }
 
@@ -224,7 +223,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the dimension of the matrix
      */
-    @Override
     public int[] getDimension() {
         return new int[]{e.length, e[0].length};
     }
@@ -234,7 +232,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the matrix elements
      */
-    @Override
     public Number[][] getElements() {
         return e;
     }
@@ -245,8 +242,7 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the type of matrix
      */
-    @Override
-    public MatrixType getType() {
+    public Matrix.MatrixType getType() {
         return t;
     }
 
@@ -256,7 +252,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return true if it is a row vector
      */
-    @Override
     public boolean isRowVector() {
         return e.length == 1 && e[0].length > 1;
     }
@@ -267,7 +262,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return true if it is a column vector
      */
-    @Override
     public boolean isColumnVector() {
         return e.length > 1 && e[0].length == 1;
     }
@@ -278,7 +272,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return true if it is a square matrix
      */
-    @Override
     public boolean isSquareMatrix() {
         switch (t) {
             case SHIFT:
@@ -304,7 +297,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @throws InvalidMatrixOperationException when the matrix is not a square matrix
      */
-    @Override
     public double getTrace() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
@@ -343,7 +335,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the rank of matrix
      */
-    @Override
     public int getRank() {
         //TODO: Rank calculation for other matrices.
         switch (t) {
@@ -365,7 +356,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the determinant of the square matrix
      */
-    @Override
     public double getDeterminant() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
@@ -441,7 +431,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return the permanent of a matrix
      */
-    @Override
     public double getPermanent() {
         return 0;
     }
@@ -467,7 +456,6 @@ public final class ArrayMatrix implements Matrix,
      *
      * @return a string representation of the object.
      */
-    @Override
     public String toString() {
         StringBuffer s = new StringBuffer();
         Arrays.stream(e).forEach(r -> {
@@ -509,7 +497,6 @@ public final class ArrayMatrix implements Matrix,
      * @see Object#equals(Object)
      * @see System#identityHashCode
      */
-    @Override
     public int hashCode() {
         return Arrays.hashCode(e);
     }
@@ -562,13 +549,12 @@ public final class ArrayMatrix implements Matrix,
      * @see #hashCode()
      * @see HashMap
      */
-    @Override
     public boolean equals(final Object obj) {
         if (this == obj) return true;
 
         if (obj == null || getClass() != obj.getClass()) return false;
 
-        final ArrayMatrix that = (ArrayMatrix) obj;
+        final ArrayMatrix_old that = (ArrayMatrix_old) obj;
         var o = that.getElements();
 
         if (!Arrays.equals(this.getDimension(), that.getDimension())) return false;
