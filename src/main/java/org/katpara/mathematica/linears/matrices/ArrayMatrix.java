@@ -10,16 +10,16 @@ import org.katpara.mathematica.linears.vectors.Vector;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
 
 /**
  * The class is an implementations of the Matrix interface.
- * Internally the class has two properties;
+ * Internally the class has three properties;
  * <ul>
- *     <li>e: a two dimensional array</li>
+ *     <li>e: a two-dimensional array</li>
+ *     <li>d: the dimension of the matrix</li>
  *     <li>t: a type of Matrix</li>
  * </ul>
  * <p>
@@ -49,7 +49,7 @@ public class ArrayMatrix implements Matrix {
     /**
      * The dimension of the matrix
      */
-    private final int[] dimension;
+    private final int[] d;
 
     /**
      * The field holds the type of matrix
@@ -84,7 +84,7 @@ public class ArrayMatrix implements Matrix {
                     throw new NullArgumentProvidedException("The matrix can't contain null values");
 
         this.e = e;
-        this.dimension = new int[]{e.length, e[0].length};
+        this.d = new int[]{e.length, e[0].length};
         this.t = t;
     }
 
@@ -116,7 +116,7 @@ public class ArrayMatrix implements Matrix {
         }
 
         e = n;
-        this.dimension = new int[]{e.length, e[0].length};
+        this.d = new int[]{e.length, e[0].length};
         this.t = NOT_SPECIFIED;
     }
 
@@ -194,7 +194,7 @@ public class ArrayMatrix implements Matrix {
         }
 
         e = n;
-        this.dimension = new int[]{e.length, e[0].length};
+        this.d = new int[]{e.length, e[0].length};
         this.t = NOT_SPECIFIED;
     }
 
@@ -224,7 +224,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public int[] getDimension() {
-        return dimension;
+        return d;
     }
 
     /**
@@ -285,7 +285,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public boolean isRowVector() {
-        return dimension[0] == 1 && dimension[1] > 1;
+        return d[0] == 1 && d[1] > 1;
     }
 
     /**
@@ -296,7 +296,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public boolean isColumnVector() {
-        return dimension[0] > 1 && dimension[1] == 1;
+        return d[0] > 1 && d[1] == 1;
     }
 
     /**
@@ -317,7 +317,7 @@ public class ArrayMatrix implements Matrix {
             case PASCAL:
                 return true;
             default:
-                return dimension[0] == dimension[1];
+                return d[0] == d[1];
         }
     }
 
@@ -338,14 +338,14 @@ public class ArrayMatrix implements Matrix {
             case IDENTITY:
             case LEHMER:
             case ONE:
-                return dimension[0];
+                return d[0];
             case SHIFT:
                 return 0;
             case EXCHANGE:
-                return (dimension[0] % 2 == 0) ? 0 : 1;
+                return (d[0] % 2 == 0) ? 0 : 1;
             case PASCAL:
-                return ((dimension[1] > 1 && e[0][1].intValue() == 0)
-                                || (dimension[0] > 1 && e[1][0].intValue() == 0)) ? dimension[0] : calculateTrace();
+                return ((d[1] > 1 && e[0][1].intValue() == 0)
+                                || (d[0] > 1 && e[1][0].intValue() == 0)) ? d[0] : calculateTrace();
             default:
                 return calculateTrace();
         }
@@ -359,8 +359,8 @@ public class ArrayMatrix implements Matrix {
     private double calculateTrace() {
         var sum = 0;
 
-        for (int i = 0; i < dimension[0]; i++)
-            for (int j = 0; j < dimension[0]; j++)
+        for (int i = 0; i < d[0]; i++)
+            for (int j = 0; j < d[0]; j++)
                 if (i == j)
                     sum += e[i][i].doubleValue();
 
@@ -380,9 +380,9 @@ public class ArrayMatrix implements Matrix {
             case ONE:
                 return 1;
             case IDENTITY:
-                return dimension[0];
+                return d[0];
             case SHIFT:
-                return dimension[0] - 1;
+                return d[0] - 1;
             default:
                 return 0;
         }
@@ -400,7 +400,7 @@ public class ArrayMatrix implements Matrix {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
 
-        if (dimension[0] == 1) {
+        if (d[0] == 1) {
             return e[0][0].doubleValue();
         } else {
             return getDeterminant(e);
