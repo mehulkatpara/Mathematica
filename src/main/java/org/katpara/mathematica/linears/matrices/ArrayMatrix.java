@@ -10,7 +10,6 @@ import org.katpara.mathematica.linears.vectors.Vector;
 import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
-import java.util.stream.IntStream;
 
 import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
 
@@ -403,71 +402,62 @@ public class ArrayMatrix implements Matrix {
         if (d[0] == 1) {
             return e[0][0].doubleValue();
         } else {
-            return getDeterminant(e);
+            var m = new int[d[0]];
+            for (int i = 0; i < d[0]; i++)
+                m[i] = i;
+
+            return det(m, m);
         }
     }
 
     /**
-     * The method is responsible to sort, refine, replace rows.
-     * This is very crusial for determinant optimization.
+     * The method calculates the determinant of a matrix using the recursion function.
      *
-     * @param e the two dimensional array
-     *
-     * @return the determinant of the matrix.
-     */
-    private double getDeterminant(final Number[][] e) {
-        if (e.length == 2) {
-            return (e[0][0].doubleValue() * e[1][1].doubleValue())
-                           - (e[0][1].doubleValue() * e[1][0].doubleValue());
-        } else {
-            return calculateDeterminant(e);
-        }
-    }
-
-    /**
-     * The method calculates the determinant of a given matrix.
-     *
-     * @param e the two-dimensional array
+     * @param rows the number of rows
+     * @param cols the number of columns
      *
      * @return the determinant of the matrix
      */
-    private double calculateDeterminant(final Number[][] e) {
-        var _ref = new Object() {
-            final int l = e.length;
-            double d = 0;
-            int[] m, n;
-        };
+    private double det(final int[] rows, final int[] cols) {
+        var sum = 0D;
+        var rowLength = rows.length;
+        var colLength = cols.length;
 
-        _ref.m = IntStream.range(0, _ref.l).filter(m -> m != 0).toArray();
+        if (rowLength == 2 && colLength == 2) {
+            return (e[rows[0]][cols[0]].doubleValue() *
+                            e[rows[1]][cols[1]].doubleValue()
+                            - e[rows[1]][cols[0]].doubleValue() *
+                                      e[rows[0]][cols[1]].doubleValue());
+        }
 
-        IntStream.range(0, _ref.l).forEach(i -> {
-            _ref.n = IntStream.range(0, _ref.l).filter(n -> n != i).toArray();
+        int row = 0;
+        int col = 0;
+        var _r = new int[rowLength - 1];
+        var _c = new int[colLength - 1];
 
-            _ref.d += (e[0][i].doubleValue() == 0) ? 0 :
-                              ((i % 2 == 0) ? e[0][i].doubleValue() : -e[0][i].doubleValue())
-                                      * getDeterminant(subset(e, _ref.m, _ref.n));
-        });
+        while (row < rowLength) {
+            while (col < colLength) {
+                var con = e[rows[0]][cols[col]];
+                for (int r = 0, k = 0; r < rowLength; r++) {
+                    if (row != r)
+                        _r[k++] = rows[r];
+                }
 
-        return _ref.d;
-    }
+                for (int c = 0, k = 0; c < colLength; c++) {
+                    if (col != c)
+                        _c[k++] = cols[c];
+                }
 
-    /**
-     * The method returns the subset matrix by given rows and columns.
-     *
-     * @param e The two-dimensional matrix elements
-     * @param m an array containing the rows to pick
-     * @param n an array containing the columns to pick
-     *
-     * @return the subset of given two-dimensional array
-     */
-    private Number[][] subset(final Number[][] e, final int[] m, final int[] n) {
-        var _e = new Number[m.length][n.length];
-
-        for (int i = 0; i < m.length; i++)
-            for (int j = 0; j < n.length; j++)
-                _e[i][j] = e[m[i]][n[j]];
-
-        return _e;
+                if (con.doubleValue() == 0) {
+                    sum += 0;
+                } else {
+                    sum += ((row + col % 2 == 0) ? 1 : -1) * (con.doubleValue() * det(_r, _c));
+                }
+                col++;
+            }
+            row++;
+        }
+        return sum;
     }
 
     /**

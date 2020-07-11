@@ -290,30 +290,48 @@ class ArrayMatrixTest {
 
     @Test
     void testDeterminant() {
-        assertAll(
-                () -> assertThrows(InvalidMatrixOperationException.class, () ->
-                                                                                  new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
-                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
-                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
-                () -> assertEquals(16D, new ArrayMatrix(new Number[][]{
-                        {1, 2, 1, 0},
-                        {0, 3, 1, 1},
-                        {-1, 0, 3, 1},
-                        {3, 1, 2, 0}
-                }).getDeterminant()),
-                () -> assertEquals(256, new ArrayMatrix(new Number[][]{
-                        {3, 7, 0},
-                        {8, 0, -2},
-                        {0, -4, -5}
-                }).getDeterminant()),
-                () -> assertEquals(-49964D, new ArrayMatrix(new Number[][]{
-                        {6, 3, -6, -4, 9},
-                        {-2, -5, 9, 2, 10},
-                        {2, 3, 4, -5, 6},
-                        {8, 6, 1, 4, 7},
-                        {12, 8, -20, 17, 4}
-                }).getDeterminant())
-        );
+        long s = System.nanoTime();
+        double d = new ArrayMatrix(new Number[][]{
+                {93, 35, 65, 26, 99, 72, 64, 98, 16, 55},
+                {21, 71, 8, 21, 26, 13, 47, 14, 88, 82},
+                {78, 67, 79, 8, 2, 82, 95, 46, 53, 35},
+                {22, 86, 39, 60, 23, 33, 49, 40, 19, 27},
+                {19, 55, 3, 39, 79, 69, 91, 24, 86, 2},
+                {8, 25, 69, 41, 40, 44, 57, 25, 18, 36},
+                {32, 69, 1, 73, 85, 52, 7, 42, 32, 8},
+                {53, 34, 78, 39, 78, 54, 89, 18, 37, 99},
+                {94, 77, 85, 95, 9, 82, 65, 26, 46, 28},
+                {70, 91, 47, 79, 57, 44, 56, 17, 51, 61}
+        }).getDeterminant();
+        long e = System.nanoTime();
+        System.out.println(e-s);
+        System.out.println(d);
+        System.out.println(ArrayMatrix.loop);
+
+//        assertAll(
+//                () -> assertThrows(InvalidMatrixOperationException.class, () ->
+//                                                                                  new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
+//                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
+//                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
+//                () -> assertEquals(16D, new ArrayMatrix(new Number[][]{
+//                        {1, 2, 1, 0},
+//                        {0, 3, 1, 1},
+//                        {-1, 0, 3, 1},
+//                        {3, 1, 2, 0}
+//                }).getDeterminant()),
+//                () -> assertEquals(256, new ArrayMatrix(new Number[][]{
+//                        {3, 7, 0},
+//                        {8, 0, -2},
+//                        {0, -4, -5}
+//                }).getDeterminant()),
+//                () -> assertEquals(-49964D, new ArrayMatrix(new Number[][]{
+//                        {6, 3, -6, -4, 9},
+//                        {-2, -5, 9, 2, 10},
+//                        {2, 3, 4, -5, 6},
+//                        {8, 6, 1, 4, 7},
+//                        {12, 8, -20, 17, 4}
+//                }).getDeterminant())
+//        );
     }
 
     @Test
