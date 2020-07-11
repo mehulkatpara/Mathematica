@@ -116,6 +116,7 @@ class ArrayMatrixTest {
         );
     }
 
+
     @Test
     void testType() {
         assertAll(
@@ -403,6 +404,7 @@ class ArrayMatrixTest {
                         () -> Matrix.shiftArrayMatrix(0, Matrix.ShiftMatrixType.LOWER)),
                 () -> System.out.println(Matrix.shiftArrayMatrix(1, Matrix.ShiftMatrixType.LOWER)),
                 () -> System.out.println(Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER))
+
         );
     }
 }
