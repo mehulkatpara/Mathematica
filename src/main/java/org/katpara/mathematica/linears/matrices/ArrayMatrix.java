@@ -1,7 +1,9 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
@@ -9,6 +11,7 @@ import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
 
@@ -150,6 +153,52 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
+     * The constructor creates a matrix out of the list containing a list of numbers,
+     * or a set containing a list of numbers. The type of this matrix is "NOT_SPECIFIED".
+     * <p>
+     * If you are creating a predefined matrix, please use {@link Matrix} interface
+     * to create a matrix for you, it's easy and helps me to optimize various calculations
+     * much faster. I have many predefined matrices for you to use out of the box, to help
+     * you create various matrices with ease, please check
+     * {@link MatrixType} for more information.
+     *
+     * @param lists the collection of list of numbers
+     *
+     * @throws InvalidParameterProvidedException when a collection is not a type of List or Set
+     * @throws InvalidMatrixDimensionException   when the collection is empty
+     * @throws InvalidMatrixDimensionException   when rows are of variable length
+     */
+    public ArrayMatrix(final Collection<List<Number>> lists) {
+        if (!(lists instanceof List) && !(lists instanceof Set))
+            throw new InvalidParameterProvidedException("The matrix can only be a type of List or Set");
+
+        if (lists.size() == 0)
+            throw new InvalidMatrixDimensionException("The list must have at least one list");
+
+        var d = 0;
+        var i = 0;
+        Number[][] n = null;
+
+        for (var list : lists) {
+            if (list.size() == 0)
+                throw new InvalidMatrixDimensionException();
+
+            if (d == 0) {
+                d = list.size();
+                n = new Number[lists.size()][d];
+            } else if (list.size() != d) {
+                throw new InvalidMatrixDimensionException("The rows have multiple sizes");
+            }
+
+            n[i] = list.toArray(Number[]::new);
+        }
+
+        e = n;
+        this.dimension = new int[]{e.length, e[0].length};
+        this.t = NOT_SPECIFIED;
+    }
+
+    /**
      * The constructor creates a Matrix using two-dimensional array.
      * The type of created matrix is "NOT_SPECIFIED"; since it's user generated.
      * <p>
@@ -236,7 +285,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public boolean isRowVector() {
-        return false;
+        return dimension[0] == 1 && dimension[1] > 1;
     }
 
     /**
@@ -247,7 +296,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public boolean isColumnVector() {
-        return false;
+        return dimension[0] > 1 && dimension[1] == 1;
     }
 
     /**
@@ -258,7 +307,18 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public boolean isSquareMatrix() {
-        return false;
+        switch (t) {
+            case SHIFT:
+            case EXCHANGE:
+            case HILBERT:
+            case REDHEFFER:
+            case IDENTITY:
+            case LEHMER:
+            case PASCAL:
+                return true;
+            default:
+                return dimension[0] == dimension[1];
+        }
     }
 
     /**
@@ -271,7 +331,40 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getTrace() {
-        return 0;
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
+
+        switch (t) {
+            case IDENTITY:
+            case LEHMER:
+            case ONE:
+                return dimension[0];
+            case SHIFT:
+                return 0;
+            case EXCHANGE:
+                return (dimension[0] % 2 == 0) ? 0 : 1;
+            case PASCAL:
+                return ((dimension[1] > 1 && e[0][1].intValue() == 0)
+                                || (dimension[0] > 1 && e[1][0].intValue() == 0)) ? dimension[0] : calculateTrace();
+            default:
+                return calculateTrace();
+        }
+    }
+
+    /**
+     * The method will calculate a trace of the square matrix.
+     *
+     * @return the trace of the matrix
+     */
+    private double calculateTrace() {
+        var sum = 0;
+
+        for (int i = 0; i < dimension[0]; i++)
+            for (int j = 0; j < dimension[0]; j++)
+                if (i == j)
+                    sum += e[i][i].doubleValue();
+
+        return sum;
     }
 
     /**
@@ -282,7 +375,17 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public int getRank() {
-        return 0;
+        //TODO: Rank calculation for other matrices.
+        switch (t) {
+            case ONE:
+                return 1;
+            case IDENTITY:
+                return dimension[0];
+            case SHIFT:
+                return dimension[0] - 1;
+            default:
+                return 0;
+        }
     }
 
     /**
@@ -294,7 +397,77 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getDeterminant() {
-        return 0;
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException();
+
+        if (dimension[0] == 1) {
+            return e[0][0].doubleValue();
+        } else {
+            return getDeterminant(e);
+        }
+    }
+
+    /**
+     * The method is responsible to sort, refine, replace rows.
+     * This is very crusial for determinant optimization.
+     *
+     * @param e the two dimensional array
+     *
+     * @return the determinant of the matrix.
+     */
+    private double getDeterminant(final Number[][] e) {
+        if (e.length == 2) {
+            return (e[0][0].doubleValue() * e[1][1].doubleValue())
+                           - (e[0][1].doubleValue() * e[1][0].doubleValue());
+        } else {
+            return calculateDeterminant(e);
+        }
+    }
+
+    /**
+     * The method calculates the determinant of a given matrix.
+     *
+     * @param e the two-dimensional array
+     *
+     * @return the determinant of the matrix
+     */
+    private double calculateDeterminant(final Number[][] e) {
+        var _ref = new Object() {
+            final int l = e.length;
+            double d = 0;
+            int[] m, n;
+        };
+
+        _ref.m = IntStream.range(0, _ref.l).filter(m -> m != 0).toArray();
+
+        IntStream.range(0, _ref.l).forEach(i -> {
+            _ref.n = IntStream.range(0, _ref.l).filter(n -> n != i).toArray();
+
+            _ref.d += (e[0][i].doubleValue() == 0) ? 0 :
+                              ((i % 2 == 0) ? e[0][i].doubleValue() : -e[0][i].doubleValue())
+                                      * getDeterminant(subset(e, _ref.m, _ref.n));
+        });
+
+        return _ref.d;
+    }
+
+    /**
+     * The method returns the subset matrix by given rows and columns.
+     *
+     * @param e The two-dimensional matrix elements
+     * @param m an array containing the rows to pick
+     * @param n an array containing the columns to pick
+     *
+     * @return the subset of given two-dimensional array
+     */
+    private Number[][] subset(final Number[][] e, final int[] m, final int[] n) {
+        var _e = new Number[m.length][n.length];
+
+        for (int i = 0; i < m.length; i++)
+            for (int j = 0; j < n.length; j++)
+                _e[i][j] = e[m[i]][n[j]];
+
+        return _e;
     }
 
     /**
@@ -422,7 +595,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return a hilbert {@link ArrayMatrix_old}
+     * @return a hilbert {@link ArrayMatrix}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
@@ -455,7 +628,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the square matrix
      *
-     * @return an exchange {@link ArrayMatrix_old}
+     * @return an exchange {@link ArrayMatrix}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
@@ -471,7 +644,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return a redheffer {@link ArrayMatrix_old}
+     * @return a redheffer {@link ArrayMatrix}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
@@ -488,7 +661,7 @@ public class ArrayMatrix implements Matrix {
      * @param n the number of rows and columns
      * @param t the type of matrix, i.e UPPER or LOWER
      *
-     * @return a shift {@link ArrayMatrix_old}
+     * @return a shift {@link ArrayMatrix}
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */

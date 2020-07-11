@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 public final class Matrices {
     private static final long serialVersionUID = 7021020217611144484L;
 
-    public static ArrayMatrix_old getSubMatrix(final Matrix e, final int[] m, final int[] n) {
+    public static ArrayMatrix getSubMatrix(final Matrix e, final int[] m, final int[] n) {
 //        var _e = e.getElements();
 //
 //        if (m.length > _e.length || n.length > _e[0].length)
