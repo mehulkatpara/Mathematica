@@ -205,4 +205,30 @@ class ArrayVectorTest {
                         Vector.arrayVectorOf(-3, 4, 1).cross(Vector.arrayVectorOf(2, 1, -1)))
         );
     }
+
+    @Test
+    void testOrthogonal() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimensionException.class,
+                        () -> Vector.arrayVectorOf(1, 2).isOrthogonal(Vector.arrayVectorOf(1, 2, 3))),
+                () -> assertFalse(Vector.arrayVectorOf(1, 2, 3)
+                                          .isOrthogonal(Vector.arrayVectorOf(1, 2, 3))),
+                () -> assertTrue(Vector.arrayVectorOf(1, 0)
+                                         .isOrthogonal(Vector.arrayVectorOf(0, 1)))
+        );
+    }
+
+    @Test
+    void testParallel() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimensionException.class,
+                        () -> Vector.arrayVectorOf(1, 2).isParallel(Vector.arrayVectorOf(1, 2, 3))),
+                () -> assertEquals(1, Vector.arrayVectorOf(1, 2, 3)
+                                          .isParallel(Vector.arrayVectorOf(1, 2, 3))),
+                () -> assertEquals(3, Vector.arrayVectorOf(1, 2, 3)
+                                              .isParallel(Vector.arrayVectorOf(3, 6, 9))),
+                () -> assertEquals(-1, Vector.arrayVectorOf(1, 0)
+                                         .isParallel(Vector.arrayVectorOf(0, 1)))
+        );
+    }
 }

@@ -1,6 +1,10 @@
 package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
+import org.katpara.mathematica.linears.vectors.Vector;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The interface defines a Matrix in the system, and it's operations.
@@ -19,18 +23,37 @@ import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionExceptio
 public interface Matrix {
 
     /**
+     * The Enum is used to create a type of pascal matrix.
+     *
+     * <ul>
+     *      <li> UPPER creates an upper triangular matrix.
+     *      <li> LOWER creates a lower triangular matrix.
+     *      <li> SYMMETRIC creates a symmetric matrix.
+     * </ul>
+     */
+    enum PascalMatrixType {UPPER, LOWER, SYMMETRIC}
+
+    /**
+     * The enum is used to create a type of shift matrix.
+     *
+     * <ul>
+     *     <li>Upper shift matrix is a matrix only on the superdiagonal is 1, else 0</li>
+     *     <li>Upper shift matrix is a matrix only on the subdiagonal is 1, else 0</li>
+     * </ul>
+     */
+    enum ShiftMatrixType {UPPER, LOWER}
+
+    /**
+     * The type of matrix created by the sytem.
+     */
+    enum MatrixType {ONE, ZERO, SHIFT, PASCAL, LEHMER, HILBERT, EXCHANGE, IDENTITY, REDHEFFER, NOT_SPECIFIED}
+
+    /**
      * The method returns the dimension of a matrix.
      *
      * @return the dimension of the matrix
      */
     int[] getDimension();
-
-    /**
-     * The method returns all the elements of a matrix.
-     *
-     * @return the matrix elements
-     */
-    Number[][] getElements();
 
     /**
      * The method returns the type of a matrix.
@@ -39,6 +62,27 @@ public interface Matrix {
      * @return the type of matrix
      */
     MatrixType getType();
+
+    /**
+     * The method returns all the elements of a matrix.
+     *
+     * @return the matrix elements
+     */
+    Number[][] toArray();
+
+    /**
+     * The method returns all the elements as a list of lists.
+     *
+     * @return the matrix elements as a list of lists
+     */
+    List<List<Number>> toList();
+
+    /**
+     * The method returns the list of Vectors.
+     *
+     * @return the matrix elements as a list of vectors
+     */
+    List<Vector> toArrayVectors();
 
     /**
      * The method will return true if the matrix is a
@@ -92,60 +136,6 @@ public interface Matrix {
     double getDeterminant();
 
     /**
-     * A permanent of a square matrix is similar to determinant.
-     *
-     * @return the permanent of a matrix
-     */
-    double getPermanent();
-
-    /**
-     * The Enum is used to create a type of pascal matrix.
-     *
-     * <ul>
-     *      <li> UPPER creates an upper triangular matrix.
-     *      <li> LOWER creates a lower triangular matrix.
-     *      <li> SYMMETRIC creates a symmetric matrix.
-     * </ul>
-     */
-    enum PascalMatrixType {UPPER, LOWER, SYMMETRIC}
-
-    /**
-     * The enum is used to create a type of shift matrix.
-     *
-     * <ul>
-     *     <li>Upper shift matrix is a matrix only on the superdiagonal is 1, else 0</li>
-     *     <li>Upper shift matrix is a matrix only on the subdiagonal is 1, else 0</li>
-     * </ul>
-     */
-    enum ShiftMatrixType {UPPER, LOWER}
-
-    /**
-     * The type of matrix created by the sytem.
-     */
-    enum MatrixType {
-        ONE("one"),
-        ZERO("zero"),
-        SHIFT("shift"),
-        PASCAL("pascal"),
-        LEHMER("lehmer"),
-        HILBERT("hilbert"),
-        EXCHANGE("exchange"),
-        IDENTITY("identity"),
-        REDHEFFER("redheffer"),
-        NOT_SPECIFIED("not_specified");
-
-        private final String name;
-
-        MatrixType(final String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
-
-    /**
      * The method will return a zero or null matrix, whose all the elements are zero.
      *
      * @param m the number of rows
@@ -157,25 +147,22 @@ public interface Matrix {
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
-    static ArrayMatrix getZeroMatrix(final int m, final int n) {
-        return MatrixUtility.getZeroMatrix(m, n);
+    static ArrayMatrix zeroArrayMatrix(final int m, final int n) {
+        return ArrayMatrix.zeroMatrix(m, n);
     }
 
     /**
-     * A dummy method that internally calls {@link #getZeroMatrix(int, int)} to get a
-     * zero matrix.
+     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
      *
-     * @param d an array of 2 elements, # of rows and # of columns.
+     * @param m the number of rows
+     * @param n the number of columns
      *
-     * @return an {@link ArrayMatrix} with all 0 entries
+     * @return a one matrix
      *
-     * @throws InvalidMatrixDimensionException if d.length != 2.
+     * @throws InvalidMatrixDimensionException when m + n < 2
      */
-    static ArrayMatrix getZeroMatrix(final int[] d) {
-        if (d.length != 2)
-            throw new InvalidMatrixDimensionException("The dimension must contain 2 elements.");
-
-        return getZeroMatrix(d[0], d[1]);
+    static ArrayMatrix oneArrayMatrix(final int m, final int n) {
+        return ArrayMatrix.oneMatrix(m, n);
     }
 
     /**
@@ -191,39 +178,8 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException when n < 1, at least one element should exist.
      */
-    static ArrayMatrix getPascalMatrix(final int n, final PascalMatrixType t) {
-        return MatrixUtility.getPascalMatrix(n, t);
-    }
-
-    /**
-     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
-     *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return a one matrix
-     *
-     * @throws InvalidMatrixDimensionException when m + n < 2
-     */
-    static ArrayMatrix getOneMatrix(final int m, final int n) {
-        return MatrixUtility.getOneMatrix(m, n);
-    }
-
-    /**
-     * A dummy method that internally calls {@link #getOneMatrix(int, int)} to get an
-     * all-one matrix.
-     *
-     * @param d an array of 2 elements, # of rows and # of columns.
-     *
-     * @return an {@link ArrayMatrix} with all 1 entries
-     *
-     * @throws InvalidMatrixDimensionException if d.length != 2.
-     */
-    static ArrayMatrix getOneMatrix(final int[] d) {
-        if (d.length != 2)
-            throw new InvalidMatrixDimensionException("The dimension must contain 2 elements.");
-
-        return getOneMatrix(d[0], d[1]);
+    static ArrayMatrix pascalArrayMatrix(final int n, final PascalMatrixType t) {
+        return ArrayMatrix.pascalMatrix(n, t);
     }
 
     /**
@@ -233,8 +189,8 @@ public interface Matrix {
      *
      * @return the lehmer {@link ArrayMatrix}
      */
-    static ArrayMatrix getLehmerMatrix(final int n) {
-        return MatrixUtility.getLehmerMatrix(n);
+    static ArrayMatrix lehmerArrayMatrix(final int n) {
+        return ArrayMatrix.lehmerMatrix(n);
     }
 
     /**
@@ -247,8 +203,8 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getIdentityMatrix(final int n) {
-        return MatrixUtility.getIdentityMatrix(n);
+    static ArrayMatrix identityArrayMatrix(final int n) {
+        return ArrayMatrix.identityMatrix(n);
     }
 
     /**
@@ -260,8 +216,8 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getHilbertMatrix(final int n) {
-        return MatrixUtility.getHilbertMatrix(n);
+    static ArrayMatrix hilbertArrayMatrix(final int n) {
+        return ArrayMatrix.hilbertMatrix(n);
     }
 
     /**
@@ -274,8 +230,8 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getExchangeMatrix(final int n) {
-        return MatrixUtility.getExchangeMatrix(n);
+    static ArrayMatrix exchangeArrayMatrix(final int n) {
+        return ArrayMatrix.exchangeMatrix(n);
     }
 
     /**
@@ -288,8 +244,8 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getRedhefferMatrix(final int n) {
-        return MatrixUtility.getRedhefferMatrix(n);
+    static ArrayMatrix redhefferArrayMatrix(final int n) {
+        return ArrayMatrix.redhefferMatrix(n);
     }
 
     /**
@@ -303,7 +259,7 @@ public interface Matrix {
      *
      * @throws InvalidMatrixDimensionException if n < 1
      */
-    static ArrayMatrix getShiftMatrix(final int n, final ShiftMatrixType t) {
-        return MatrixUtility.getShiftMatrix(n, t);
+    static ArrayMatrix shiftArrayMatrix(final int n, final ShiftMatrixType t) {
+        return ArrayMatrix.shiftMatrix(n, t);
     }
 }

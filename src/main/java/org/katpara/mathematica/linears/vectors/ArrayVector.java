@@ -31,7 +31,7 @@ public final class ArrayVector implements Vector {
     /**
      * The dimension of the vector
      */
-    private final int dimension;
+    private final int d;
 
     /**
      * The array stores new processed values of e
@@ -60,7 +60,7 @@ public final class ArrayVector implements Vector {
             if (n == null) throw new NullArgumentProvidedException();
 
         this.e = e;
-        this.dimension = e.length;
+        this.d = e.length;
     }
 
     /**
@@ -89,7 +89,7 @@ public final class ArrayVector implements Vector {
         for (var n : numbers)
             e[i++] = n;
 
-        this.dimension = e.length;
+        this.d = e.length;
     }
 
     /**
@@ -129,7 +129,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public int getDimension() {
-        return dimension;
+        return d;
     }
 
     /**
@@ -173,6 +173,59 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * If the given vector is orthogonal to the current vector, then it returns true;
+     * otherwise it would be false.
+     * <p>
+     * Orthogonality is known as a vector that is perpendicular to the given matrix,
+     * i.e. if the vector makes the 90 degrees angle with the current matrix.
+     *
+     * @param vector the vector to check orthogonality
+     *
+     * @return true if it's orthogonal
+     */
+    @Override
+    public boolean isOrthogonal(final Vector vector) {
+        return angle(vector, true) != 0;
+    }
+
+    /**
+     * If the given vector is parallel to the current vector then it returns the factor;
+     * otherwise it will be -1.
+     * <p>
+     * The parallel vectors have the same direction but different magnitudes, which
+     * means the given vector is scaled up or down in the same or opposite direction
+     * of the current vector.
+     * <p>
+     * If a vector V1 = (v1, v2, ... , vn), and a vector W = (w1, w2, ..., wn);
+     * where n belongs to the set of Integers. Then the parallel vectors can be
+     * written as;
+     * W = a(V); where a is a constant (here "the factor").
+     * i.e (w1, w2, ..., wn) = (av1, av2, ..., avn)
+     *
+     * @param vector the vector to check parallelism
+     *
+     * @return if it's parallel then returns the factor, otherwise -1
+     */
+    @Override
+    public double isParallel(final Vector vector) {
+        if(d != vector.getDimension())
+            throw new InvalidVectorDimensionException("Vectors have different dimensions");
+
+        var _e = vector.toArray();
+        var a = -1.0;
+
+        for (int i = 0; i < d; i++) {
+            var _a = _e[i].doubleValue()/e[i].doubleValue();
+
+            if(a == -1)
+                a = _a;
+            else if(a != _a)
+                return -1;
+        }
+        return a;
+    }
+
+    /**
      * The method returns the angle between two vectors.
      * The second parameter can be true/false, depending on if you want the angle
      * in degrees (true) or in radian (false).
@@ -197,8 +250,8 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public Vector inverse() {
-        n = new Number[dimension];
-        for (var i = 0; i < dimension; i++)
+        n = new Number[d];
+        for (var i = 0; i < d; i++)
             n[i] = -e[i].doubleValue();
 
         return new ArrayVector(n);
@@ -222,8 +275,8 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public Vector scale(final double scalar) {
-        n = new Number[dimension];
-        for (var i = 0; i < dimension; i++)
+        n = new Number[d];
+        for (var i = 0; i < d; i++)
             n[i] = e[i].doubleValue() * scalar;
 
         return new ArrayVector(n);
@@ -250,15 +303,15 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public Vector transpose(final int dimension) {
-        if (dimension < 2 || this.dimension == dimension)
+        if (dimension < 2 || this.d == dimension)
             throw new InvalidVectorDimensionException();
 
         n = new Number[dimension];
-        if (dimension < this.dimension)
+        if (dimension < this.d)
             System.arraycopy(e, 0, n, 0, dimension);
         else {
-            System.arraycopy(e, 0, n, 0, this.dimension);
-            for (var i = this.dimension; i < dimension; i++) {
+            System.arraycopy(e, 0, n, 0, this.d);
+            for (var i = this.d; i < dimension; i++) {
                 n[i] = 0;
             }
         }
@@ -347,11 +400,11 @@ public final class ArrayVector implements Vector {
     @Override
     public double dot(final Vector vector) {
         Number[] _e;
-        if (dimension != (_e = vector.toArray()).length)
+        if (d != (_e = vector.toArray()).length)
             throw new InvalidVectorDimensionException();
 
         var sum = 0;
-        for (var i = 0; i < dimension; i++) {
+        for (var i = 0; i < d; i++) {
             sum += e[i].doubleValue() * _e[i].doubleValue();
         }
 
@@ -381,7 +434,7 @@ public final class ArrayVector implements Vector {
     @Override
     public Vector cross(final Vector vector) {
         Number[] _e, n = new Number[3];
-        if (dimension != 3 || (_e = vector.toArray()).length != 3)
+        if (d != 3 || (_e = vector.toArray()).length != 3)
             throw new InvalidVectorDimensionException("The cross product is only supported for vectors in 3rd dimension");
 
         n[0] = e[1].doubleValue() * _e[2].doubleValue() - e[2].doubleValue() * _e[1].doubleValue();
@@ -471,7 +524,7 @@ public final class ArrayVector implements Vector {
         if (obj == null || getClass() != obj.getClass()) return false;
 
         var that = (ArrayVector) obj;
-        if (dimension != that.getDimension()) return false;
+        if (d != that.getDimension()) return false;
         return Arrays.equals(e, that.toArray());
     }
 
@@ -572,8 +625,8 @@ public final class ArrayVector implements Vector {
     protected Object clone() throws CloneNotSupportedException {
         super.clone();
 
-        n = new Number[dimension];
-        System.arraycopy(e, 0, n, 0, dimension);
+        n = new Number[d];
+        System.arraycopy(e, 0, n, 0, d);
 
         return new ArrayVector(n);
     }
