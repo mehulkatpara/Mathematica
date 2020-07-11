@@ -65,11 +65,10 @@ public final class ArrayMatrix_old {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException();
 
-        Arrays.stream(e).forEach(i ->
-                Arrays.stream(i).forEach(ie -> {
-                    if (ie == null)
-                        throw new NullArgumentProvidedException();
-                }));
+        for (var a : e)
+            for (var _e : a)
+                if (_e == null)
+                    throw new NullArgumentProvidedException();
 
         this.e = e;
         this.t = t;
@@ -95,10 +94,10 @@ public final class ArrayMatrix_old {
             throw new InvalidMatrixDimensionException();
 
         Arrays.stream(e).forEach(i ->
-                Arrays.stream(i).forEach(ie -> {
-                    if (ie == null)
-                        throw new NullArgumentProvidedException();
-                }));
+                                         Arrays.stream(i).forEach(ie -> {
+                                             if (ie == null)
+                                                 throw new NullArgumentProvidedException();
+                                         }));
 
         this.e = e;
         this.t = NOT_SPECIFIED;
@@ -312,7 +311,7 @@ public final class ArrayMatrix_old {
                 return (e.length % 2 == 0) ? 0 : 1;
             case PASCAL:
                 return ((e[0].length > 1 && e[0][1].intValue() == 0)
-                        || (e.length > 1 && e[1][0].intValue() == 0)) ? e.length : calculateTrace();
+                                || (e.length > 1 && e[1][0].intValue() == 0)) ? e.length : calculateTrace();
             default:
                 return calculateTrace();
         }
@@ -325,8 +324,8 @@ public final class ArrayMatrix_old {
      */
     private double calculateTrace() {
         return IntStream.range(0, e.length)
-                .mapToDouble(i -> e[i][i].doubleValue())
-                .sum();
+                       .mapToDouble(i -> e[i][i].doubleValue())
+                       .sum();
     }
 
     /**
@@ -378,7 +377,7 @@ public final class ArrayMatrix_old {
     private double getDeterminant(final Number[][] e) {
         if (e.length == 2) {
             return (e[0][0].doubleValue() * e[1][1].doubleValue())
-                    - (e[0][1].doubleValue() * e[1][0].doubleValue());
+                           - (e[0][1].doubleValue() * e[1][0].doubleValue());
         } else {
             return calculateDeterminant(e);
         }
@@ -404,8 +403,8 @@ public final class ArrayMatrix_old {
             _ref.n = IntStream.range(0, _ref.l).filter(n -> n != i).toArray();
 
             _ref.d += (e[0][i].doubleValue() == 0) ? 0 :
-                    ((i % 2 == 0) ? e[0][i].doubleValue() : -e[0][i].doubleValue())
-                            * getDeterminant(subset(e, _ref.m, _ref.n));
+                              ((i % 2 == 0) ? e[0][i].doubleValue() : -e[0][i].doubleValue())
+                                      * getDeterminant(subset(e, _ref.m, _ref.n));
         });
 
         return _ref.d;
