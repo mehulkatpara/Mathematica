@@ -329,7 +329,7 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the square matrix
      */
     @Override
-    public double getTrace() {
+    public double trace() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
@@ -373,12 +373,18 @@ public class ArrayMatrix implements Matrix {
      * @return the rank of matrix
      */
     @Override
-    public int getRank() {
+    public int rank() {
         //TODO: Rank calculation for other matrices.
         switch (t) {
             case ONE:
+            case ZERO:
                 return 1;
             case IDENTITY:
+            case EXCHANGE:
+            case HILBERT:
+            case LEHMER:
+            case PASCAL:
+            case REDHEFFER:
                 return d[0];
             case SHIFT:
                 return d[0] - 1;
@@ -456,7 +462,7 @@ public class ArrayMatrix implements Matrix {
      * @return the determinant of the square matrix
      */
     @Override
-    public double getDeterminant() {
+    public double determinant() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
 

@@ -254,29 +254,29 @@ class ArrayMatrixTest {
     void testTrace() {
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class,
-                        () -> Matrix.oneArrayMatrix(5, 10).getTrace()),
+                        () -> Matrix.oneArrayMatrix(5, 10).trace()),
                 () -> assertThrows(InvalidMatrixOperationException.class,
-                        () -> new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}}).getTrace()),
-                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getTrace()),
-                () -> assertEquals(5, Matrix.oneArrayMatrix(5, 5).getTrace()),
-                () -> assertEquals(0, Matrix.shiftArrayMatrix(3, Matrix.ShiftMatrixType.LOWER).getTrace()),
-                () -> assertEquals(0, Matrix.exchangeArrayMatrix(4).getTrace()),
-                () -> assertEquals(1, Matrix.exchangeArrayMatrix(7).getTrace()),
-                () -> assertEquals(12, Matrix.pascalArrayMatrix(12, Matrix.PascalMatrixType.UPPER).getTrace()),
-                () -> assertEquals(8, Matrix.pascalArrayMatrix(8, Matrix.PascalMatrixType.LOWER).getTrace()),
+                        () -> new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}}).trace()),
+                () -> assertEquals(5, Matrix.identityArrayMatrix(5).trace()),
+                () -> assertEquals(5, Matrix.oneArrayMatrix(5, 5).trace()),
+                () -> assertEquals(0, Matrix.shiftArrayMatrix(3, Matrix.ShiftMatrixType.LOWER).trace()),
+                () -> assertEquals(0, Matrix.exchangeArrayMatrix(4).trace()),
+                () -> assertEquals(1, Matrix.exchangeArrayMatrix(7).trace()),
+                () -> assertEquals(12, Matrix.pascalArrayMatrix(12, Matrix.PascalMatrixType.UPPER).trace()),
+                () -> assertEquals(8, Matrix.pascalArrayMatrix(8, Matrix.PascalMatrixType.LOWER).trace()),
                 () -> assertEquals(5D, new ArrayMatrix(new Number[][]{
                         {3, 2, 0, 4},
                         {4, 1, -2, 3},
                         {-3, -2, -4, 7},
                         {3, 1, 1, 5}
-                }).getTrace()),
+                }).trace()),
                 () -> assertEquals(30D, new ArrayMatrix(new Number[][]{
                         {1, 2, 3, 4, 2},
                         {-4, 11, 5, 2, 0},
                         {-1, 0, 3, 2, 3},
                         {22, 5, 3, 1, 1},
                         {3, 5, -22, 1, 14},
-                }).getTrace())
+                }).trace())
         );
     }
 
@@ -284,27 +284,27 @@ class ArrayMatrixTest {
     void testDeterminant() {
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class, () ->
-                                                                                  new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).getDeterminant()),
-                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).getDeterminant()),
-                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).getDeterminant()),
+                                                                                  new ArrayMatrix(new Number[][]{{1, 2, 3}, {1, 2, 3}}).determinant()),
+                () -> assertEquals(1D, new ArrayMatrix(new Number[][]{{1}}).determinant()),
+                () -> assertEquals(-4D, new ArrayMatrix(new Number[][]{{3, 2}, {5, 2}}).determinant()),
                 () -> assertEquals(16D, new ArrayMatrix(new Number[][]{
                         {1, 2, 1, 0},
                         {0, 3, 1, 1},
                         {-1, 0, 3, 1},
                         {3, 1, 2, 0}
-                }).getDeterminant()),
+                }).determinant()),
                 () -> assertEquals(256, new ArrayMatrix(new Number[][]{
                         {3, 7, 0},
                         {8, 0, -2},
                         {0, -4, -5}
-                }).getDeterminant()),
+                }).determinant()),
                 () -> assertEquals(-49964D, new ArrayMatrix(new Number[][]{
                         {6, 3, -6, -4, 9},
                         {-2, -5, 9, 2, 10},
                         {2, 3, 4, -5, 6},
                         {8, 6, 1, 4, 7},
                         {12, 8, -20, 17, 4}
-                }).getDeterminant())
+                }).determinant())
         );
     }
 
@@ -403,15 +403,15 @@ class ArrayMatrixTest {
     @Test
     void testRank() {
         assertAll(
-                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getRank()),
-                () -> assertEquals(1, Matrix.oneArrayMatrix(5, 10).getRank()),
-                () -> assertEquals(4, Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER).getRank()),
-                () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).getRank()),
-                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).getRank()),
-                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).getRank()),
-                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}).getRank()),
-                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{12,29,72},{2,7,8},{6,5,0}}).getRank()),
-                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{2,7,8},{0,6,5},{5,7,0},{5,2,1}}).getRank())
+                () -> assertEquals(5, Matrix.identityArrayMatrix(5).rank()),
+                () -> assertEquals(1, Matrix.oneArrayMatrix(5, 10).rank()),
+                () -> assertEquals(4, Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER).rank()),
+                () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).rank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).rank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).rank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}).rank()),
+                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{12,29,72},{2,7,8},{6,5,0}}).rank()),
+                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{2,7,8},{0,6,5},{5,7,0},{5,2,1}}).rank())
         );
     }
 }
