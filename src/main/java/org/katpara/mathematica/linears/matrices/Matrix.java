@@ -116,7 +116,7 @@ public interface Matrix {
      *
      * @return the trace of the square matrix
      */
-    double getTrace();
+    double trace();
 
     /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many
@@ -124,7 +124,7 @@ public interface Matrix {
      *
      * @return the rank of matrix
      */
-    int getRank();
+    int rank();
 
     /**
      * A determinant is a scalar value computed for a square matrix; that
@@ -133,7 +133,7 @@ public interface Matrix {
      *
      * @return the determinant of the square matrix
      */
-    double getDeterminant();
+    double determinant();
 
     /**
      * The method will return a zero or null matrix, whose all the elements are zero.
