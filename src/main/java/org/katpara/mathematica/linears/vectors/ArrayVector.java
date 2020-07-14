@@ -1,9 +1,8 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.linears.annotations.Angle;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.util.*;
 import java.util.stream.Collectors;

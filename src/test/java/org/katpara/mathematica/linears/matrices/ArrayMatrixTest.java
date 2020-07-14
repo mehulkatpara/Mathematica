@@ -281,15 +281,6 @@ class ArrayMatrixTest {
     }
 
     @Test
-    void testRank() {
-        assertAll(
-                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getRank()),
-                () -> assertEquals(1, Matrix.oneArrayMatrix(5, 10).getRank()),
-                () -> assertEquals(4, Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER).getRank())
-        );
-    }
-
-    @Test
     void testDeterminant() {
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class, () ->
@@ -405,6 +396,22 @@ class ArrayMatrixTest {
                 () -> System.out.println(Matrix.shiftArrayMatrix(1, Matrix.ShiftMatrixType.LOWER)),
                 () -> System.out.println(Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER))
 
+
+        );
+    }
+
+    @Test
+    void testRank() {
+        assertAll(
+                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getRank()),
+                () -> assertEquals(1, Matrix.oneArrayMatrix(5, 10).getRank()),
+                () -> assertEquals(4, Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER).getRank()),
+                () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).getRank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).getRank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).getRank()),
+                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}).getRank()),
+                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{12,29,72},{2,7,8},{6,5,0}}).getRank()),
+                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{2,7,8},{0,6,5},{5,7,0},{5,2,1}}).getRank())
         );
     }
 }
