@@ -356,14 +356,14 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the matrix
      */
     private double calculateTrace() {
-        var sum = 0;
+        var s = 0;
 
         for (int i = 0; i < d[0]; i++)
             for (int j = 0; j < d[0]; j++)
                 if (i == j)
-                    sum += e[i][i].doubleValue();
+                    s += e[i][i].doubleValue();
 
-        return sum;
+        return s;
     }
 
     /**
@@ -383,8 +383,69 @@ public class ArrayMatrix implements Matrix {
             case SHIFT:
                 return d[0] - 1;
             default:
-                return 0;
+                if (isColumnVector() || isRowVector()) return 1;
+                return calculateRank();
         }
+    }
+
+    /**
+     * The method calculates the rank of the matrix.
+     *
+     * @return the rank
+     */
+    private int calculateRank() {
+        int rk = Math.min(d[0], d[1]);
+        Number[][] n = new Number[d[0]][d[1]];
+        System.arraycopy(e, 0, n, 0, d[0]);
+
+        for (int r = 0; r < rk; r++) {
+            if (n[r][r].doubleValue() == 0) {
+                for (int i = r + 1; i < rk; i++) {
+                    if (n[i][r].doubleValue() != 0) {
+                        var t = n[r];
+                        n[r] = n[i];
+                        n[i] = t;
+                    }
+                }
+            } else if (n[r][r].doubleValue() != 1) {
+                for (int c = d[1] - 1; c >= r; c--) {
+                    n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
+                }
+            }
+
+            for (int _r = r + 1; _r < rk; _r++) {
+                if (n[_r][r].doubleValue() == 0) {
+                    for (int i = r + 1; i < rk; i++) {
+                        if (n[i][r].doubleValue() != 0) {
+                            var t = n[_r];
+                            n[_r] = n[i];
+                            n[i] = t;
+                        }
+                    }
+                } else {
+                    for (int _c = d[1] - 1; _c >= r; _c--) {
+                        n[_r][_c] = n[_r][_c].doubleValue()
+                                            - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
+                    }
+                }
+            }
+
+        }
+
+        for (int r = 0; r < d[0]; r++) {
+            var z = true;
+
+            for (int c = 0; c < d[1]; c++) {
+                if (n[r][c].doubleValue() != 0) {
+                    z = false;
+                    break;
+                }
+            }
+
+            if (z) rk--;
+        }
+
+        return rk == 0 ? 1 : rk;
     }
 
     /**
@@ -406,58 +467,54 @@ public class ArrayMatrix implements Matrix {
             for (int i = 0; i < d[0]; i++)
                 m[i] = i;
 
-            return det(m, m);
+            return determinant(m, m);
         }
     }
 
     /**
      * The method calculates the determinant of a matrix using the recursion function.
      *
-     * @param rows the number of rows
-     * @param cols the number of columns
+     * @param rs the number of rows
+     * @param cs the number of columns
      *
      * @return the determinant of the matrix
      */
-    private double det(final int[] rows, final int[] cols) {
-        var sum = 0D;
-        var rowLength = rows.length;
-        var colLength = cols.length;
-
-        if (rowLength == 2 && colLength == 2) {
-            return (e[rows[0]][cols[0]].doubleValue() *
-                            e[rows[1]][cols[1]].doubleValue()
-                            - e[rows[1]][cols[0]].doubleValue() *
-                                      e[rows[0]][cols[1]].doubleValue());
+    private double determinant(final int[] rs, final int[] cs) {
+        int rl = rs.length, cl = cs.length;
+        if (rl == 2 && cl == 2) {
+            return (e[rs[0]][cs[0]].doubleValue() *
+                            e[rs[1]][cs[1]].doubleValue()
+                            - e[rs[1]][cs[0]].doubleValue() *
+                                      e[rs[0]][cs[1]].doubleValue());
         }
 
-        int row = 0;
-        int col = 0;
-        var _r = new int[rowLength - 1];
-        var _c = new int[colLength - 1];
+        var s = 0D;
+        int r = 0, c = 0;
+        int[] _r = new int[rl - 1], _c = new int[cl - 1];
 
-        while (row < rowLength) {
-            while (col < colLength) {
-                var con = e[rows[0]][cols[col]];
-                for (int r = 0, k = 0; r < rowLength; r++) {
-                    if (row != r)
-                        _r[k++] = rows[r];
+        while (r < rl) {
+            while (c < cl) {
+                var ct = e[rs[0]][cs[c]];
+                for (int i = 0, k = 0; i < rl; i++) {
+                    if (r != i)
+                        _r[k++] = rs[i];
                 }
 
-                for (int c = 0, k = 0; c < colLength; c++) {
-                    if (col != c)
-                        _c[k++] = cols[c];
+                for (int i = 0, k = 0; i < cl; i++) {
+                    if (c != i)
+                        _c[k++] = cs[i];
                 }
 
-                if (con.doubleValue() == 0) {
-                    sum += 0;
+                if (ct.doubleValue() == 0) {
+                    s += 0;
                 } else {
-                    sum += ((row + col % 2 == 0) ? 1 : -1) * (con.doubleValue() * det(_r, _c));
+                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * determinant(_r, _c));
                 }
-                col++;
+                c++;
             }
-            row++;
+            r++;
         }
-        return sum;
+        return s;
     }
 
     /**
