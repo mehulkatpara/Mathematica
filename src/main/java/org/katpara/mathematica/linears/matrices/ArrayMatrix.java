@@ -420,22 +420,13 @@ public class ArrayMatrix implements Matrix {
             }
 
             for (int _r = r + 1; _r < rk; _r++) {
-                if (n[_r][r].doubleValue() == 0) {
-                    for (int i = r + 1; i < rk; i++) {
-                        if (n[i][r].doubleValue() != 0) {
-                            var t = n[_r];
-                            n[_r] = n[i];
-                            n[i] = t;
-                        }
-                    }
-                } else {
+                if (n[_r][r].doubleValue() != 0) {
                     for (int _c = d[1] - 1; _c >= r; _c--) {
                         n[_r][_c] = n[_r][_c].doubleValue()
                                             - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
                     }
                 }
             }
-
         }
 
         for (int r = 0; r < d[0]; r++) {
