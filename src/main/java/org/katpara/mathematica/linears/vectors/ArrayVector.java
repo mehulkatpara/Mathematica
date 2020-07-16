@@ -730,6 +730,7 @@ public final class ArrayVector implements Vector {
      * The method will generate a vector of
      *
      * @param d the number of dimensions
+     * @param p the rounding decimals
      *
      * @return the random vector
      */

@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.katpara.mathematica.exceptions"},{"l":"org.katpara.mathematica.linears.matrices"},{"l":"org.katpara.mathematica.linears.vectors"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"org.katpara.mathematica.commons"},{"l":"org.katpara.mathematica.exceptions"},{"l":"org.katpara.mathematica.exceptions.linears"},{"l":"org.katpara.mathematica.linears.matrices"},{"l":"org.katpara.mathematica.linears.vectors"}]
