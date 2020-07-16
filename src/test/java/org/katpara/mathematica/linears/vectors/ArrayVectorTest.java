@@ -1,10 +1,12 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.Test;
+import org.katpara.mathematica.common.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
+import java.text.DecimalFormat;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -185,6 +187,9 @@ class ArrayVectorTest {
                                       .angle(ArrayVector.of(1, 2, 3), Vector.Angle.DEGREE)),
                 () -> assertEquals(45.00000000000001, ArrayVector.of(2, 2)
                                                               .angle(ArrayVector.of(0, 3), Vector.Angle.DEGREE)),
+                () -> assertEquals(45.0,
+                        ArrayVector.of(2, 2)
+                                .angle(ArrayVector.of(0, 3), Vector.Angle.DEGREE, Rounding.POINT.TWO)),
                 () -> assertEquals(0.7853981633974484, ArrayVector.of(2, 2)
                                                                .angle(ArrayVector.of(0, 3), Vector.Angle.RADIAN)),
                 () -> assertEquals(131.647015792716, ArrayVector.of(3, -4, 5)
@@ -251,7 +256,7 @@ class ArrayVectorTest {
 
     @Test
     void testScalarProjection() {
-        assertEquals(-33D/13D, ArrayVector.of(5, -12).scalarProjection(ArrayVector.of(3, 4)));
+        assertEquals(-33D / 13D, ArrayVector.of(5, -12).scalarProjection(ArrayVector.of(3, 4)));
     }
 
     @Test
@@ -263,5 +268,17 @@ class ArrayVectorTest {
     @Test
     void testVectorRejection() {
         System.out.println(ArrayVector.of(5, -12).vectorRejection(ArrayVector.of(3, 4)));
+    }
+
+    @Test
+    void testScalarAddition() {
+        assertEquals(ArrayVector.of(11D, 12D), ArrayVector.of(1, 2).add(10));
+    }
+
+    @Test
+    void testRandomVector() {
+        System.out.println(ArrayVector.randomOf(3, Rounding.POINT.THREE));
+        System.out.println(ArrayVector.randomOf(3, 98, 100, Rounding.POINT.TWO));
+        System.out.println(ArrayVector.randomOf(8, -1, 1, Rounding.POINT.FIVE));
     }
 }

@@ -1,5 +1,6 @@
 package org.katpara.mathematica.linears.vectors;
 
+import org.katpara.mathematica.common.Rounding;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.io.Serializable;
@@ -18,11 +19,6 @@ public interface Vector extends Cloneable, Serializable {
      * either in degrees or in radian.
      */
     enum Angle {DEGREE, RADIAN}
-
-    /**
-     * The property is used to calculate the projection of vectors.
-     */
-    enum Projection {SCALAR, VECTOR}
 
     /**
      * A dimension of a vector is determined based on the number of elements
@@ -51,6 +47,21 @@ public interface Vector extends Cloneable, Serializable {
     double getMagnitude();
 
     /**
+     * The magnitude of a vector, also known as "norm", is square root of
+     * the sum all the vector elements powered by 2. A magnitude of a vector
+     * is represented by the length of a vector and written as |V| for vector V.
+     * <p>
+     * For n-dimensional vector, the magnitude is defined as;
+     * |v| = sqrt(v1^2 + v2^2 + ... + vn^2).
+     *
+     * @param point the value round up to the given decimal point
+     *              see, {@link Rounding.POINT}
+     *
+     * @return the magnitude of the vector
+     */
+    double getMagnitude(final Rounding.POINT point);
+
+    /**
      * The method calculates the cosines with respect to their dimensional axioms.
      * The number of elements in the returned array will be equal to the number of
      * dimensions.
@@ -59,7 +70,19 @@ public interface Vector extends Cloneable, Serializable {
      *
      * @return an array of cosines with respect to axiom.
      */
-    double[] getCosines(Angle angle);
+    double[] getCosines(final Angle angle);
+
+    /**
+     * The method calculates the cosines with respect to their dimensional axioms.
+     * The number of elements in the returned array will be equal to the number of
+     * dimensions.
+     *
+     * @param angle the angle, see {@link Angle}
+     * @param point the rounding point
+     *
+     * @return an array of cosines with respect to axiom.
+     */
+    double[] getCosines(final Angle angle, final Rounding.POINT point);
 
     /**
      * The method returns the elements of a vector as an array.
@@ -121,6 +144,19 @@ public interface Vector extends Cloneable, Serializable {
     double angle(final Vector vector, final Angle angle);
 
     /**
+     * The method returns the angle between two vectors.
+     * The second parameter can be true/false, depending on if you want the angle
+     * in degrees (true) or in radian (false).
+     *
+     * @param vector the another vector to calculate
+     * @param angle  the angle either in degree or radian, See, {@link Angle}
+     * @param point  the decimal point you want to round up to
+     *
+     * @return the angle in degrees or radian.
+     */
+    double angle(final Vector vector, final Angle angle, final Rounding.POINT point);
+
+    /**
      * The method will return the inverse vector.
      * The inverse vector satisfy the following equation:
      * V + inverse(V) = 0 (Zero Vector).
@@ -167,6 +203,15 @@ public interface Vector extends Cloneable, Serializable {
      *                                         vector dimension
      */
     Vector transpose(final int dimension);
+
+    /**
+     * The method performs the scalar addition on the vector.
+     *
+     * @param scalar the scalar to add
+     *
+     * @return a resulting vector
+     */
+    Vector add(final Number scalar);
 
     /**
      * The method will add a vector to the current vector.
@@ -217,6 +262,21 @@ public interface Vector extends Cloneable, Serializable {
     double dot(final Vector vector);
 
     /**
+     * The method will return a dot product of two vectors.
+     * If both vectors are on different dimensions then
+     * {@link InvalidVectorDimensionException} exception is thrown.
+     *
+     * @param vector the second vector
+     * @param point the rounding point, {@link Rounding.POINT}
+     *
+     * @return the resulting dot product
+     *
+     * @throws InvalidVectorDimensionException when both products are on different
+     *                                         dimensions.
+     */
+    double dot(final Vector vector, final Rounding.POINT point);
+
+    /**
      * The method returns the cross product of two vectors.
      * A cross product of two vectors if a new vector, this
      * new vector is perpendicular to both vectors.
@@ -251,6 +311,21 @@ public interface Vector extends Cloneable, Serializable {
      * @return the projected scalar
      */
     double scalarProjection(final Vector vector);
+
+    /**
+     * The method calculates the scalar project of a given vector onto
+     * the current vector.
+     * <p>
+     * Let this vector be V and the given vector be W.
+     * The scalar projection is defined as,
+     * dot(V, W) / magnitude(V)
+     *
+     * @param vector the projecting vector
+     * @param point the rounding point, {@link Rounding.POINT}
+     *
+     * @return the projected scalar
+     */
+    double scalarProjection(final Vector vector, final Rounding.POINT point);
 
     /**
      * The method calculates the vector project of a given vector onto

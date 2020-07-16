@@ -1,12 +1,11 @@
 package org.katpara.mathematica.linears.vectors;
 
+import org.katpara.mathematica.common.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
 
 import static org.katpara.mathematica.linears.vectors.Vector.Angle.DEGREE;
@@ -161,6 +160,24 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * The magnitude of a vector, also known as "norm", is square root of
+     * the sum all the vector elements powered by 2. A magnitude of a vector
+     * is represented by the length of a vector and written as |V| for vector V.
+     * <p>
+     * For n-dimensional vector, the magnitude is defined as;
+     * |v| = sqrt(v1^2 + v2^2 + ... + vn^2).
+     *
+     * @param point the value round up to the given decimal point
+     *              see, {@link Rounding.POINT}
+     *
+     * @return the magnitude of the vector
+     */
+    @Override
+    public double getMagnitude(final Rounding.POINT point) {
+        return Rounding.round(getMagnitude(), point);
+    }
+
+    /**
      * The method calculates the cosines with respect to their dimensional axioms.
      * The number of elements in the returned array will be equal to the number of
      * dimensions.
@@ -178,6 +195,25 @@ public final class ArrayVector implements Vector {
         }
 
         return (a == DEGREE) ? c.getCd() : c.getCr();
+    }
+
+    /**
+     * The method calculates the cosines with respect to their dimensional axioms.
+     * The number of elements in the returned array will be equal to the number of
+     * dimensions.
+     *
+     * @param a the angle, see {@link Angle}
+     * @param p the rounding point
+     *
+     * @return an array of cosines with respect to axiom.
+     */
+    @Override
+    public double[] getCosines(final Angle a, final Rounding.POINT p) {
+        var n = getCosines(a);
+        for (var i = 0; i < d; i++)
+            n[i++] = Rounding.round(n[i], p);
+
+        return n;
     }
 
     /**
@@ -288,6 +324,22 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * The method returns the angle between two vectors.
+     * The second parameter can be true/false, depending on if you want the angle
+     * in degrees (true) or in radian (false).
+     *
+     * @param v the another vector to calculate
+     * @param a the angle either in degree or radian, See, {@link Angle}
+     * @param p the decimal point you want to round up to
+     *
+     * @return the angle in degrees or radian.
+     */
+    @Override
+    public double angle(final Vector v, final Angle a, final Rounding.POINT p) {
+        return Rounding.round(angle(v, a), p);
+    }
+
+    /**
      * The method will return the inverse vector.
      * The inverse vector satisfy the following equation:
      * V + inverse(V) = 0 (Zero Vector).
@@ -365,6 +417,24 @@ public final class ArrayVector implements Vector {
                 n[i] = 0;
             }
         }
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method performs the scalar addition on the vector.
+     *
+     * @param s the scalar to add
+     *
+     * @return a resulting vector
+     */
+    @Override
+    public Vector add(final Number s) {
+        var n = new Number[d];
+        int i = 0;
+
+        for (var e : e)
+            n[i++] = e.doubleValue() + s.doubleValue();
 
         return new ArrayVector(n);
     }
@@ -462,6 +532,24 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * The method will return a dot product of two vectors.
+     * If both vectors are on different dimensions then
+     * {@link InvalidVectorDimensionException} exception is thrown.
+     *
+     * @param v the second vector
+     * @param p  the rounding point, {@link Rounding.POINT}
+     *
+     * @return the resulting dot product
+     *
+     * @throws InvalidVectorDimensionException when both products are on different
+     *                                         dimensions.
+     */
+    @Override
+    public double dot(final Vector v, final Rounding.POINT p) {
+        return Rounding.round(dot(v), p);
+    }
+
+    /**
      * The method returns the cross product of two vectors.
      * A cross product of two vectors if a new vector, this
      * new vector is perpendicular to both vectors.
@@ -474,7 +562,7 @@ public final class ArrayVector implements Vector {
      * If given vectors are not in 3 dimensions then,
      * {@link InvalidVectorDimensionException} is thrown.
      *
-     * @param vector the second 3 dimensional vector
+     * @param v the second 3 dimensional vector
      *
      * @return the cross product vector
      *
@@ -482,9 +570,9 @@ public final class ArrayVector implements Vector {
      *                                         the third dimension.
      */
     @Override
-    public Vector cross(final Vector vector) {
+    public Vector cross(final Vector v) {
         Number[] _e, n = new Number[3];
-        if (d != 3 || (_e = vector.toArray()).length != 3)
+        if (d != 3 || (_e = v.toArray()).length != 3)
             throw new InvalidVectorDimensionException("The cross product is only supported for vectors in 3rd dimension");
 
         n[0] = e[1].doubleValue() * _e[2].doubleValue() - e[2].doubleValue() * _e[1].doubleValue();
@@ -497,10 +585,10 @@ public final class ArrayVector implements Vector {
     /**
      * The method calculates the scalar project of a given vector onto
      * the current vector.
-     *
+     * <p>
      * Let this vector be V and the given vector be W.
      * The scalar projection is defined as,
-     *          dot(V, W) / magnitude(V)
+     * dot(V, W) / magnitude(V)
      *
      * @param v the projecting vector
      *
@@ -511,16 +599,34 @@ public final class ArrayVector implements Vector {
         if (d != v.getDimension())
             throw new InvalidVectorDimensionException("Vectors have different dimensions");
 
-        return dot(v)/getMagnitude();
+        return dot(v) / getMagnitude();
+    }
+
+    /**
+     * The method calculates the scalar project of a given vector onto
+     * the current vector.
+     * <p>
+     * Let this vector be V and the given vector be W.
+     * The scalar projection is defined as,
+     * dot(V, W) / magnitude(V)
+     *
+     * @param v the projecting vector
+     * @param p  the rounding point, {@link Rounding.POINT}
+     *
+     * @return the projected scalar
+     */
+    @Override
+    public double scalarProjection(final Vector v, final Rounding.POINT p) {
+        return Rounding.round(scalarProjection(v), p);
     }
 
     /**
      * The method calculates the vector project of a given vector onto
      * the current vector. This will produce another vector.
-     *
+     * <p>
      * Let this vector be V and the given vector be W.
      * The vector projection is defined as,
-     *          [dot(V, W) / magnitude(V)] x V
+     * [dot(V, W) / magnitude(V)] x V
      *
      * @param v the projecting vector
      *
@@ -550,12 +656,19 @@ public final class ArrayVector implements Vector {
         return new ArrayVector(m);
     }
 
+    /**
+     * The method calculates the elements of projection
+     *
+     * @param v the projecting vector
+     *
+     * @return the array with projection
+     */
     private Number[] calculateProjection(final Vector v) {
         double sp = scalarProjection(v), m = getMagnitude();
         var n = new Number[d];
         var i = 0;
 
-        for (var e: e)
+        for (var e : e)
             n[i++] = sp * e.doubleValue() / m;
 
         return n;
@@ -608,8 +721,43 @@ public final class ArrayVector implements Vector {
      * @return a vector
      */
     public static Vector unitOf(final int d) {
-        Number[] n = new Number[d];
+        var n = new Number[d];
         Arrays.fill(n, 1);
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will generate a vector of
+     *
+     * @param d the number of dimensions
+     *
+     * @return the random vector
+     */
+    public static Vector randomOf(final int d, final Rounding.POINT p) {
+        var n = new Number[d];
+        for (int i = 0; i < d; i++) {
+            n[i] = Rounding.round(Math.random(), p);
+        }
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will create a random vector, with given upper and lower bound limits,
+     * as well as the rounding mode.
+     *
+     * @param d   the dimension of the vector
+     * @param min the lower bound limit
+     * @param max the upper bound limit
+     * @param p   the rounding decimal points
+     *
+     * @return the random vector
+     */
+    public static Vector randomOf(final int d, final double min, final double max, final Rounding.POINT p) {
+        var n = new Number[d];
+        for (int i = 0; i < d; i++)
+            n[i] = Rounding.round((Math.random() * ((max - min) + 1)) + min, p);
+
         return new ArrayVector(n);
     }
 
@@ -621,7 +769,6 @@ public final class ArrayVector implements Vector {
         private double[] cd;
         private double[] cr;
         private String s;
-
 
         private double getM() {
             return m;
