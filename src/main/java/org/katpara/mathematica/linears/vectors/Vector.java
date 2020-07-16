@@ -12,6 +12,18 @@ import java.util.List;
  * @since 1.0.0
  */
 public interface Vector extends Cloneable, Serializable {
+
+    /**
+     * When you work with angles there are two options to get an angle
+     * either in degrees or in radian.
+     */
+    enum Angle {DEGREE, RADIAN}
+
+    /**
+     * The property is used to calculate the projection of vectors.
+     */
+    enum Projection {SCALAR, VECTOR}
+
     /**
      * A dimension of a vector is determined based on the number of elements
      * it holds. Such as, a two-dimensional vector could be represented as,
@@ -37,6 +49,17 @@ public interface Vector extends Cloneable, Serializable {
      * @return the magnitude of the vector
      */
     double getMagnitude();
+
+    /**
+     * The method calculates the cosines with respect to their dimensional axioms.
+     * The number of elements in the returned array will be equal to the number of
+     * dimensions.
+     *
+     * @param angle The angle, see {@link Angle}
+     *
+     * @return an array of cosines with respect to axiom.
+     */
+    double[] getCosines(Angle angle);
 
     /**
      * The method returns the elements of a vector as an array.
@@ -91,11 +114,11 @@ public interface Vector extends Cloneable, Serializable {
      * in degrees (true) or in radian (false).
      *
      * @param vector the another vector to calculate
-     * @param degree the angle either in degree or radian
+     * @param angle  the angle either in degree or radian, See, {@link Angle}
      *
      * @return the angle in degrees or radian.
      */
-    double angle(final Vector vector, final boolean degree);
+    double angle(final Vector vector, final Angle angle);
 
     /**
      * The method will return the inverse vector.
@@ -216,41 +239,41 @@ public interface Vector extends Cloneable, Serializable {
     Vector cross(final Vector vector);
 
     /**
-     * The method creates a two-dimensional {@link ArrayVector}.
+     * The method calculates the scalar project of a given vector onto
+     * the current vector.
+     * <p>
+     * Let this vector be V and the given vector be W.
+     * The scalar projection is defined as,
+     * dot(V, W) / magnitude(V)
      *
-     * @param x x value
-     * @param y y Value
+     * @param vector the projecting vector
      *
-     * @return an {@link ArrayVector}
+     * @return the projected scalar
      */
-    static Vector arrayVectorOf(final Number x, final Number y) {
-        return new ArrayVector(new Number[]{x, y});
-    }
+    double scalarProjection(final Vector vector);
 
     /**
-     * The method creates a three-dimensional {@link ArrayVector}.
+     * The method calculates the vector project of a given vector onto
+     * the current vector. This will produce another vector.
+     * <p>
+     * Let this vector be V and the given vector be W.
+     * The vector projection is defined as,
+     * [dot(V, W) / magnitude(V)] x V
      *
-     * @param x x value
-     * @param y y Value
-     * @param z z Value
+     * @param vector the projecting vector
      *
-     * @return an {@link ArrayVector}
+     * @return the projected scalar
      */
-    static Vector arrayVectorOf(final Number x, final Number y, final Number z) {
-        return new ArrayVector(new Number[]{x, y, z});
-    }
+    Vector vectorProjection(final Vector vector);
 
     /**
-     * The method creates a three-dimensional {@link ArrayVector}.
+     * The method will return a rejection vector from the the given vector.
+     * The projecting vector can be calculated as;
+     * R = V - ScalarProjection(W)
      *
-     * @param x x value
-     * @param y y Value
-     * @param z z Value
-     * @param t t Value
+     * @param vector the projecting vector
      *
-     * @return an {@link ArrayVector}
+     * @return the rejection vector
      */
-    static Vector arrayVectorOf(final Number x, final Number y, final Number z, final Number t) {
-        return new ArrayVector(new Number[]{x, y, z, t});
-    }
+    Vector vectorRejection(final Vector vector);
 }

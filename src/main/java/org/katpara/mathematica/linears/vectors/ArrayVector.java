@@ -5,7 +5,12 @@ import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.ToDoubleBiFunction;
 import java.util.stream.Collectors;
+
+import static org.katpara.mathematica.linears.vectors.Vector.Angle.DEGREE;
+import static org.katpara.mathematica.linears.vectors.Vector.Angle.RADIAN;
 
 /**
  * The ArrayVector class is an implementations of the Vector interface,
@@ -33,9 +38,9 @@ public final class ArrayVector implements Vector {
     private final int d;
 
     /**
-     * The array stores new processed values of e
+     * Useful to cache some of the calculated properties
      */
-    private Number[] n;
+    private final Cache c = new Cache();
 
     /**
      * The constructor creates a vector from the given {@link Number} array.
@@ -56,7 +61,8 @@ public final class ArrayVector implements Vector {
             throw new InvalidVectorDimensionException();
 
         for (var n : e)
-            if (n == null) throw new NullArgumentProvidedException();
+            if (n == null)
+                throw new NullArgumentProvidedException();
 
         this.e = e;
         this.d = e.length;
@@ -143,12 +149,57 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double getMagnitude() {
-        var sum = 0;
+        if (c.getM() == 0) {
+            var s = 0;
+            for (var n : e)
+                s += n.doubleValue() * n.doubleValue();
 
-        for (var n : e)
-            sum += n.doubleValue() * n.doubleValue();
+            c.setM(Math.sqrt(s));
+        }
 
-        return Math.sqrt(sum);
+        return c.getM();
+    }
+
+    /**
+     * The method calculates the cosines with respect to their dimensional axioms.
+     * The number of elements in the returned array will be equal to the number of
+     * dimensions.
+     *
+     * @param a The angle, see {@link Angle}
+     *
+     * @return an array of cosines with respect to axiom.
+     */
+    @Override
+    public double[] getCosines(final Angle a) {
+        if (a == DEGREE && c.getCd() == null) {
+            c.setCd(calculateCosines(a));
+        } else if (a == RADIAN && c.getCr() == null) {
+            c.setCr(calculateCosines(a));
+        }
+
+        return (a == DEGREE) ? c.getCd() : c.getCr();
+    }
+
+    /**
+     * The method calculates the cosigns.
+     *
+     * @param a the angle specification
+     *
+     * @return the array with cosines
+     */
+    private double[] calculateCosines(final Angle a) {
+        var n = new double[d];
+        var m = getMagnitude();
+        var i = 0;
+
+        if (a == DEGREE)
+            for (var _e : e)
+                n[i++] = Math.toDegrees(_e.doubleValue() / m);
+        else
+            for (var _e : e)
+                n[i++] = _e.doubleValue() / m;
+
+        return n;
     }
 
     /**
@@ -178,13 +229,13 @@ public final class ArrayVector implements Vector {
      * Orthogonality is known as a vector that is perpendicular to the given matrix,
      * i.e. if the vector makes the 90 degrees angle with the current matrix.
      *
-     * @param vector the vector to check orthogonality
+     * @param v the vector to check orthogonality
      *
      * @return true if it's orthogonal
      */
     @Override
-    public boolean isOrthogonal(final Vector vector) {
-        return angle(vector, true) != 0;
+    public boolean isOrthogonal(final Vector v) {
+        return angle(v, DEGREE) != 0;
     }
 
     /**
@@ -201,26 +252,22 @@ public final class ArrayVector implements Vector {
      * W = a(V); where a is a constant (here "the factor").
      * i.e (w1, w2, ..., wn) = (av1, av2, ..., avn)
      *
-     * @param vector the vector to check parallelism
+     * @param v the vector to check parallelism
      *
      * @return if it's parallel then returns the factor, otherwise -1
      */
     @Override
-    public double isParallel(final Vector vector) {
-        if(d != vector.getDimension())
+    public double isParallel(final Vector v) {
+        if (d != v.getDimension())
             throw new InvalidVectorDimensionException("Vectors have different dimensions");
 
-        var _e = vector.toArray();
-        var a = -1.0;
+        var _e = v.toArray();
+        var a = _e[0].doubleValue() / e[0].doubleValue();
 
-        for (int i = 0; i < d; i++) {
-            var _a = _e[i].doubleValue()/e[i].doubleValue();
-
-            if(a == -1)
-                a = _a;
-            else if(a != _a)
+        for (int i = 1; i < d; i++)
+            if (a != _e[i].doubleValue() / e[i].doubleValue())
                 return -1;
-        }
+
         return a;
     }
 
@@ -229,15 +276,15 @@ public final class ArrayVector implements Vector {
      * The second parameter can be true/false, depending on if you want the angle
      * in degrees (true) or in radian (false).
      *
-     * @param vector the another vector to calculate
-     * @param degree the angle either in degree or radian
+     * @param v the another vector to calculate
+     * @param a the angle either in degree or radian, see {@link Angle}
      *
      * @return the angle in degrees or radian.
      */
     @Override
-    public double angle(final Vector vector, final boolean degree) {
-        double radian = Math.acos(dot(vector) / (getMagnitude() * vector.getMagnitude()));
-        return degree ? Math.toDegrees(radian) : radian;
+    public double angle(final Vector v, final Angle a) {
+        var r = Math.acos(dot(v) / (getMagnitude() * v.getMagnitude()));
+        return (a == DEGREE) ? Math.toDegrees(r) : r;
     }
 
     /**
@@ -249,9 +296,11 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public Vector inverse() {
-        n = new Number[d];
-        for (var i = 0; i < d; i++)
-            n[i] = -e[i].doubleValue();
+        var n = new Number[d];
+        var i = 0;
+
+        for (var e : e)
+            n[i++] = -e.doubleValue();
 
         return new ArrayVector(n);
     }
@@ -260,23 +309,25 @@ public final class ArrayVector implements Vector {
      * The method will scale the vector by the given value.
      * Please not, this operation is mutable.
      *
-     * @param scalar the scalar you want to scale the vector with.
-     *               if:
-     *                <ul>
-     *                <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
-     *                <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
-     *                <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
-     *                <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
-     *                <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
-     *               </ul>
+     * @param s the scalar you want to scale the vector with.
+     *          if:
+     *           <ul>
+     *           <li>scalar &gt; 1          -&gt; The scaled vector will be scaled up in the same direction.
+     *           <li>0 &lt; scalar &lt; 1   -&gt; The scaled vector is shrunk in the same direction.
+     *           <li>scalar = 0             -&gt; The scaled vector becomes a zero vector.
+     *           <li>-1 &lt; scalar &lt; 0  -&gt; The scaled vector is shrunk but in the opposite direction.
+     *           <li>scalar &lt; -1         -&gt; The scaled vector is scaled up but in the opposite direction.
+     *          </ul>
      *
      * @return the self vector but scaled by the given number.
      */
     @Override
-    public Vector scale(final double scalar) {
-        n = new Number[d];
-        for (var i = 0; i < d; i++)
-            n[i] = e[i].doubleValue() * scalar;
+    public Vector scale(final double s) {
+        var n = new Number[d];
+        var i = 0;
+
+        for (var e : e)
+            n[i++] = e.doubleValue() * s;
 
         return new ArrayVector(n);
     }
@@ -305,7 +356,7 @@ public final class ArrayVector implements Vector {
         if (dimension < 2 || this.d == dimension)
             throw new InvalidVectorDimensionException();
 
-        n = new Number[dimension];
+        var n = new Number[dimension];
         if (dimension < this.d)
             System.arraycopy(e, 0, n, 0, dimension);
         else {
@@ -346,7 +397,7 @@ public final class ArrayVector implements Vector {
         if (vectors.size() < 2)
             throw new InvalidParameterProvidedException("The list must have at least 2 vectors");
 
-        n = e;
+        var n = e;
         for (Vector vector : vectors)
             addElements(n, vector.toArray());
 
@@ -444,6 +495,168 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * The method calculates the scalar project of a given vector onto
+     * the current vector.
+     *
+     * Let this vector be V and the given vector be W.
+     * The scalar projection is defined as,
+     *          dot(V, W) / magnitude(V)
+     *
+     * @param v the projecting vector
+     *
+     * @return the projected scalar
+     */
+    @Override
+    public double scalarProjection(final Vector v) {
+        if (d != v.getDimension())
+            throw new InvalidVectorDimensionException("Vectors have different dimensions");
+
+        return dot(v)/getMagnitude();
+    }
+
+    /**
+     * The method calculates the vector project of a given vector onto
+     * the current vector. This will produce another vector.
+     *
+     * Let this vector be V and the given vector be W.
+     * The vector projection is defined as,
+     *          [dot(V, W) / magnitude(V)] x V
+     *
+     * @param v the projecting vector
+     *
+     * @return the projected scalar
+     */
+    @Override
+    public Vector vectorProjection(final Vector v) {
+        return new ArrayVector(calculateProjection(v));
+    }
+
+    /**
+     * The method will return a rejection vector from the the given vector.
+     * The projecting vector can be calculated as;
+     * R = V - ScalarProjection(W)
+     *
+     * @param v the projecting vector
+     *
+     * @return the rejection vector
+     */
+    @Override
+    public Vector vectorRejection(final Vector v) {
+        Number[] n = calculateProjection(v), m = new Number[d];
+
+        for (int i = 0; i < d; i++)
+            m[i] = e[i].doubleValue() - n[i].doubleValue();
+
+        return new ArrayVector(m);
+    }
+
+    private Number[] calculateProjection(final Vector v) {
+        double sp = scalarProjection(v), m = getMagnitude();
+        var n = new Number[d];
+        var i = 0;
+
+        for (var e: e)
+            n[i++] = sp * e.doubleValue() / m;
+
+        return n;
+    }
+
+    /**
+     * The method creates a two-dimensional {@link ArrayVector}.
+     *
+     * @param x x value
+     * @param y y Value
+     *
+     * @return an {@link ArrayVector}
+     */
+    public static Vector of(final Number x, final Number y) {
+        return new ArrayVector(new Number[]{x, y});
+    }
+
+    /**
+     * The method creates a three-dimensional {@link ArrayVector}.
+     *
+     * @param x x value
+     * @param y y Value
+     * @param z z Value
+     *
+     * @return an {@link ArrayVector}
+     */
+    public static Vector of(final Number x, final Number y, final Number z) {
+        return new ArrayVector(new Number[]{x, y, z});
+    }
+
+    /**
+     * The method creates a three-dimensional {@link ArrayVector}.
+     *
+     * @param x x value
+     * @param y y Value
+     * @param z z Value
+     * @param t t Value
+     *
+     * @return an {@link ArrayVector}
+     */
+    public static Vector of(final Number x, final Number y, final Number z, final Number t) {
+        return new ArrayVector(new Number[]{x, y, z, t});
+    }
+
+    /**
+     * The method will return an unit vector of given dimensions.
+     *
+     * @param d the dimension of a vector
+     *
+     * @return a vector
+     */
+    public static Vector unitOf(final int d) {
+        Number[] n = new Number[d];
+        Arrays.fill(n, 1);
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The class is used for caching some of the constant properties.
+     */
+    private static class Cache {
+        private double m;
+        private double[] cd;
+        private double[] cr;
+        private String s;
+
+
+        private double getM() {
+            return m;
+        }
+
+        private void setM(final double m) {
+            this.m = m;
+        }
+
+        private double[] getCd() {
+            return cd;
+        }
+
+        private void setCd(final double[] cd) {
+            this.cd = cd;
+        }
+
+        private double[] getCr() {
+            return cr;
+        }
+
+        private void setCr(final double[] cr) {
+            this.cr = cr;
+        }
+
+        private String getS() {
+            return s;
+        }
+
+        private void setS(final String s) {
+            this.s = s;
+        }
+    }
+
+    /**
      * Returns a string representation of the object. In general, the
      * {@code toString} method returns a string that
      * "textually represents" this object. The result should
@@ -465,9 +678,13 @@ public final class ArrayVector implements Vector {
      * @return a string representation of the object.
      */
     public String toString() {
-        var l = new LinkedList<String>();
-        Arrays.stream(e).forEach(v -> l.add(v.toString()));
-        return "<" + String.join(", ", l) + ">";
+        if (c.getS() == null) {
+            var l = new LinkedList<String>();
+            Arrays.stream(e).forEach(v -> l.add(v.toString()));
+            c.setS("<" + String.join(", ", l) + ">");
+        }
+
+        return c.getS();
     }
 
     /**
@@ -513,7 +730,7 @@ public final class ArrayVector implements Vector {
      * @param obj the reference object with which to compare.
      *
      * @return {@code true} if this object is the same as the obj
-     * argument; {@code false} otherwise.
+     *         argument; {@code false} otherwise.
      *
      * @see #hashCode()
      * @see HashMap
@@ -558,75 +775,5 @@ public final class ArrayVector implements Vector {
      */
     public int hashCode() {
         return Arrays.hashCode(e);
-    }
-
-    /**
-     * Creates and returns a copy of this object.  The precise meaning
-     * of "copy" may depend on the class of the object. The general
-     * intent is that, for any object {@code x}, the expression:
-     * <blockquote>
-     * <pre>
-     * x.clone() != x</pre></blockquote>
-     * will be true, and that the expression:
-     * <blockquote>
-     * <pre>
-     * x.clone().getClass() == x.getClass()</pre></blockquote>
-     * will be {@code true}, but these are not absolute requirements.
-     * While it is typically the case that:
-     * <blockquote>
-     * <pre>
-     * x.clone().equals(x)</pre></blockquote>
-     * will be {@code true}, this is not an absolute requirement.
-     * <p>
-     * By convention, the returned object should be obtained by calling
-     * {@code super.clone}.  If a class and all of its superclasses (except
-     * {@code Object}) obey this convention, it will be the case that
-     * {@code x.clone().getClass() == x.getClass()}.
-     * <p>
-     * By convention, the object returned by this method should be independent
-     * of this object (which is being cloned).  To achieve this independence,
-     * it may be necessary to modify one or more fields of the object returned
-     * by {@code super.clone} before returning it.  Typically, this means
-     * copying any mutable objects that comprise the internal "deep structure"
-     * of the object being cloned and replacing the references to these
-     * objects with references to the copies.  If a class contains only
-     * primitive fields or references to immutable objects, then it is usually
-     * the case that no fields in the object returned by {@code super.clone}
-     * need to be modified.
-     * <p>
-     * The method {@code clone} for class {@code Object} performs a
-     * specific cloning operation. First, if the class of this object does
-     * not implement the interface {@code Cloneable}, then a
-     * {@code CloneNotSupportedException} is thrown. Note that all arrays
-     * are considered to implement the interface {@code Cloneable} and that
-     * the return type of the {@code clone} method of an array type {@code T[]}
-     * is {@code T[]} where T is any reference or primitive type.
-     * Otherwise, this method creates a new instance of the class of this
-     * object and initializes all its fields with exactly the contents of
-     * the corresponding fields of this object, as if by assignment; the
-     * contents of the fields are not themselves cloned. Thus, this method
-     * performs a "shallow copy" of this object, not a "deep copy" operation.
-     * <p>
-     * The class {@code Object} does not itself implement the interface
-     * {@code Cloneable}, so calling the {@code clone} method on an object
-     * whose class is {@code Object} will result in throwing an
-     * exception at run time.
-     *
-     * @return a clone of this instance.
-     *
-     * @throws CloneNotSupportedException if the object's class does not
-     *                                    support the {@code Cloneable} interface. Subclasses
-     *                                    that override the {@code clone} method can also
-     *                                    throw this exception to indicate that an instance cannot
-     *                                    be cloned.
-     * @see Cloneable
-     */
-    protected Object clone() throws CloneNotSupportedException {
-        super.clone();
-
-        n = new Number[d];
-        System.arraycopy(e, 0, n, 0, d);
-
-        return new ArrayVector(n);
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
+import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
 import java.util.Collections;
@@ -38,19 +39,19 @@ class ArrayMatrixTest {
     @Test
     void testVectorConstructor() {
         List<Vector> vl1 = Collections.emptyList();
-        List<Vector> vl2 = List.of(Vector.arrayVectorOf(1, 2), Vector.arrayVectorOf(1, 2, 3));
-        List<Vector> vl3 = List.of(Vector.arrayVectorOf(1, 2));
-        List<Vector> vl4 = List.of(Vector.arrayVectorOf(1, 2, 3), Vector.arrayVectorOf(4, 5, 6));
+        List<Vector> vl2 = List.of(ArrayVector.of(1, 2), ArrayVector.of(1, 2, 3));
+        List<Vector> vl3 = List.of(ArrayVector.of(1, 2));
+        List<Vector> vl4 = List.of(ArrayVector.of(1, 2, 3), ArrayVector.of(4, 5, 6));
 
         Set<Vector> vs1 = Collections.emptySet();
-        Set<Vector> vs2 = Set.of(Vector.arrayVectorOf(1, 2), Vector.arrayVectorOf(1, 2, 3));
-        Set<Vector> vs3 = Set.of(Vector.arrayVectorOf(1, 2));
-        Set<Vector> vs4 = Set.of(Vector.arrayVectorOf(1, 2, 3), Vector.arrayVectorOf(4, 5, 6));
+        Set<Vector> vs2 = Set.of(ArrayVector.of(1, 2), ArrayVector.of(1, 2, 3));
+        Set<Vector> vs3 = Set.of(ArrayVector.of(1, 2));
+        Set<Vector> vs4 = Set.of(ArrayVector.of(1, 2, 3), ArrayVector.of(4, 5, 6));
 
         Map<Integer, Vector> vm1 = Collections.emptyMap();
-        Map<Integer, Vector> vm2 = Map.of(1, Vector.arrayVectorOf(1, 2), 2, Vector.arrayVectorOf(1, 2, 3));
-        Map<Integer, Vector> vm3 = Map.of(1, Vector.arrayVectorOf(1, 2));
-        Map<Integer, Vector> vm4 = Map.of(1, Vector.arrayVectorOf(1, 2), 2, Vector.arrayVectorOf(1, 2));
+        Map<Integer, Vector> vm2 = Map.of(1, ArrayVector.of(1, 2), 2, ArrayVector.of(1, 2, 3));
+        Map<Integer, Vector> vm3 = Map.of(1, ArrayVector.of(1, 2));
+        Map<Integer, Vector> vm4 = Map.of(1, ArrayVector.of(1, 2), 2, ArrayVector.of(1, 2));
 
         assertAll(
                 () -> assertThrows(InvalidMatrixDimensionException.class, () -> new ArrayMatrix(vl1)),
@@ -102,8 +103,8 @@ class ArrayMatrixTest {
         var _d1 = new ArrayMatrix(new Number[][]{{1, 2}}).getDimension();
         var _d2 = new ArrayMatrix(new Number[][]{{1}, {1}}).getDimension();
         var _d3 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2, 3),
-                Vector.arrayVectorOf(4, 5, 6))
+                ArrayVector.of(1, 2, 3),
+                ArrayVector.of(4, 5, 6))
         ).getDimension();
 
         assertAll(
@@ -131,9 +132,9 @@ class ArrayMatrixTest {
     void testToArray() {
         var _d1 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
         var _d2 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2, 3),
-                Vector.arrayVectorOf(4, 5, 6),
-                Vector.arrayVectorOf(7, 8, 9)));
+                ArrayVector.of(1, 2, 3),
+                ArrayVector.of(4, 5, 6),
+                ArrayVector.of(7, 8, 9)));
 
         var e_d1 = _d1.toArray();
         var e_d2 = _d2.toArray();
@@ -176,8 +177,8 @@ class ArrayMatrixTest {
         assertAll(
                 () -> assertEquals(2, list.size()),
                 () -> assertEquals(3, list.get(0).getDimension()),
-                () -> assertEquals(Vector.arrayVectorOf(1, 2, 3), list.get(0)),
-                () -> assertEquals(Vector.arrayVectorOf(4, 5, 6), list.get(1))
+                () -> assertEquals(ArrayVector.of(1, 2, 3), list.get(0)),
+                () -> assertEquals(ArrayVector.of(4, 5, 6), list.get(1))
         );
     }
 
@@ -188,8 +189,8 @@ class ArrayMatrixTest {
         var _d3 = new ArrayMatrix(new Number[][]{{11, 20}, {23, 34}});
         var _d4 = new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}});
         var _d5 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2),
-                Vector.arrayVectorOf(3, 4)));
+                ArrayVector.of(1, 2),
+                ArrayVector.of(3, 4)));
 
         assertAll(
                 () -> assertEquals(_d1, _d2),
@@ -202,10 +203,10 @@ class ArrayMatrixTest {
     @Test
     void testIsRowVector() {
         var _d1 = new ArrayMatrix(new Number[][]{{1, 2}});
-        var _d2 = new ArrayMatrix(List.of(Vector.arrayVectorOf(1, 2, 3)));
+        var _d2 = new ArrayMatrix(List.of(ArrayVector.of(1, 2, 3)));
         var _d3 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2, 3),
-                Vector.arrayVectorOf(4, 5, 6)));
+                ArrayVector.of(1, 2, 3),
+                ArrayVector.of(4, 5, 6)));
 
         assertAll(
                 () -> assertTrue(_d1.isRowVector()),
@@ -219,8 +220,8 @@ class ArrayMatrixTest {
         var _d1 = new ArrayMatrix(new Number[][]{{1}, {2}});
         var _d2 = new ArrayMatrix(List.of(List.of(1), List.of(2), List.of(3)));
         var _d3 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2, 3),
-                Vector.arrayVectorOf(4, 5, 6)));
+                ArrayVector.of(1, 2, 3),
+                ArrayVector.of(4, 5, 6)));
 
         assertAll(
                 () -> assertTrue(_d1.isColumnVector()),
@@ -233,9 +234,9 @@ class ArrayMatrixTest {
     void testIsSquareMatrix() {
         var _d1 = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
         var _d2 = new ArrayMatrix(List.of(
-                Vector.arrayVectorOf(1, 2, 3),
-                Vector.arrayVectorOf(4, 5, 6),
-                Vector.arrayVectorOf(7, 8, 9)));
+                ArrayVector.of(1, 2, 3),
+                ArrayVector.of(4, 5, 6),
+                ArrayVector.of(7, 8, 9)));
         var _d3 = new ArrayMatrix(List.of(List.of(1, 2), List.of(3, 4), List.of(5, 6)));
 
         assertAll(
