@@ -1,4 +1,4 @@
-package org.katpara.mathematica.common;
+package org.katpara.mathematica.commons;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;

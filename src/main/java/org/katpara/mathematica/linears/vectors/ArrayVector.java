@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.common.Rounding;
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
@@ -290,10 +290,10 @@ public final class ArrayVector implements Vector {
      *
      * @param v the vector to check parallelism
      *
-     * @return if it's parallel then returns the factor, otherwise -1
+     * @return if it's parallel then returns true
      */
     @Override
-    public double isParallel(final Vector v) {
+    public boolean isParallel(final Vector v) {
         if (d != v.getDimension())
             throw new InvalidVectorDimensionException("Vectors have different dimensions");
 
@@ -302,9 +302,9 @@ public final class ArrayVector implements Vector {
 
         for (int i = 1; i < d; i++)
             if (a != _e[i].doubleValue() / e[i].doubleValue())
-                return -1;
+                return false;
 
-        return a;
+        return true;
     }
 
     /**

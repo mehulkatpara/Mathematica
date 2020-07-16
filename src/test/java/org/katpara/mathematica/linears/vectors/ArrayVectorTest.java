@@ -1,12 +1,11 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.common.Rounding;
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
-import java.text.DecimalFormat;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -231,12 +230,12 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> ArrayVector.of(1, 2).isParallel(ArrayVector.of(1, 2, 3))),
-                () -> assertEquals(1, ArrayVector.of(1, 2, 3)
-                                              .isParallel(ArrayVector.of(1, 2, 3))),
-                () -> assertEquals(3, ArrayVector.of(1, 2, 3)
-                                              .isParallel(ArrayVector.of(3, 6, 9))),
-                () -> assertEquals(-1, ArrayVector.of(1, 0)
-                                               .isParallel(ArrayVector.of(0, 1)))
+                () -> assertTrue(ArrayVector.of(1, 2, 3)
+                                         .isParallel(ArrayVector.of(1, 2, 3))),
+                () -> assertTrue(ArrayVector.of(1, 2, 3)
+                                         .isParallel(ArrayVector.of(3, 6, 9))),
+                () -> assertFalse(ArrayVector.of(1, 0)
+                                          .isParallel(ArrayVector.of(0, 1)))
         );
     }
 
@@ -277,8 +276,9 @@ class ArrayVectorTest {
 
     @Test
     void testRandomVector() {
-        System.out.println(ArrayVector.randomOf(3, Rounding.POINT.THREE));
-        System.out.println(ArrayVector.randomOf(3, 98, 100, Rounding.POINT.TWO));
-        System.out.println(ArrayVector.randomOf(8, -1, 1, Rounding.POINT.FIVE));
+        assertAll(
+                () -> assertEquals(3, ArrayVector.of(0.876, 0.409, 0.822).getDimension()),
+                () -> assertEquals(3, ArrayVector.randomOf(3, 98, 100, Rounding.POINT.TWO).getDimension())
+        );
     }
 }

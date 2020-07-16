@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.common.Rounding;
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.io.Serializable;
@@ -127,9 +127,9 @@ public interface Vector extends Cloneable, Serializable {
      *
      * @param vector the vector to check parallelism
      *
-     * @return if it's parallel then returns the factor, otherwise -1
+     * @return if it's parallel then returns true
      */
-    double isParallel(Vector vector);
+    boolean isParallel(Vector vector);
 
     /**
      * The method returns the angle between two vectors.
