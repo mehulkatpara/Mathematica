@@ -1,38 +1,51 @@
 # Mathematica
-This library is useful to perform complex mathematical calculations. 
+This library is useful to perform complex mathematical calculations. Currently, I have implemented the linear algebra, but It will be expanded to cover more.
 
 ## Vectors
-A vector has magnitude and dimension. The library provides __Vector__ interface, and __ArrayVector__ as it's implementations.
+A vector has magnitude and dimension. 
+The library provides __Vector__ interface, and __ArrayVector__ as it's implementations, where __ArrayVector__ class used an array to create and compute a vector.
+The vectors are immutable objects, which basically means that once they are created, any operations on them would result in a new vector.
 In order to create a vector; both class and interface decide in the package:
 
 ```
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.linears.vectors.Vector;
-import org.katpara.mathematica.linears.vectors.ArrayVector_Old;
+import org.katpara.mathematica.linears.vectors.ArrayVector;
 ```
 
 ### The basics:
-#### To Create a two-dimensional vector:
+#### To quickly create a vector using:
 ```
-Vector v = new ArrayVector(1, 2);                                   //=> <1, 2>
+Vector v = ArrayVector.of(1, 2);                                   //=> <1, 2>
+Vector v = ArrayVector.of(1, 2, 3);                                //=> <1, 2, 3>
+Vector v = ArrayVector.of(1, 2, 3, 4);                             //=> <1, 2, 3, 4>
 ```
-The easiest way to create a two-dimensional vector is by using the constructor that takes 2 arguments.
 
-#### To Create a three-dimensional vector:
+#### To create a unit vector:
 ```
-Vector v = new ArrayVector(1, 2, 3);                                //=> <1, 2, 3>
+// 3 dimensional unit vector
+Vector v = ArrayVector.unitOf(3);                                //=> <1, 1, 1>
 ```
-The easiest way to create a three-dimensional vector is by using the constructor that takes 3 arguments.
 
-#### To create a multi-dimensional vector
+#### To create a vector with random values
 ```
-Vector v = new ArrayVector(new Number[]{1, 2, 3, 4});               //=> <1, 2, 3, 4>
+// creates a 3 dimensional vector with values between 0 and 1, with 3 decimal values.
+Vector v = ArrayVector.randomOf(3, Rounding.POINT.THREE);        //=> <0.273, 0.983, 0.72>
+
+// creates a 3 dimensional vector with values between 10 and 20, with 4 decimal points.
+Vector v = ArrayVector.randomOf(3, Rounding.POINT.FOUR);        //=> <10.3223, 18.9283, 13.7244>
 ```
-This is way preferable to create a vector with more than 3 dimensions; otherwise use the other two ways 
-for the simplicity.<br/>
-It throws __InvalidVectorDimensionException__ when, the array has less than 2 elements.<br/>
-It throws __NullArgumentProvidedException__ when, the array contains null values.
+
+#### To create a vector from an array
+```
+Vector v = new ArrayVector(new Number[]{1, 2, 3,4});        //=> <1, 2, 3, 4>
+```
+<ul>
+    <li>It should have at least two elements, or throws __InvalidVectorDimensionException__.
+    <li>The array must be a type or subtype of java.lang.Number (i.e. int, Integer, double, Double, etc)
+    <li>It should have non-null values.
+</ul>
 
 #### To create a vector from a List
 ```
@@ -40,7 +53,7 @@ Vector v = new ArrayVector(List.of(1, 2, 3));                       //=> <1, 2, 
 ```
 <ul>
     <li>It should have at least two elements, or throws __InvalidVectorDimensionException__.
-    <li>The List must be a type of java.lang.Number
+    <li>The List must be a type or subtype of java.lang.Number (i.e. int, Integer, double, Double, etc)
     <li>It should have non-null values.
 </ul>
 
@@ -72,8 +85,7 @@ When you create a vector from a map:
     <li>The keys will be ignored and all the values will be used to create a vector.
 </ul>
 
-### What can you do with the vector object?
-When you create a vector, you can perform following operations
+### Basic vector properties
 
 #### To get the dimension of the vector
 ```
@@ -83,32 +95,56 @@ int dimension = v.getDimension();
 #### To get the magnitude of a vector | v |
 ```
 double magnitude = v.getMagnitude();
+double magnitude = v.getMagnitude(Rounding.POINT.FIVE);     // Magnitude rounded to 5 decimal points
 ```
 
-### To get Elements of Vector:
+### To get vector elements
 ```
-Number[] n = v.getElements();
+Number[] n = v.toArray();
+List<Number> n = v.toList();
 ```
 Please note, I rely on JVM to determine the type of the array.
-If you pass all integer values, the type of the array is "Integer". etc.
-However, I perform all the operations using the double values. So a vector of an integer type, may would result in a vector of double type after some operations.
+If you pass all integer values, the type of the array is "Integer". etc. However, operations can change a vector from an integer type to double.
+
+### To get cosines of a vector
+```
+double[] cosines = v.getCosines(Vector.Angle.DEGREE);
+double[] cosines = v.getCosines(Vector.Angle.RADIAN, Rounding.POINT.TWO);
+```
+The method returns the cosines of a vector with each respective axioms. If the vector has a n-number of dimensions then the resulting array would have n number of cosines.
 
 ### Vector Operations:
 
-The __VectorOperations__ is a concrete class, that contains static methods to perform various operations.
-Please note that regardless of the element types to create an initial vector, such as Integer, Long, Byte, Short, ete,
-all the methods here will return the __Double__ elements.
+#### To check if two vectors are orthogonal
+```
+boolean result = v.isOrthogonal(w);             //=> true or false
+```
+It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.
+
+#### To check if two vectors are parallel
+```
+boolean result = v.isParallel(w);               //=> true or false
+```
+It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.
+
+#### To get an angle between two vectors
+```
+// To get an angle in degrees
+double angle = v.angle(w, Vector.Angle.DEGREE);
+
+// To get an angle in Radian, with 3 decimal point
+double angle = v.angle(w, Vector.Angle.RADIAN, Rounding.POINT.THREE);
+```
+It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.
 
 #### To get an inverse vector
 ```
-Vector v = new ArrayVector(1, 2);
-Vector i = VectorOperations.getInverseVector(v);    //=> <-1.0, -2.0>
+Vector i = v.inverse(v);  
 ```
 
 #### To scale a vector
 ```
-Vector v = new ArrayVector(1, 2, 3);
-Vector s = VectorOperations.scale(v, 3);            //=> <3.0, 6.0, 9.0>
+Vector s = v.scale(3);            //=> <1, 2, 3> => <3.0, 6.0, 9.0>
 ```
 Please Note the following:
 | Scalar Condition      |       The output vector                            |
@@ -119,32 +155,20 @@ Please Note the following:
 | -1 &lt; scalar &lt; 0 | It shrinks the vector in the opposite direction.   |
 | scalar &lt; -1        | It scales up the vector in the opposite direction. |
 
-#### Add vectors
+#### addition
 ```
-Vector v1 = new ArrayVector(0, 2, 4);
-Vector v2 = new ArrayVector(0, 4, 8);
+Vector v = v.add(5);                    // Scalar addition
+Vector v = v.add(w);                    // Vector addition
+Vector v = v.add(List.of(w, x, z));     // Add the list of vectors
 
-// If you have 2 vectors
-Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 6.0, 12.0>
-
-// If you have a list of Vectors
-List<Vector> vl = new ArrayList<>(List.of(v1, v2));
-Vector b = VectorOperations.addVector(vl);              //=> <0.0, 6.0, 12.0>
 ```
+
 It throws __InvalidParameterProvidedException__ when, the list contains 1 or 0 elements.<br/>
 It throws __InvalidVectorDimensionException__ when, vectors have different dimensions.
 
 #### Subtract vectors
 ```
-Vector v1 = new ArrayVector(0, 4, 8);
-Vector v2 = new ArrayVector(0, 2, 4);
-
-// Subtract v2 from v1
-Vector a = VectorOperations.addVector(v1, v2);          //=> <0.0, 2.0, 4.0>
-
-// Subtract all the other vectors from the vector vl[0].
-List<Vector> vl = new ArrayList<>(List.of(v1, v2));
-Vector b = VectorOperations.addVector(vl);              //=> <0.0, 2.0, 4.0>
+Vector v = v.subtract(w);                    // Vector addition
 ```
 It throws __InvalidParameterProvidedException__ when, the list contains 1 or 0 elements.<br/>
 It throws __InvalidVectorDimensionException__ when, vectors have different dimensions.
@@ -152,12 +176,10 @@ It throws __InvalidVectorDimensionException__ when, vectors have different dimen
 #### Transpose dimensions of vectors
 ```
 Vector v = new ArrayVector(0, 4, 8);
-Vector l = VectorOperations.transpose(v, 5);            //=> <0.0, 4.0, 8.0, 0.0, 0.0>
-Vector s = VectorOperations.transpose(v, 2);            //=> <0.0, 4.0>
-
-Vector err1 = VectorOperations.transpose(v, 1);         //=> less than 2
-Vector err2 = VectorOperations.transpose(v, 3);         //=> the same as v.getDimension()
+Vector l = v.transpose(5);                  //=> <0.0, 4.0, 8.0, 0.0, 0.0>
+Vector s = v.transpose(v, 2);               //=> <0.0, 4.0>
 ```
+
 It throws __InvalidVectorDimensionException__ when,
 <ul>
 <li>The targeted dimension is less than 2.</li>
@@ -166,28 +188,28 @@ It throws __InvalidVectorDimensionException__ when,
 
 #### Dot product
 ```
-Vector v1 = new ArrayVector(3, 4);
-Vector v2 = new ArrayVector(4, 3);
-
-double dp = VectorOperations.dotProduct(v1, v2)         //=> 24.0
+double dp = v.dot(w);                        //=> 24.0
+double dp = v.dot(w, Rounding.POINT.SIX);    //=> 24.073894
 ```
 It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.
 
 #### Cross product
 ```
-Vector v1 = new ArrayVector(2, 1, -1);
-Vector v2 = new ArrayVector(-3, 4, 1);
-
-Vector r = VectorOperations.crossProduct(v1, v2)         //=> <5.0, 1.0, 11.0>
+Vector c = v.cross(w);         //=> <5.0, 1.0, 11.0>
 ```
 It throws __InvalidVectorDimensionException__ when, both vectors are not three-dimensional.
 
-#### Get an angle between two products
+#### Projecting the vector W on V 
 ```
-Vector v1 = new ArrayVector(2, 2);
-Vector v2 = new ArrayVector(0, 3);
+// Scalar Projection
+double sp = v.scalarProjection(w);                          //=> 30.298382938293892
+double sp = v.scalarProjection(w, Rounding.POINT.FOUR);     //=> 30.2983
 
-double a1 = VectorOperations.angle(v1, v2, true);       //=> 45.00000000000001  in Degrees
-double a2 = VectorOperations.angle(v1, v2, false);      //=> 0.7853981633974484 in Radian
+// Vector Projection
+Vector x = v.vectorProjection(w);
+
+// Vector Rejection
+Vector x = v.vectorRejection(w);
+ 
 ```
 It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.

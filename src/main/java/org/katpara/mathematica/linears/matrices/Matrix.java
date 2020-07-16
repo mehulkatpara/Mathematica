@@ -3,7 +3,6 @@ package org.katpara.mathematica.linears.matrices;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -143,7 +142,7 @@ public interface Matrix {
      *
      * @return a {@link Matrix} with all 0 entries
      *
-     * @throws InvalidMatrixDimensionException when # of row + # of column < 2;
+     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
@@ -159,7 +158,7 @@ public interface Matrix {
      *
      * @return a one matrix
      *
-     * @throws InvalidMatrixDimensionException when m + n < 2
+     * @throws InvalidMatrixDimensionException when m + n &lt; 2
      */
     static ArrayMatrix oneArrayMatrix(final int m, final int n) {
         return ArrayMatrix.oneMatrix(m, n);
@@ -176,7 +175,7 @@ public interface Matrix {
      *
      * @return a Pascal's {@link Matrix}
      *
-     * @throws InvalidMatrixDimensionException when n < 1, at least one element should exist.
+     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
      */
     static ArrayMatrix pascalArrayMatrix(final int n, final PascalMatrixType t) {
         return ArrayMatrix.pascalMatrix(n, t);
@@ -201,7 +200,7 @@ public interface Matrix {
      *
      * @return an identity {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix identityArrayMatrix(final int n) {
         return ArrayMatrix.identityMatrix(n);
@@ -214,7 +213,7 @@ public interface Matrix {
      *
      * @return a hilbert {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix hilbertArrayMatrix(final int n) {
         return ArrayMatrix.hilbertMatrix(n);
@@ -228,7 +227,7 @@ public interface Matrix {
      *
      * @return an exchange {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix exchangeArrayMatrix(final int n) {
         return ArrayMatrix.exchangeMatrix(n);
@@ -242,7 +241,7 @@ public interface Matrix {
      *
      * @return a redheffer {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix redhefferArrayMatrix(final int n) {
         return ArrayMatrix.redhefferMatrix(n);
@@ -257,7 +256,7 @@ public interface Matrix {
      *
      * @return a shift {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix shiftArrayMatrix(final int n, final ShiftMatrixType t) {
         return ArrayMatrix.shiftMatrix(n, t);

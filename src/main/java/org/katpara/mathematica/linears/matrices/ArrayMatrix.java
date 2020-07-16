@@ -522,7 +522,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return an ArrayMatrix with all 0 entries
      *
-     * @throws InvalidMatrixDimensionException when # of row + # of column < 2;
+     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
@@ -538,7 +538,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return am ArrayMatrix with all 1 entries
      *
-     * @throws InvalidMatrixDimensionException when m + n < 2
+     * @throws InvalidMatrixDimensionException when m + n &lt; 2
      */
     static ArrayMatrix oneMatrix(final int m, final int n) {
         return calculateZeroOneMatrix(m, n, ONE);
@@ -582,7 +582,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return a Pascal's {@link Matrix}
      *
-     * @throws InvalidMatrixDimensionException when n < 1, at least one element should exist.
+     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
      */
     static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
         if (n < 1)
@@ -626,7 +626,9 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return InvalidMatrixDimensionException if n < 1
+     * @return the lehmer matrix
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix lehmerMatrix(final int n) {
         return new ArrayMatrix(
@@ -641,7 +643,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return a hilbert {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix hilbertMatrix(final int n) {
         return new ArrayMatrix(
@@ -657,7 +659,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return an identity {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix identityMatrix(final int n) {
         return new ArrayMatrix(
@@ -674,7 +676,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return an exchange {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix exchangeMatrix(final int n) {
         return new ArrayMatrix(
@@ -690,7 +692,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return a redheffer {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix redhefferMatrix(final int n) {
         return new ArrayMatrix(
@@ -707,7 +709,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return a shift {@link ArrayMatrix}
      *
-     * @throws InvalidMatrixDimensionException if n < 1
+     * @throws InvalidMatrixDimensionException if n &lt; 1
      */
     static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
         if (t == ShiftMatrixType.UPPER)
