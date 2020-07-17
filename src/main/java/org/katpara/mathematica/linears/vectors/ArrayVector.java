@@ -6,6 +6,7 @@ import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 
 import java.util.*;
+import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Collectors;
 
 import static org.katpara.mathematica.linears.vectors.Vector.Angle.DEGREE;
@@ -675,6 +676,19 @@ public final class ArrayVector implements Vector {
     }
 
     /**
+     * The method will return an unit vector of given dimensions.
+     *
+     * @param d the dimension of a vector
+     *
+     * @return a vector
+     */
+    public static Vector of(final int d) {
+        var n = new Number[d];
+        Arrays.fill(n, 1);
+        return new ArrayVector(n);
+    }
+
+    /**
      * The method creates a two-dimensional {@link ArrayVector}.
      *
      * @param x x value
@@ -714,15 +728,80 @@ public final class ArrayVector implements Vector {
     }
 
     /**
-     * The method will return an unit vector of given dimensions.
+     * The method will generate vector elements based on the provided lambda functions.
      *
-     * @param d the dimension of a vector
+     * @param d the number of dimensions
+     * @param o the lambda function to be apply at each increment
      *
-     * @return a vector
+     * @return the {@link ArrayVector}
      */
-    public static Vector unitOf(final int d) {
+    public static Vector of(final int d, final DoubleUnaryOperator o) {
         var n = new Number[d];
-        Arrays.fill(n, 1);
+
+        for (var i = 0; i < d; i++)
+            n[i] = o.applyAsDouble(i);
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will generate vector elements based on the provided lambda functions.
+     * It will also rounds up the values to the given decimal points.
+     *
+     * @param d the number of dimensions
+     * @param o the lambda function to be apply at each increment
+     * @param p the decimal point precision
+     *
+     * @return the {@link ArrayVector}
+     */
+    public static Vector of(final int d, final DoubleUnaryOperator o, final Rounding.POINT p) {
+        var n = new Number[d];
+
+        for (var i = 0; i < d; i++)
+            n[i] = Rounding.round(o.applyAsDouble(i), p);
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will generate vector elements based on the provided lambda functions.
+     * The min and max are the lower and upper bound values for generating values.
+     *
+     * @param d   the number of dimensions
+     * @param min the lower bound value (inclusive)
+     * @param max the upper bound value (Exclusive)
+     * @param o   the lambda function to be apply at each increment
+     *
+     * @return the {@link ArrayVector}
+     */
+    public static Vector of(final int d, final double min, final double max, final DoubleUnaryOperator o) {
+        var n = random(d, min, max);
+
+        for (var i = 0; i < d; i++)
+            n[i] = o.applyAsDouble(n[i].doubleValue());
+
+        return new ArrayVector(n);
+    }
+
+    /**
+     * The method will generate vector elements based on the provided lambda functions.
+     * The min and max are the lower and upper bound values for generating values.
+     * The method also rounds up values to given decimal points.
+     *
+     * @param d   the number of dimensions
+     * @param min the lower bound value (inclusive)
+     * @param max the upper bound value (Exclusive)
+     * @param o   the lambda function to be apply at each increment
+     * @param p   the decimal point precision
+     *
+     * @return the {@link ArrayVector}
+     */
+    public static Vector of(final int d, final double min, final double max, final DoubleUnaryOperator o, final Rounding.POINT p) {
+        var n = random(d, min, max);
+
+        for (var i = 0; i < d; i++)
+            n[i] = Rounding.round(o.applyAsDouble(n[i].doubleValue()), p);
+
         return new ArrayVector(n);
     }
 
@@ -734,13 +813,8 @@ public final class ArrayVector implements Vector {
      *
      * @return the random vector
      */
-    public static Vector randomOf(final int d, final Rounding.POINT p) {
-        var n = new Number[d];
-        for (int i = 0; i < d; i++) {
-            n[i] = Rounding.round(Math.random(), p);
-        }
-
-        return new ArrayVector(n);
+    public static Vector of(final int d, final Rounding.POINT p) {
+        return new ArrayVector(random(d, 0, 1, p));
     }
 
     /**
@@ -754,12 +828,46 @@ public final class ArrayVector implements Vector {
      *
      * @return the random vector
      */
-    public static Vector randomOf(final int d, final double min, final double max, final Rounding.POINT p) {
-        var n = new Number[d];
-        for (int i = 0; i < d; i++)
-            n[i] = Rounding.round((Math.random() * ((max - min) + 1)) + min, p);
-
+    public static Vector of(final int d, final double min, final double max, final Rounding.POINT p) {
+        final Number[] n = random(d, min, max, p);
         return new ArrayVector(n);
+    }
+
+    /**
+     * The method converts the generated random values to given decimal points.
+     *
+     * @param d   the number of values
+     * @param min the minimum value, it is included.
+     * @param max the maximum value, it is excluded
+     * @param p   the decimal point precision
+     *
+     * @return the array of values with decimal point precision
+     */
+    private static Number[] random(final int d, final double min, final double max, final Rounding.POINT p) {
+        var n = random(d, min, max);
+
+        for (var i = 0; i < d; i++)
+            n[i] = Rounding.round(n[i], p);
+
+        return n;
+    }
+
+    /**
+     * The method generates random values between the given range.
+     *
+     * @param d   the number of values
+     * @param min the minimum value, it is included.
+     * @param max the maximum value, it is excluded
+     *
+     * @return an array of random values
+     */
+    private static Number[] random(final int d, final double min, final double max) {
+        var n = new Number[d];
+
+        for (int i = 0; i < d; i++)
+            n[i] = min + (Math.random() * (max - min));
+
+        return n;
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
@@ -101,14 +102,14 @@ public class ArrayMatrix implements Matrix {
         if (vl.size() < 1)
             throw new InvalidMatrixDimensionException("The list is empty");
 
-        int dimension = 0, i = 0;
+        int d = 0, i = 0;
         Number[][] n = null;
 
         for (Vector v : vl) {
-            if (dimension == 0) {
-                dimension = v.getDimension();
-                n = new Number[vl.size()][dimension];
-            } else if (dimension != v.getDimension()) {
+            if (d == 0) {
+                d = v.getDimension();
+                n = new Number[vl.size()][d];
+            } else if (d != v.getDimension()) {
                 throw new InvalidMatrixDimensionException("The vectors have different dimensions.");
             }
             n[i++] = v.toArray();
@@ -174,8 +175,7 @@ public class ArrayMatrix implements Matrix {
         if (lists.size() == 0)
             throw new InvalidMatrixDimensionException("The list must have at least one list");
 
-        var d = 0;
-        var i = 0;
+        int d = 0, i = 0;
         Number[][] n = null;
 
         for (var list : lists) {
@@ -224,17 +224,6 @@ public class ArrayMatrix implements Matrix {
     @Override
     public int[] getDimension() {
         return d;
-    }
-
-    /**
-     * The method returns the type of a matrix.
-     * For more details see {@link MatrixType}
-     *
-     * @return the type of matrix
-     */
-    @Override
-    public MatrixType getType() {
-        return t;
     }
 
     /**
@@ -329,7 +318,7 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the square matrix
      */
     @Override
-    public double trace() {
+    public double getTrace() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
@@ -351,6 +340,21 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
+     * The trace of the matrix is defined as the sum of all the elements,
+     * on the main diagonal.
+     * <p>
+     * The trace only exist for a square matrix.
+     *
+     * @param p the decimal points of accuracy
+     *
+     * @return the trace of the square matrix
+     */
+    @Override
+    public double getTrace(final Rounding.POINT p) {
+        return Rounding.round(getTrace(), p);
+    }
+
+    /**
      * The method will calculate a trace of the square matrix.
      *
      * @return the trace of the matrix
@@ -359,9 +363,7 @@ public class ArrayMatrix implements Matrix {
         var s = 0;
 
         for (int i = 0; i < d[0]; i++)
-            for (int j = 0; j < d[0]; j++)
-                if (i == j)
-                    s += e[i][i].doubleValue();
+            s += e[i][i].doubleValue();
 
         return s;
     }
@@ -373,8 +375,7 @@ public class ArrayMatrix implements Matrix {
      * @return the rank of matrix
      */
     @Override
-    public int rank() {
-        //TODO: Rank calculation for other matrices.
+    public int getRank() {
         switch (t) {
             case ONE:
             case ZERO:
@@ -453,7 +454,7 @@ public class ArrayMatrix implements Matrix {
      * @return the determinant of the square matrix
      */
     @Override
-    public double determinant() {
+    public double getDeterminant() {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
 
@@ -464,8 +465,22 @@ public class ArrayMatrix implements Matrix {
             for (int i = 0; i < d[0]; i++)
                 m[i] = i;
 
-            return determinant(m, m);
+            return getDeterminant(m, m);
         }
+    }
+
+    /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @param point the decimal point accuracy
+     *
+     * @return the determinant of the square matrix
+     */
+    @Override
+    public double getDeterminant(final Rounding.POINT point) {
+        return 0;
     }
 
     /**
@@ -476,7 +491,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the determinant of the matrix
      */
-    private double determinant(final int[] rs, final int[] cs) {
+    private double getDeterminant(final int[] rs, final int[] cs) {
         int rl = rs.length, cl = cs.length;
         if (rl == 2 && cl == 2) {
             return (e[rs[0]][cs[0]].doubleValue() *
@@ -505,7 +520,7 @@ public class ArrayMatrix implements Matrix {
                 if (ct.doubleValue() == 0) {
                     s += 0;
                 } else {
-                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * determinant(_r, _c));
+                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * getDeterminant(_r, _c));
                 }
                 c++;
             }

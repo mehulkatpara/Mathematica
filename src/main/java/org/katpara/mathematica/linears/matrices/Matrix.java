@@ -1,5 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
@@ -55,14 +56,6 @@ public interface Matrix {
     int[] getDimension();
 
     /**
-     * The method returns the type of a matrix.
-     * For more details see {@link MatrixType}
-     *
-     * @return the type of matrix
-     */
-    MatrixType getType();
-
-    /**
      * The method returns all the elements of a matrix.
      *
      * @return the matrix elements
@@ -115,7 +108,19 @@ public interface Matrix {
      *
      * @return the trace of the square matrix
      */
-    double trace();
+    double getTrace();
+
+    /**
+     * The trace of the matrix is defined as the sum of all the elements,
+     * on the main diagonal.
+     * <p>
+     * The trace only exist for a square matrix.
+     *
+     * @param point the decimal points of accuracy
+     *
+     * @return the trace of the square matrix
+     */
+    double getTrace(final Rounding.POINT point);
 
     /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many
@@ -123,7 +128,7 @@ public interface Matrix {
      *
      * @return the rank of matrix
      */
-    int rank();
+    int getRank();
 
     /**
      * A determinant is a scalar value computed for a square matrix; that
@@ -132,7 +137,18 @@ public interface Matrix {
      *
      * @return the determinant of the square matrix
      */
-    double determinant();
+    double getDeterminant();
+
+    /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @param point the decimal point accuracy
+     *
+     * @return the determinant of the square matrix
+     */
+    double getDeterminant(final Rounding.POINT point);
 
     /**
      * The method will return a zero or null matrix, whose all the elements are zero.

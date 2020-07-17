@@ -14,7 +14,6 @@ class ArrayVectorTest {
 
     @Test
     void testNumberConstructor() {
-
         assertAll(
                 () -> assertThrows(InvalidVectorDimensionException.class, () -> new ArrayVector(new Number[]{1})),
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new ArrayVector(new Number[2])),
@@ -242,8 +241,8 @@ class ArrayVectorTest {
     @Test
     void testUnitVector() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class, () -> ArrayVector.unitOf(1)),
-                () -> System.out.println(ArrayVector.unitOf(5))
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> ArrayVector.of(1)),
+                () -> System.out.println(ArrayVector.of(5))
         );
     }
 
@@ -278,7 +277,21 @@ class ArrayVectorTest {
     void testRandomVector() {
         assertAll(
                 () -> assertEquals(3, ArrayVector.of(0.876, 0.409, 0.822).getDimension()),
-                () -> assertEquals(3, ArrayVector.randomOf(3, 98, 100, Rounding.POINT.TWO).getDimension())
+                () -> assertEquals(3, ArrayVector.of(3, 98, 100, Rounding.POINT.TWO).getDimension()),
+                () -> assertEquals(5, ArrayVector.of(5, Rounding.POINT.FOUR).getDimension())
+        );
+    }
+
+    @Test
+    void testVectorFunction() {
+        assertAll(
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> ArrayVector.of(1, Math::sqrt, Rounding.POINT.TWO)),
+                () -> System.out.println(ArrayVector.of(4, 0, 1, Math::acos, Rounding.POINT.THREE)),
+                () -> System.out.println(ArrayVector.of(3, Math::sqrt, Rounding.POINT.SEVEN)),
+                () -> ArrayVector.of(4, 0, 1, Math::log, Rounding.POINT.THREE),
+                () -> ArrayVector.of(3, -1, 0, (e) -> e * 10),
+                () -> ArrayVector.of(2, (e) -> e * 1.2, Rounding.POINT.TWO),
+                () -> ArrayVector.of(2, (e) -> e * 1)
         );
     }
 }
