@@ -774,6 +774,158 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
+     * The method performs a scalar addition on a square matrix.
+     * The operation is somewhat be described as;
+     * Let's consider a matrix "M", and scalar "a"
+     * then M + a = M + a(I), where I is an identity matrix.
+     *
+     * @param s the scalar to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix add(final Number s) {
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("Scalar addition is only for square matrices.");
+
+        return new ArrayMatrix(
+                addSubArrays(e, calculateDoubleMatrix(d[0], (i, j) -> (i == j) ? s.doubleValue() : 0), true));
+    }
+
+    /**
+     * The method adds two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A + B operation, and returns the resulting matrix.
+     *
+     * @param m the matrix to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    @Override
+    public Matrix add(final Matrix m) {
+        if (!Arrays.equals(d, m.getDimension()))
+            throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
+
+        return new ArrayMatrix(addSubArrays(e, m.toArray(), true));
+    }
+
+    /**
+     * The method subtracts two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A - B operation, and returns the resulting matrix.
+     *
+     * @param m the matrix to subtract
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    @Override
+    public Matrix subtract(final Matrix m) {
+        if (!Arrays.equals(d, m.getDimension()))
+            throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
+
+        return new ArrayMatrix(addSubArrays(e, m.toArray(), false));
+    }
+
+    /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param s a scalar to scale the matrix with
+     *
+     * @return a new scalded matrix
+     */
+    @Override
+    public Matrix multiply(final Number s) {
+        var n = new Number[d[0]][d[1]];
+
+        for (int i = 0; i < d[0]; i++)
+            for (int j = 0; j < d[1]; j++)
+                n[i][j] = e[i][j].doubleValue() * s.doubleValue();
+
+        return new ArrayMatrix(n);
+    }
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param m the matrix to multiply
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices have different columns and rows
+     */
+    @Override
+    public Matrix multiply(final Matrix m) {
+        var md = m.getDimension();
+
+        if(d[1] != md[0])
+            throw new InvalidMatrixOperationException("the rows and columns don't match");
+
+        return new ArrayMatrix(strassen(0, 0, m.toArray(), 0, 0));
+    }
+
+    private Number[][] strassen(final int ie, final int je, final Number[][] n, final int in, final int jn) {
+        Number[][] _n = new Number[2][2];
+
+        double A11 = e[ie][je].doubleValue();
+        double A12 = e[ie][je + 1].doubleValue();
+        double A21 = e[ie + 1][je].doubleValue();
+        double A22 = e[ie + 1][je + 1].doubleValue();
+
+        double B11 = n[in][jn].doubleValue();
+        double B12 = n[in][jn + 1].doubleValue();
+        double B21 = n[in + 1][jn].doubleValue();
+        double B22 = n[in + 1][jn + 1].doubleValue();
+
+        double m1 = (A11 + A22) * (B11 + B22);
+        double m2 = (A21 + A22) * B11;
+        double m3 = A11 * (B12 - B22);
+        double m4 = A22 * (B21 - B11);
+        double m5 = (A11 + A12) * B22;
+        double m6 = (A21 - A11) * (B11 + B12);
+        double m7 = (A12 - A22) * (B21 + B22);
+
+        _n[0][0] = m1 + m4 - m5 + m7;
+        _n[0][1] = m3 + m5;
+        _n[1][0] = m2 + m4;
+        _n[1][1] = m1 - m2 + m3 + m6;
+
+        return _n;
+    }
+
+    /**
+     * The method will do addition or subtraction on two two-dimensional arrays.
+     *
+     * @param n1  the first two-dimensional array
+     * @param n2  the second two-dimensional array
+     * @param add either addition or subtraction
+     *
+     * @return the resulting new array
+     */
+    private Number[][] addSubArrays(final Number[][] n1, final Number[][] n2, final boolean add) {
+        var n = new Number[d[0]][d[1]];
+        for (int i = 0; i < d[0]; i++)
+            for (int j = 0; j < d[1]; j++)
+                n[i][j] = (add) ? n1[i][j].doubleValue() + n2[i][j].doubleValue()
+                                  : n1[i][j].doubleValue() - n2[i][j].doubleValue();
+
+        return n;
+    }
+
+    /**
      * Returns a string representation of the object. In general, the
      * {@code toString} method returns a string that
      * "textually represents" this object. The result should
@@ -800,7 +952,7 @@ public class ArrayMatrix implements Matrix {
             var ls = new LinkedList<String>();
             Arrays.stream(r).forEach(e -> ls.add(e.toString()));
             s.append("|");
-            s.append(String.join(",\t\t", ls));
+            s.append(String.join(",", ls));
             s.append("|\n");
         });
         return s.toString();
@@ -836,7 +988,9 @@ public class ArrayMatrix implements Matrix {
      * @see System#identityHashCode
      */
     public int hashCode() {
-        return Arrays.hashCode(e);
+        int hash = 0;
+        for (var n : e) hash += Arrays.hashCode(n);
+        return hash;
     }
 
     /**
@@ -889,20 +1043,18 @@ public class ArrayMatrix implements Matrix {
      */
     public boolean equals(final Object obj) {
         if (this == obj) return true;
-
         if (obj == null || getClass() != obj.getClass()) return false;
+        if (this.hashCode() == obj.hashCode()) return true;
 
-        final ArrayMatrix that = (ArrayMatrix) obj;
+        final Matrix that = (Matrix) obj;
         var o = that.toArray();
 
         if (!Arrays.equals(this.getDimension(), that.getDimension())) return false;
-
-        for (int j = 0; j < this.e.length; j++) {
-            for (int k = 0; k < e[j].length; k++) {
-                if (!e[j][k].equals(o[j][k]))
+        for (int j = 0; j < this.e.length; j++)
+            for (int k = 0; k < e[j].length; k++)
+                if (e[j][k].doubleValue() != o[j][k].doubleValue())
                     return false;
-            }
-        }
+
         return true;
     }
 }

@@ -432,4 +432,33 @@ class ArrayMatrixTest {
         System.out.println(u);
 
     }
+
+    @Test
+    void testAddition() {
+
+        Matrix m = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
+
+        assertAll(
+                () -> assertEquals(m.add(10), new ArrayMatrix(new Number[][]{{11, 2}, {3, 14}})),
+                () -> assertEquals(m.add(new ArrayMatrix(new Number[][]{{5, 6}, {7, 8}})),
+                        new ArrayMatrix(new Number[][]{{6, 8}, {10, 12}})),
+                () -> assertEquals(m.subtract(new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}})),
+                        new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}))
+        );
+    }
+
+
+    @Test
+    void testMultiplication() {
+        Matrix m = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
+
+        assertAll(
+                () -> assertEquals(new ArrayMatrix(new Number[][]{{2, 4},{6, 8}}),
+                        m.multiply(2))
+        );
+
+        Matrix a = new ArrayMatrix(new Number[][]{{1, 2},{5, 9}});
+        Matrix b = new ArrayMatrix(new Number[][]{{1, 8},{3, 6}});
+        System.out.println(a.multiply(b));
+    }
 }

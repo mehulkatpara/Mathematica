@@ -104,12 +104,12 @@ class ArrayVectorTest {
 
     @Test
     void testInverseVector() {
-        assertArrayEquals(new Number[]{-3D, -4D}, ArrayVector.of(3, 4).inverse().toArray());
+        assertEquals(ArrayVector.of(-3, -4), ArrayVector.of(3, 4).inverse());
     }
 
     @Test
     void testVectorScalar() {
-        assertEquals(ArrayVector.of(2D, 4D), ArrayVector.of(1, 2).scale(2));
+        assertEquals(ArrayVector.of(2, 4), ArrayVector.of(1, 2).scale(2));
     }
 
     @Test
@@ -117,8 +117,8 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> ArrayVector.of(1, 2).add(ArrayVector.of(1, 2, 3))),
-                () -> assertArrayEquals(new Number[]{2D, 4D, 6D},
-                        ArrayVector.of(1, 2, 3).add(ArrayVector.of(1, 2, 3)).toArray())
+                () -> assertEquals(ArrayVector.of(2, 4, 6),
+                        ArrayVector.of(1, 2, 3).add(ArrayVector.of(1, 2, 3)))
         );
     }
 
@@ -128,8 +128,8 @@ class ArrayVectorTest {
                 () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> ArrayVector.of(1, 2).subtract(ArrayVector.of(1, 2, 3))
                 ),
-                () -> assertArrayEquals(new Number[]{0D, 0D, 0D},
-                        ArrayVector.of(1, 2, 3).subtract(ArrayVector.of(1, 2, 3)).toArray())
+                () -> assertEquals(ArrayVector.of(0, 0, 0),
+                        ArrayVector.of(1, 2, 3).subtract(ArrayVector.of(1, 2, 3)))
         );
     }
 
@@ -140,7 +140,7 @@ class ArrayVectorTest {
         assertAll(
                 () -> assertThrows(InvalidParameterProvidedException.class,
                         () -> v.add(new ArrayList<>(List.of(ArrayVector.of(2, 3))))),
-                () -> assertEquals(ArrayVector.of(3D, 6D, 9D),
+                () -> assertEquals(ArrayVector.of(3, 6, 9),
                         v.add(new ArrayList<>(List.of(ArrayVector.of(1, 2, 3),
                                 ArrayVector.of(1, 2, 3))))),
                 () -> assertEquals(ArrayVector.of(3.25, 6.5, 9.75),
@@ -204,10 +204,10 @@ class ArrayVectorTest {
                         () -> ArrayVector.of(1, 2, 3).cross(ArrayVector.of(1, 2))),
                 () -> assertThrows(InvalidVectorDimensionException.class,
                         () -> ArrayVector.of(1, 2).cross(ArrayVector.of(1, 2, 3))),
-                () -> assertEquals(ArrayVector.of(5D, 1D, 11D),
+                () -> assertEquals(ArrayVector.of(5, 1, 11),
                         ArrayVector.of(2, 1, -1).cross(ArrayVector.of(-3, 4, 1))),
                 () -> assertEquals(
-                        ArrayVector.of(-5D, -1D, -11D),
+                        ArrayVector.of(-5, -1, -11),
                         ArrayVector.of(-3, 4, 1).cross(ArrayVector.of(2, 1, -1)))
         );
     }
@@ -248,7 +248,7 @@ class ArrayVectorTest {
 
     @Test
     void testCosines() {
-        assertArrayEquals(new double[]{0.2672612419124244D, 0.5345224838248488D, 0.8017837257372732D},
+        assertArrayEquals(new double[]{0.2672612419124244, 0.5345224838248488, 0.8017837257372732},
                 ArrayVector.of(1, 2, 3).getCosines(Vector.Angle.RADIAN));
     }
 

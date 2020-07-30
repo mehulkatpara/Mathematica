@@ -994,10 +994,17 @@ public final class ArrayVector implements Vector {
     public boolean equals(final Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
+        if (this.hashCode() == obj.hashCode()) return true;
 
         var that = (ArrayVector) obj;
         if (d != that.getDimension()) return false;
-        return Arrays.equals(e, that.toArray());
+
+        Number[] n = that.toArray();
+        for (int i = 0; i < d; i++)
+            if (e[i].doubleValue() != n[i].doubleValue())
+                return false;
+
+        return true;
     }
 
     /**

@@ -2,6 +2,7 @@ package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
 import java.util.List;
@@ -277,4 +278,72 @@ public interface Matrix {
     static ArrayMatrix shiftArrayMatrix(final int n, final ShiftMatrixType t) {
         return ArrayMatrix.shiftMatrix(n, t);
     }
+
+    /**
+     * The method performs a scalar addition on a square matrix.
+     * The operation is somewhat be described as;
+     * Let's consider a matrix "M", and scalar "a"
+     * then M + a = M + a(I), where I is an identity matrix.
+     *
+     * @param scalar the scalar to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    Matrix add(final Number scalar);
+
+    /**
+     * The method adds two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A + B operation, and returns the resulting matrix.
+     *
+     * @param matrix the matrix to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    Matrix add(final Matrix matrix);
+
+    /**
+     * The method subtracts two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A - B operation, and returns the resulting matrix.
+     *
+     * @param matrix the matrix to subtract
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    Matrix subtract(final Matrix matrix);
+
+    /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param scalar a scalar to scale the matrix with
+     *
+     * @return a new scalded matrix
+     */
+    Matrix multiply(final Number scalar);
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param matrix the matrix to multiply
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices have different columns and rows
+     */
+    Matrix multiply(final Matrix matrix);
 }
