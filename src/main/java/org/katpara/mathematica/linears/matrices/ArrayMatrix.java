@@ -869,41 +869,83 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix multiply(final Matrix m) {
-        var md = m.getDimension();
+        var _e = m.toArray();
 
-        if(d[1] != md[0])
+        if (d[1] != _e.length)
             throw new InvalidMatrixOperationException("the rows and columns don't match");
 
-        return new ArrayMatrix(strassen(0, 0, m.toArray(), 0, 0));
+        // If both matrix are square matrices and of 2 x 2 dimensions then do Strassen's algorithm
+        // Otherwise use the native method.
+        if (d[0] == 2 && d[1] == 2 && _e[0].length == 2) {
+            Number[][] n = new Number[2][2];
+
+            double _e1 = e[0][0].doubleValue(),
+                    _e2 = e[0][1].doubleValue(),
+                    _e3 = e[1][0].doubleValue(),
+                    _e4 = e[1][1].doubleValue(),
+                    _n1 = _e[0][0].doubleValue(),
+                    _n2 = _e[0][1].doubleValue(),
+                    _n3 = _e[1][0].doubleValue(),
+                    _n4 = _e[1][1].doubleValue();
+
+            double _m1 = (_e1 + _e4) * (_n1 + _n4),
+                    _m2 = (_e3 + _e4) * _n1,
+                    _m3 = _e1 * (_n2 - _n4),
+                    _m4 = _e4 * (_n3 - _n1),
+                    _m5 = (_e1 + _e2) * _n4,
+                    _m6 = (_e3 - _e1) * (_n1 + _n2),
+                    _m7 = (_e2 - _e4) * (_n3 + _n4);
+
+            n[0][0] = _m1 + _m4 - _m5 + _m7;
+            n[0][1] = _m3 + _m5;
+            n[1][0] = _m2 + _m4;
+            n[1][1] = _m1 - _m2 + _m3 + _m6;
+
+            return new ArrayMatrix(n);
+
+        } else {
+            var n = new Number[d[0]][_e[1].length];
+            for (int i = 0; i < d[0]; i++) {
+                for (int j = 0; j < _e[1].length; j++) {
+                    var sum = 0;
+                    for (int k = 0; k < d[1]; k++) {
+                        sum += (e[i][k].doubleValue() * _e[k][j].doubleValue());
+                    }
+                    n[i][j] = sum;
+                }
+            }
+
+            return new ArrayMatrix(n);
+        }
     }
 
-    private Number[][] strassen(final int ie, final int je, final Number[][] n, final int in, final int jn) {
-        Number[][] _n = new Number[2][2];
+    /**
+     * The method will perform multiplication of a matrix with a vector.
+     * The vector must have the dimension equal to the number of columns of the matrix.
+     *
+     * @param v the vector to multiply
+     *
+     * @return the resulting vector
+     *
+     * @throws InvalidMatrixOperationException if the number of columns is not equal to
+     *                                         the dimension of a given vector
+     */
+    @Override
+    public Vector multiply(final Vector v) {
+        Number[] _e = v.toArray();
 
-        double A11 = e[ie][je].doubleValue();
-        double A12 = e[ie][je + 1].doubleValue();
-        double A21 = e[ie + 1][je].doubleValue();
-        double A22 = e[ie + 1][je + 1].doubleValue();
+        if(d[1] != _e.length)
+            throw new InvalidMatrixOperationException("The vector dimension doesn't match with the matrix columns");
 
-        double B11 = n[in][jn].doubleValue();
-        double B12 = n[in][jn + 1].doubleValue();
-        double B21 = n[in + 1][jn].doubleValue();
-        double B22 = n[in + 1][jn + 1].doubleValue();
+        var n = new Number[_e.length];
+        for (int i = 0; i < d[0]; i++) {
+            n[i] = 0;
+            for (int j = 0; j < d[1]; j++) {
+                n[i] = n[i].doubleValue() + (e[i][j].doubleValue() * _e[j].doubleValue());
+            }
+        }
 
-        double m1 = (A11 + A22) * (B11 + B22);
-        double m2 = (A21 + A22) * B11;
-        double m3 = A11 * (B12 - B22);
-        double m4 = A22 * (B21 - B11);
-        double m5 = (A11 + A12) * B22;
-        double m6 = (A21 - A11) * (B11 + B12);
-        double m7 = (A12 - A22) * (B21 + B22);
-
-        _n[0][0] = m1 + m4 - m5 + m7;
-        _n[0][1] = m3 + m5;
-        _n[1][0] = m2 + m4;
-        _n[1][1] = m1 - m2 + m3 + m6;
-
-        return _n;
+        return new ArrayVector(n);
     }
 
     /**
