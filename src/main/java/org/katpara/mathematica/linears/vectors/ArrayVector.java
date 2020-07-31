@@ -3,7 +3,10 @@ package org.katpara.mathematica.linears.vectors;
 import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
+import org.katpara.mathematica.linears.matrices.Matrix;
 
 import java.util.*;
 import java.util.function.DoubleUnaryOperator;
@@ -296,7 +299,7 @@ public final class ArrayVector implements Vector {
     @Override
     public boolean isParallel(final Vector v) {
         if (d != v.getDimension())
-            throw new InvalidVectorDimensionException("Vectors have different dimensions");
+            throw new InvalidVectorOperationException("Vectors have different dimensions");
 
         var _e = v.toArray();
         var a = _e[0].doubleValue() / e[0].doubleValue();
@@ -448,7 +451,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the resulting vector
      *
-     * @throws InvalidVectorDimensionException if the vectors have different dimensions
+     * @throws InvalidVectorOperationException if the vectors have different dimensions
      */
     @Override
     public Vector add(final Vector vector) {
@@ -485,7 +488,7 @@ public final class ArrayVector implements Vector {
      */
     private Number[] addElements(final Number[] e, final Number[] _e) {
         if (e.length != _e.length)
-            throw new InvalidVectorDimensionException("Both vectors have different dimensions");
+            throw new InvalidVectorOperationException("Both vectors have different dimensions");
 
         for (var i = 0; i < e.length; i++)
             e[i] = e[i].doubleValue() + _e[i].doubleValue();
@@ -509,20 +512,20 @@ public final class ArrayVector implements Vector {
     /**
      * The method will return a dot product of two vectors.
      * If both vectors are on different dimensions then
-     * {@link InvalidVectorDimensionException} exception is thrown.
+     * {@link InvalidVectorOperationException} exception is thrown.
      *
      * @param vector the second vector
      *
      * @return the resulting dot product
      *
-     * @throws InvalidVectorDimensionException when both products are on different
+     * @throws InvalidVectorOperationException when both products are on different
      *                                         dimensions.
      */
     @Override
     public double dot(final Vector vector) {
         Number[] _e;
         if (d != (_e = vector.toArray()).length)
-            throw new InvalidVectorDimensionException();
+            throw new InvalidVectorOperationException("Both Vectors have different dimensions");
 
         var sum = 0;
         for (var i = 0; i < d; i++) {
@@ -535,14 +538,14 @@ public final class ArrayVector implements Vector {
     /**
      * The method will return a dot product of two vectors.
      * If both vectors are on different dimensions then
-     * {@link InvalidVectorDimensionException} exception is thrown.
+     * {@link InvalidVectorOperationException} exception is thrown.
      *
      * @param v the second vector
      * @param p  the rounding point, {@link Rounding.POINT}
      *
      * @return the resulting dot product
      *
-     * @throws InvalidVectorDimensionException when both products are on different
+     * @throws InvalidVectorOperationException when both products are on different
      *                                         dimensions.
      */
     @Override
@@ -561,20 +564,20 @@ public final class ArrayVector implements Vector {
      * would be in the opposite direction.
      * <p>
      * If given vectors are not in 3 dimensions then,
-     * {@link InvalidVectorDimensionException} is thrown.
+     * {@link InvalidVectorOperationException} is thrown.
      *
      * @param v the second 3 dimensional vector
      *
      * @return the cross product vector
      *
-     * @throws InvalidVectorDimensionException when both vectors are in
+     * @throws InvalidVectorOperationException when both vectors are in
      *                                         the third dimension.
      */
     @Override
     public Vector cross(final Vector v) {
         Number[] _e, n = new Number[3];
         if (d != 3 || (_e = v.toArray()).length != 3)
-            throw new InvalidVectorDimensionException("The cross product is only supported for vectors in 3rd dimension");
+            throw new InvalidVectorOperationException("The cross product is only supported for vectors in 3rd dimension");
 
         n[0] = e[1].doubleValue() * _e[2].doubleValue() - e[2].doubleValue() * _e[1].doubleValue();
         n[1] = e[2].doubleValue() * _e[0].doubleValue() - e[0].doubleValue() * _e[2].doubleValue();
@@ -598,7 +601,7 @@ public final class ArrayVector implements Vector {
     @Override
     public double scalarProjection(final Vector v) {
         if (d != v.getDimension())
-            throw new InvalidVectorDimensionException("Vectors have different dimensions");
+            throw new InvalidVectorOperationException("Vectors have different dimensions");
 
         return dot(v) / getMagnitude();
     }
@@ -655,6 +658,35 @@ public final class ArrayVector implements Vector {
             m[i] = e[i].doubleValue() - n[i].doubleValue();
 
         return new ArrayVector(m);
+    }
+
+    /**
+     * The method will perform multiplication of a matrix with a vector.
+     * The vector must have the dimension equal to the number of columns of the matrix.
+     *
+     * @param m the matrix to multiply
+     *
+     * @return the resulting vector
+     *
+     * @throws InvalidVectorOperationException if the number of columns is not equal to
+     *                                         the dimension of a given vector
+     */
+    @Override
+    public Vector multiply(final Matrix m) {
+        Number[][] _e = m.toArray();
+
+        if(d != _e[0].length)
+            throw new InvalidVectorOperationException("The vector dimension doesn't match with the matrix columns");
+
+        var n = new Number[d];
+        for (int i = 0; i < _e[0].length; i++) {
+            n[i] = 0;
+            for (int j = 0; j < _e[1].length; j++) {
+                n[i] = n[i].doubleValue() + (e[j].doubleValue() * _e[i][j].doubleValue());
+            }
+        }
+
+        return new ArrayVector(n);
     }
 
     /**

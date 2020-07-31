@@ -5,6 +5,9 @@ import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
+import org.katpara.mathematica.linears.matrices.ArrayMatrix;
+import org.katpara.mathematica.linears.matrices.Matrix;
 
 import java.util.*;
 
@@ -115,7 +118,7 @@ class ArrayVectorTest {
     @Test
     void testAddVector() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).add(ArrayVector.of(1, 2, 3))),
                 () -> assertEquals(ArrayVector.of(2, 4, 6),
                         ArrayVector.of(1, 2, 3).add(ArrayVector.of(1, 2, 3)))
@@ -125,7 +128,7 @@ class ArrayVectorTest {
     @Test
     void testSubtractVector() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).subtract(ArrayVector.of(1, 2, 3))
                 ),
                 () -> assertEquals(ArrayVector.of(0, 0, 0),
@@ -168,7 +171,7 @@ class ArrayVectorTest {
     @Test
     void testDotProducts() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).dot(ArrayVector.of(1, 2, 3))),
                 () -> assertEquals(24, ArrayVector.of(3, 4)
                                                .dot(ArrayVector.of(4, 3))),
@@ -180,7 +183,7 @@ class ArrayVectorTest {
     @Test
     void testAngle() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2)
                                       .angle(ArrayVector.of(1, 2, 3), Vector.Angle.DEGREE)),
                 () -> assertEquals(45.00000000000001, ArrayVector.of(2, 2)
@@ -198,11 +201,11 @@ class ArrayVectorTest {
     @Test
     void testCrossProduct() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).cross(ArrayVector.of(1, 2))),
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2, 3).cross(ArrayVector.of(1, 2))),
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).cross(ArrayVector.of(1, 2, 3))),
                 () -> assertEquals(ArrayVector.of(5, 1, 11),
                         ArrayVector.of(2, 1, -1).cross(ArrayVector.of(-3, 4, 1))),
@@ -215,7 +218,7 @@ class ArrayVectorTest {
     @Test
     void testOrthogonal() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).isOrthogonal(ArrayVector.of(1, 2, 3))),
                 () -> assertFalse(ArrayVector.of(1, 2, 3)
                                           .isOrthogonal(ArrayVector.of(1, 2, 3))),
@@ -227,7 +230,7 @@ class ArrayVectorTest {
     @Test
     void testParallel() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class,
+                () -> assertThrows(InvalidVectorOperationException.class,
                         () -> ArrayVector.of(1, 2).isParallel(ArrayVector.of(1, 2, 3))),
                 () -> assertTrue(ArrayVector.of(1, 2, 3)
                                          .isParallel(ArrayVector.of(1, 2, 3))),
@@ -292,6 +295,17 @@ class ArrayVectorTest {
                 () -> ArrayVector.of(3, -1, 0, (e) -> e * 10),
                 () -> ArrayVector.of(2, (e) -> e * 1.2, Rounding.POINT.TWO),
                 () -> ArrayVector.of(2, (e) -> e * 1)
+        );
+    }
+
+    @Test
+    void testMatrixMultiplication() {
+        Matrix f = new ArrayMatrix(new Number[][]{{1, 2, 3},{4, 5, 6},{7, 8, 9}});
+        Vector v = ArrayVector.of(2, 1, 3);
+
+        assertAll(
+                () -> assertThrows(InvalidVectorOperationException.class, () -> ArrayVector.of(1, 2).multiply(f)),
+                () -> assertEquals(ArrayVector.of(13, 31, 49), v.multiply(f))
         );
     }
 }

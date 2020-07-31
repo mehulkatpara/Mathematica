@@ -347,17 +347,4 @@ public interface Matrix {
      *                                         equal to the number of rows of another matrix
      */
     Matrix multiply(final Matrix matrix);
-
-    /**
-     * The method will perform multiplication of a matrix with a vector.
-     * The vector must have the dimension equal to the number of columns of the matrix.
-     *
-     * @param vector the vector to multiply
-     *
-     * @return the resulting vector
-     *
-     * @throws InvalidMatrixOperationException if the number of columns is not equal to
-     *                                         the dimension of a given vector
-     */
-    Vector multiply(final Vector vector);
 }

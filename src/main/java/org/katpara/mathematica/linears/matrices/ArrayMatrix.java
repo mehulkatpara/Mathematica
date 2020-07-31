@@ -920,35 +920,6 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
-     * The method will perform multiplication of a matrix with a vector.
-     * The vector must have the dimension equal to the number of columns of the matrix.
-     *
-     * @param v the vector to multiply
-     *
-     * @return the resulting vector
-     *
-     * @throws InvalidMatrixOperationException if the number of columns is not equal to
-     *                                         the dimension of a given vector
-     */
-    @Override
-    public Vector multiply(final Vector v) {
-        Number[] _e = v.toArray();
-
-        if(d[1] != _e.length)
-            throw new InvalidMatrixOperationException("The vector dimension doesn't match with the matrix columns");
-
-        var n = new Number[_e.length];
-        for (int i = 0; i < d[0]; i++) {
-            n[i] = 0;
-            for (int j = 0; j < d[1]; j++) {
-                n[i] = n[i].doubleValue() + (e[i][j].doubleValue() * _e[j].doubleValue());
-            }
-        }
-
-        return new ArrayVector(n);
-    }
-
-    /**
      * The method will do addition or subtraction on two two-dimensional arrays.
      *
      * @param n1  the first two-dimensional array

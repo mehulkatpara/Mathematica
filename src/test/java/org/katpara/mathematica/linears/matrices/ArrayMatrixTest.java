@@ -456,15 +456,12 @@ class ArrayMatrixTest {
         Matrix c = new ArrayMatrix(new Number[][]{{1, 8},{3, 6}});
         Matrix d = new ArrayMatrix(new Number[][]{{1, 2, 3, 4},{5, 6, 7, 8},{9, 10, 11, 12}});
         Matrix e = new ArrayMatrix(new Number[][]{{1, 2},{3, 4},{5, 6},{7, 8}});
-        Matrix f = new ArrayMatrix(new Number[][]{{1, 2, 3},{4, 5, 6},{7, 8, 9}});
-        Vector v = ArrayVector.of(2, 1, 3);
 
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class, () -> c.multiply(d)),
                 () -> assertEquals(new ArrayMatrix(new Number[][]{{2, 4},{6, 8}}), a.multiply(2)),
                 () -> assertEquals(new ArrayMatrix(new Number[][]{{7, 20},{32, 94}}), b.multiply(c)),
-                () -> assertEquals(new ArrayMatrix(new Number[][]{{50, 60}, {114, 140}, {178, 220}}), d.multiply(e)),
-                () -> assertEquals(ArrayVector.of(13, 31, 49), f.multiply(v))
+                () -> assertEquals(new ArrayMatrix(new Number[][]{{50, 60}, {114, 140}, {178, 220}}), d.multiply(e))
         );
     }
 }
