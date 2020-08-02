@@ -152,132 +152,21 @@ public interface Matrix {
     double getDeterminant(final Rounding.POINT point);
 
     /**
-     * The method will return a zero or null matrix, whose all the elements are zero.
+     * The method transposes the matrix.
      *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return a {@link Matrix} with all 0 entries
-     *
-     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
-     *                                         this ensures that at least one element
-     *                                         exist all the time.
+     * @return the transposed matrix
      */
-    static ArrayMatrix zeroArrayMatrix(final int m, final int n) {
-        return ArrayMatrix.zeroMatrix(m, n);
-    }
+    Matrix transpose();
 
     /**
-     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
      *
-     * @param m the number of rows
-     * @param n the number of columns
+     * @return The inverse matrix
      *
-     * @return a one matrix
-     *
-     * @throws InvalidMatrixDimensionException when m + n &lt; 2
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
-    static ArrayMatrix oneArrayMatrix(final int m, final int n) {
-        return ArrayMatrix.oneMatrix(m, n);
-    }
-
-    /**
-     * The method will return a zero or null matrix, whose all the elements are zero.
-     *
-     * @param n the number of rows and columns
-     * @param t the type of matrix;
-     *          LOWER       - Lover triangular
-     *          UPPER       - Upper triangular
-     *          SYMMETRIC   - a symmetric matrix
-     *
-     * @return a Pascal's {@link Matrix}
-     *
-     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
-     */
-    static ArrayMatrix pascalArrayMatrix(final int n, final PascalMatrixType t) {
-        return ArrayMatrix.pascalMatrix(n, t);
-    }
-
-    /**
-     * A lehmer matrix is a constant systematic square matrix.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return the lehmer {@link ArrayMatrix}
-     */
-    static ArrayMatrix lehmerArrayMatrix(final int n) {
-        return ArrayMatrix.lehmerMatrix(n);
-    }
-
-    /**
-     * The identity matrix is a square matrix whose diagonal is always 1 and all the
-     * other elements are 0.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return an identity {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix identityArrayMatrix(final int n) {
-        return ArrayMatrix.identityMatrix(n);
-    }
-
-    /**
-     * A Hilbert matrix is a square matrix with entries being the unit fractions.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return a hilbert {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix hilbertArrayMatrix(final int n) {
-        return ArrayMatrix.hilbertMatrix(n);
-    }
-
-    /**
-     * An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
-     * rest of the elements are 0.
-     *
-     * @param n the square matrix
-     *
-     * @return an exchange {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix exchangeArrayMatrix(final int n) {
-        return ArrayMatrix.exchangeMatrix(n);
-    }
-
-    /**
-     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
-     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return a redheffer {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix redhefferArrayMatrix(final int n) {
-        return ArrayMatrix.redhefferMatrix(n);
-    }
-
-    /**
-     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
-     * super diagonal matrix, or lower diagonal matrix.
-     *
-     * @param n the number of rows and columns
-     * @param t the type of matrix, i.e UPPER or LOWER
-     *
-     * @return a shift {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix shiftArrayMatrix(final int n, final ShiftMatrixType t) {
-        return ArrayMatrix.shiftMatrix(n, t);
-    }
+    Matrix inverse();
 
     /**
      * The method performs a scalar addition on a square matrix.

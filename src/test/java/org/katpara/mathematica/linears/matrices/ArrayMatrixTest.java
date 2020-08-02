@@ -1,13 +1,13 @@
 package org.katpara.mathematica.linears.matrices;
 
 import org.junit.jupiter.api.Test;
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
-import java.lang.reflect.Array;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -232,11 +232,11 @@ class ArrayMatrixTest {
         assertAll(
                 () -> assertTrue(_d1.isSquareMatrix()),
                 () -> assertTrue(_d2.isSquareMatrix()),
-                () -> assertTrue(Matrix.exchangeArrayMatrix(4).isSquareMatrix()),
-                () -> assertTrue(Matrix.hilbertArrayMatrix(4).isSquareMatrix()),
-                () -> assertTrue(Matrix.lehmerArrayMatrix(4).isSquareMatrix()),
-                () -> assertTrue(Matrix.oneArrayMatrix(4, 4).isSquareMatrix()),
-                () -> assertFalse(Matrix.oneArrayMatrix(4, 5).isSquareMatrix()),
+                () -> assertTrue(ArrayMatrix.exchangeMatrix(4).isSquareMatrix()),
+                () -> assertTrue(ArrayMatrix.hilbertMatrix(4).isSquareMatrix()),
+                () -> assertTrue(ArrayMatrix.lehmerMatrix(4).isSquareMatrix()),
+                () -> assertTrue(ArrayMatrix.oneMatrix(4, 4).isSquareMatrix()),
+                () -> assertFalse(ArrayMatrix.oneMatrix(4, 5).isSquareMatrix()),
                 () -> assertFalse(_d3.isSquareMatrix())
         );
     }
@@ -245,16 +245,16 @@ class ArrayMatrixTest {
     void testTrace() {
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class,
-                        () -> Matrix.oneArrayMatrix(5, 10).getTrace()),
+                        () -> ArrayMatrix.oneMatrix(5, 10).getTrace()),
                 () -> assertThrows(InvalidMatrixOperationException.class,
                         () -> new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}}).getTrace()),
-                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getTrace()),
-                () -> assertEquals(5, Matrix.oneArrayMatrix(5, 5).getTrace()),
-                () -> assertEquals(0, Matrix.shiftArrayMatrix(3, Matrix.ShiftMatrixType.LOWER).getTrace()),
-                () -> assertEquals(0, Matrix.exchangeArrayMatrix(4).getTrace()),
-                () -> assertEquals(1, Matrix.exchangeArrayMatrix(7).getTrace()),
-                () -> assertEquals(12, Matrix.pascalArrayMatrix(12, Matrix.PascalMatrixType.UPPER).getTrace()),
-                () -> assertEquals(8, Matrix.pascalArrayMatrix(8, Matrix.PascalMatrixType.LOWER).getTrace()),
+                () -> assertEquals(5, ArrayMatrix.identityMatrix(5).getTrace()),
+                () -> assertEquals(5, ArrayMatrix.oneMatrix(5, 5).getTrace()),
+                () -> assertEquals(0, ArrayMatrix.shiftMatrix(3, ArrayMatrix.ShiftMatrixType.LOWER).getTrace()),
+                () -> assertEquals(0, ArrayMatrix.exchangeMatrix(4).getTrace()),
+                () -> assertEquals(1, ArrayMatrix.exchangeMatrix(7).getTrace()),
+                () -> assertEquals(12, ArrayMatrix.pascalMatrix(12, ArrayMatrix.PascalMatrixType.UPPER).getTrace()),
+                () -> assertEquals(8, ArrayMatrix.pascalMatrix(8, ArrayMatrix.PascalMatrixType.LOWER).getTrace()),
                 () -> assertEquals(5D, new ArrayMatrix(new Number[][]{
                         {3, 2, 0, 4},
                         {4, 1, -2, 3},
@@ -302,18 +302,18 @@ class ArrayMatrixTest {
     @Test
     void testZeroMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.zeroArrayMatrix(0, 0)),
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.zeroArrayMatrix(0, 1)),
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.zeroArrayMatrix(1, 0)),
-                () -> System.out.println(Matrix.zeroArrayMatrix(1, 1))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.zeroMatrix(0, 0)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.zeroMatrix(0, 1)),
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.zeroMatrix(1, 0)),
+                () -> System.out.println(ArrayMatrix.zeroMatrix(1, 1))
         );
     }
 
     @Test
     void testOneMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.oneArrayMatrix(0, 0)),
-                () -> System.out.println(Matrix.oneArrayMatrix(5, 5))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.oneMatrix(0, 0)),
+                () -> System.out.println(ArrayMatrix.oneMatrix(5, 5))
         );
     }
 
@@ -321,28 +321,28 @@ class ArrayMatrixTest {
     void testPascalMatrix() {
         assertAll(
                 () -> assertThrows(InvalidMatrixDimensionException.class,
-                        () -> Matrix.pascalArrayMatrix(0, Matrix.PascalMatrixType.SYMMETRIC)),
-                () -> System.out.println(Matrix.pascalArrayMatrix(5, Matrix.PascalMatrixType.UPPER)),
-                () -> System.out.println(Matrix.pascalArrayMatrix(5, Matrix.PascalMatrixType.LOWER)),
-                () -> System.out.println(Matrix.pascalArrayMatrix(5, Matrix.PascalMatrixType.SYMMETRIC))
+                        () -> ArrayMatrix.pascalMatrix(0, ArrayMatrix.PascalMatrixType.SYMMETRIC)),
+                () -> System.out.println(ArrayMatrix.pascalMatrix(5, ArrayMatrix.PascalMatrixType.UPPER)),
+                () -> System.out.println(ArrayMatrix.pascalMatrix(5, ArrayMatrix.PascalMatrixType.LOWER)),
+                () -> System.out.println(ArrayMatrix.pascalMatrix(5, ArrayMatrix.PascalMatrixType.SYMMETRIC))
         );
     }
 
     @Test
     void testLehmerMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.lehmerArrayMatrix(0)),
-                () -> System.out.println(Matrix.lehmerArrayMatrix(1)),
-                () -> System.out.println(Matrix.lehmerArrayMatrix(4))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.lehmerMatrix(0)),
+                () -> System.out.println(ArrayMatrix.lehmerMatrix(1)),
+                () -> System.out.println(ArrayMatrix.lehmerMatrix(4))
         );
     }
 
     @Test
     void testHilbertMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.hilbertArrayMatrix(0)),
-                () -> System.out.println(Matrix.hilbertArrayMatrix(1)),
-                () -> System.out.println(Matrix.hilbertArrayMatrix(4))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.hilbertMatrix(0)),
+                () -> System.out.println(ArrayMatrix.hilbertMatrix(1)),
+                () -> System.out.println(ArrayMatrix.hilbertMatrix(4))
         );
     }
 
@@ -350,28 +350,28 @@ class ArrayMatrixTest {
     @Test
     void testIdentityMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.identityArrayMatrix(0)),
-                () -> System.out.println(Matrix.identityArrayMatrix(1)),
-                () -> System.out.println(Matrix.identityArrayMatrix(4))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.identityMatrix(0)),
+                () -> System.out.println(ArrayMatrix.identityMatrix(1)),
+                () -> System.out.println(ArrayMatrix.identityMatrix(4))
         );
     }
 
     @Test
     void testExchangeMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.exchangeArrayMatrix(0)),
-                () -> System.out.println(Matrix.exchangeArrayMatrix(1)),
-                () -> System.out.println(Matrix.exchangeArrayMatrix(4))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.exchangeMatrix(0)),
+                () -> System.out.println(ArrayMatrix.exchangeMatrix(1)),
+                () -> System.out.println(ArrayMatrix.exchangeMatrix(4))
         );
     }
 
     @Test
     void testRedhefferMatrix() {
         assertAll(
-                () -> assertThrows(InvalidMatrixDimensionException.class, () -> Matrix.redhefferArrayMatrix(0)),
-                () -> System.out.println(Matrix.redhefferArrayMatrix(1)),
-                () -> System.out.println(Matrix.redhefferArrayMatrix(4)),
-                () -> System.out.println(Matrix.redhefferArrayMatrix(12))
+                () -> assertThrows(InvalidMatrixDimensionException.class, () -> ArrayMatrix.redhefferMatrix(0)),
+                () -> System.out.println(ArrayMatrix.redhefferMatrix(1)),
+                () -> System.out.println(ArrayMatrix.redhefferMatrix(4)),
+                () -> System.out.println(ArrayMatrix.redhefferMatrix(12))
         );
     }
 
@@ -379,13 +379,13 @@ class ArrayMatrixTest {
     void testShiftMatrix() {
         assertAll(
                 () -> assertThrows(InvalidMatrixDimensionException.class,
-                        () -> Matrix.shiftArrayMatrix(0, Matrix.ShiftMatrixType.UPPER)),
-                () -> System.out.println(Matrix.shiftArrayMatrix(1, Matrix.ShiftMatrixType.UPPER)),
-                () -> System.out.println(Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.UPPER)),
+                        () -> ArrayMatrix.shiftMatrix(0, ArrayMatrix.ShiftMatrixType.UPPER)),
+                () -> System.out.println(ArrayMatrix.shiftMatrix(1, ArrayMatrix.ShiftMatrixType.UPPER)),
+                () -> System.out.println(ArrayMatrix.shiftMatrix(5, ArrayMatrix.ShiftMatrixType.UPPER)),
                 () -> assertThrows(InvalidMatrixDimensionException.class,
-                        () -> Matrix.shiftArrayMatrix(0, Matrix.ShiftMatrixType.LOWER)),
-                () -> System.out.println(Matrix.shiftArrayMatrix(1, Matrix.ShiftMatrixType.LOWER)),
-                () -> System.out.println(Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER))
+                        () -> ArrayMatrix.shiftMatrix(0, ArrayMatrix.ShiftMatrixType.LOWER)),
+                () -> System.out.println(ArrayMatrix.shiftMatrix(1, ArrayMatrix.ShiftMatrixType.LOWER)),
+                () -> System.out.println(ArrayMatrix.shiftMatrix(5, ArrayMatrix.ShiftMatrixType.LOWER))
 
 
         );
@@ -394,9 +394,9 @@ class ArrayMatrixTest {
     @Test
     void testRank() {
         assertAll(
-                () -> assertEquals(5, Matrix.identityArrayMatrix(5).getRank()),
-                () -> assertEquals(1, Matrix.oneArrayMatrix(5, 10).getRank()),
-                () -> assertEquals(4, Matrix.shiftArrayMatrix(5, Matrix.ShiftMatrixType.LOWER).getRank()),
+                () -> assertEquals(5, ArrayMatrix.identityMatrix(5).getRank()),
+                () -> assertEquals(1, ArrayMatrix.oneMatrix(5, 10).getRank()),
+                () -> assertEquals(4, ArrayMatrix.shiftMatrix(5, ArrayMatrix.ShiftMatrixType.LOWER).getRank()),
                 () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).getRank()),
                 () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).getRank()),
                 () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).getRank()),
@@ -452,16 +452,39 @@ class ArrayMatrixTest {
     @Test
     void testMultiplication() {
         Matrix a = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}});
-        Matrix b = new ArrayMatrix(new Number[][]{{1, 2},{5, 9}});
-        Matrix c = new ArrayMatrix(new Number[][]{{1, 8},{3, 6}});
-        Matrix d = new ArrayMatrix(new Number[][]{{1, 2, 3, 4},{5, 6, 7, 8},{9, 10, 11, 12}});
-        Matrix e = new ArrayMatrix(new Number[][]{{1, 2},{3, 4},{5, 6},{7, 8}});
+        Matrix b = new ArrayMatrix(new Number[][]{{1, 2}, {5, 9}});
+        Matrix c = new ArrayMatrix(new Number[][]{{1, 8}, {3, 6}});
+        Matrix d = new ArrayMatrix(new Number[][]{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}});
+        Matrix e = new ArrayMatrix(new Number[][]{{1, 2}, {3, 4}, {5, 6}, {7, 8}});
 
         assertAll(
                 () -> assertThrows(InvalidMatrixOperationException.class, () -> c.multiply(d)),
-                () -> assertEquals(new ArrayMatrix(new Number[][]{{2, 4},{6, 8}}), a.multiply(2)),
-                () -> assertEquals(new ArrayMatrix(new Number[][]{{7, 20},{32, 94}}), b.multiply(c)),
+                () -> assertEquals(new ArrayMatrix(new Number[][]{{2, 4}, {6, 8}}), a.multiply(2)),
+                () -> assertEquals(new ArrayMatrix(new Number[][]{{7, 20}, {32, 94}}), b.multiply(c)),
                 () -> assertEquals(new ArrayMatrix(new Number[][]{{50, 60}, {114, 140}, {178, 220}}), d.multiply(e))
         );
+    }
+
+    @Test
+    void testTranspose() {
+        assertEquals(new ArrayMatrix(new Number[][]{{0, 7, 3}, {4, 0, 1}}),
+                new ArrayMatrix(new Number[][]{{0, 4}, {7, 0}, {3, 1}}).transpose());
+    }
+
+    @Test
+    void testInverse() {
+        System.out.println(new ArrayMatrix(new Number[][]{{1, -1}, {-2, 2}}).inverse());
+    }
+
+    @Test
+    void testLU() {
+        ArrayMatrix m = new ArrayMatrix(new Number[][]{
+                {4, -2, -7, -4, -8},
+                {9, -6, -6, -1, -5},
+                {-2, -9, 3, -5, 2},
+                {9, 7, -9, 5, -8},
+                {-1, 6, -3, 9, 6}
+        });
+        System.out.println(m.getDeterminant(Rounding.POINT.TEN));
     }
 }

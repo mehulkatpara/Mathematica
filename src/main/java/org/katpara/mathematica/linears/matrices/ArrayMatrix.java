@@ -458,15 +458,35 @@ public class ArrayMatrix implements Matrix {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException();
 
+        var det = 0.0;
         if (d[0] == 1) {
-            return e[0][0].doubleValue();
-        } else {
-            var m = new int[d[0]];
-            for (int i = 0; i < d[0]; i++)
-                m[i] = i;
+            det = e[0][0].doubleValue();
+        } else if (d[0] == 2) {
+            det = (e[0][0].doubleValue() * e[1][1].doubleValue()) -
+                           (e[0][1].doubleValue() * e[1][0].doubleValue());
+        } else if (d[1] == 3) {
+            double _e1 = e[0][0].doubleValue(),
+                    _e2 = e[0][1].doubleValue(),
+                    _e3 = e[0][2].doubleValue(),
+                    _e4 = e[1][0].doubleValue(),
+                    _e5 = e[1][1].doubleValue(),
+                    _e6 = e[1][2].doubleValue(),
+                    _e7 = e[2][0].doubleValue(),
+                    _e8 = e[2][1].doubleValue(),
+                    _e9 = e[2][2].doubleValue();
 
-            return getDeterminant(m, m);
+            det = (
+                    (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
+                            (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
+            );
+        } else {
+            Number[][][] n = lu();
+            det = n[1][0][0].doubleValue();
+            for (int i = 1; i < n[1].length; i++)
+                det *= n[1][i][i].doubleValue();
         }
+
+        return det;
     }
 
     /**
@@ -480,297 +500,56 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getDeterminant(final Rounding.POINT point) {
-        return 0;
+        return Rounding.round(getDeterminant(), point);
     }
 
     /**
-     * The method calculates the determinant of a matrix using the recursion function.
+     * The method transposes the matrix.
      *
-     * @param rs the number of rows
-     * @param cs the number of columns
-     *
-     * @return the determinant of the matrix
+     * @return the transposed matrix
      */
-    private double getDeterminant(final int[] rs, final int[] cs) {
-        int rl = rs.length, cl = cs.length;
-        if (rl == 2 && cl == 2) {
-            return (e[rs[0]][cs[0]].doubleValue() *
-                            e[rs[1]][cs[1]].doubleValue()
-                            - e[rs[1]][cs[0]].doubleValue() *
-                                      e[rs[0]][cs[1]].doubleValue());
+    @Override
+    public Matrix transpose() {
+        var n = new Number[d[1]][d[0]];
+
+        for (int i = 0; i < d[0]; i++)
+            for (int j = 0; j < d[1]; j++)
+                n[j][i] = e[i][j];
+
+        return new ArrayMatrix(n);
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix inverse() {
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("The matrix is not a square matrix");
+
+        if (d[0] == 2) {
+            var n = new Number[2][2];
+            double a = e[0][0].doubleValue(), b = e[0][1].doubleValue(),
+                    c = e[1][0].doubleValue(), d = e[1][1].doubleValue(),
+                    v = (a * d) - (b * c);
+
+            if (v == 0)
+                return null;
+
+            n[0][0] = d / v;
+            n[0][1] = -b / v;
+            n[1][0] = -c / v;
+            n[1][1] = a / v;
+
+            return new ArrayMatrix(n);
         }
 
-        var s = 0D;
-        int r = 0, c = 0;
-        int[] _r = new int[rl - 1], _c = new int[cl - 1];
-
-        while (r < rl) {
-            while (c < cl) {
-                var ct = e[rs[0]][cs[c]];
-                for (int i = 0, k = 0; i < rl; i++) {
-                    if (r != i)
-                        _r[k++] = rs[i];
-                }
-
-                for (int i = 0, k = 0; i < cl; i++) {
-                    if (c != i)
-                        _c[k++] = cs[i];
-                }
-
-                if (ct.doubleValue() == 0) {
-                    s += 0;
-                } else {
-                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * getDeterminant(_r, _c));
-                }
-                c++;
-            }
-            r++;
-        }
-        return s;
-    }
-
-    /**
-     * The method will return a zero or null matrix, whose all the elements are zero.
-     *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return an ArrayMatrix with all 0 entries
-     *
-     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
-     *                                         this ensures that at least one element
-     *                                         exist all the time.
-     */
-    static ArrayMatrix zeroMatrix(final int m, final int n) {
-        return calculateZeroOneMatrix(m, n, ZERO);
-    }
-
-    /**
-     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
-     *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return am ArrayMatrix with all 1 entries
-     *
-     * @throws InvalidMatrixDimensionException when m + n &lt; 2
-     */
-    static ArrayMatrix oneMatrix(final int m, final int n) {
-        return calculateZeroOneMatrix(m, n, ONE);
-    }
-
-    /**
-     * The method produces Zero or One matrix, based on the type argument.
-     *
-     * @param m the number of rows
-     * @param n the number of columns
-     * @param t the type of matrix, i. e. Zero or One
-     *
-     * @return a one matrix
-     *
-     * @throws InvalidMatrixDimensionException when m + n < 2
-     */
-    private static ArrayMatrix calculateZeroOneMatrix(final int m, final int n, final MatrixType t) {
-        if (m + n < 2)
-            throw new InvalidMatrixDimensionException("One matrix should have at least one element");
-
-        var e = new Number[m][n];
-
-        if (t == ZERO)
-            Arrays.fill(e[0], 0);
-
-        if (t == ONE)
-            Arrays.fill(e[0], 1);
-
-        for (int i = 1; i < e.length; i++)
-            System.arraycopy(e[0], 0, e[i], 0, e[0].length);
-
-        return new ArrayMatrix(e, t);
-    }
-
-    /**
-     * The method will create a pascal's square matrix.
-     *
-     * @param n the number of rows and columns of a square matrix
-     * @param t the type of matrix
-     *          i.e. UPPER, LOWER or SYMMETRIC
-     *
-     * @return a Pascal's {@link Matrix}
-     *
-     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
-     */
-    static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
-        if (n < 1)
-            throw new InvalidMatrixDimensionException("Pascal's matrix should have at least one element");
-
-        var r = new Number[n];
-        var e = new Number[n][n];
-
-        if (t == PascalMatrixType.UPPER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
-                    e[i][j] = (i == j || i == 0) ? 1 : (j < i) ? 0 : e[i][j - 1].longValue() + r[j - 1].longValue();
-
-                r = e[i];
-            }
-        }
-
-        if (t == PascalMatrixType.LOWER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
-                    e[i][j] = (i == j || j == 0) ? 1 : (i < j) ? 0 : r[j].longValue() + r[j - 1].longValue();
-
-                r = e[i];
-            }
-        }
-
-        if (t == PascalMatrixType.SYMMETRIC) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
-                    e[i][j] = (i == 0 || j == 0) ? 1 : e[i][j - 1].longValue() + r[j].longValue();
-
-                r = e[i];
-            }
-        }
-
-        return new ArrayMatrix(e, PASCAL);
-    }
-
-    /**
-     * A lehmer matrix is a constant systematic square matrix.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return the lehmer matrix
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix lehmerMatrix(final int n) {
-        return new ArrayMatrix(
-                calculateDoubleMatrix
-                        (n, (i, j) -> (j >= i) ? (i + 1) / (j + 1) : (j + 1) / (i + 1)), LEHMER);
-    }
-
-    /**
-     * A Hilbert matrix is a square matrix with entries being the unit fractions.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return a hilbert {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix hilbertMatrix(final int n) {
-        return new ArrayMatrix(
-                calculateDoubleMatrix
-                        (n, (i, j) -> 1 / (i + 1 + (j + 1) - 1)), HILBERT);
-    }
-
-    /**
-     * The identity matrix is a square matrix whose diagonal is always 1 and all the
-     * other elements are 0.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return an identity {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix identityMatrix(final int n) {
-        return new ArrayMatrix(
-                calculateIntMatrix
-                        (n, (i, j) -> (i.equals(j)) ? 1 : 0), IDENTITY);
-
-    }
-
-    /**
-     * An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
-     * rest of the elements are 0.
-     *
-     * @param n the square matrix
-     *
-     * @return an exchange {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix exchangeMatrix(final int n) {
-        return new ArrayMatrix(
-                calculateIntMatrix
-                        (n, (i, j) -> (j == n - i - 1) ? 1 : 0), EXCHANGE);
-    }
-
-    /**
-     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
-     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
-     *
-     * @param n the number of rows and columns
-     *
-     * @return a redheffer {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix redhefferMatrix(final int n) {
-        return new ArrayMatrix(
-                calculateIntMatrix
-                        (n, (i, j) -> (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)), REDHEFFER);
-    }
-
-    /**
-     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
-     * super diagonal matrix, or lower diagonal matrix.
-     *
-     * @param n the number of rows and columns
-     * @param t the type of matrix, i.e UPPER or LOWER
-     *
-     * @return a shift {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
-     */
-    static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
-        if (t == ShiftMatrixType.UPPER)
-            return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i + 1) ? 1 : 0), SHIFT);
-
-        return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i - 1) ? 1 : 0), SHIFT);
-    }
-
-    /**
-     * The method is helpful to create some of the constant matrices.
-     *
-     * @param n        the dimension of the matrix
-     * @param operator the binary operation
-     *
-     * @return a two dimensional array
-     */
-    private static Number[][] calculateIntMatrix(final int n, BinaryOperator<Integer> operator) {
-        if (n < 1)
-            throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
-
-        var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                e[i][j] = operator.apply(i, j);
-
-        return e;
-    }
-
-    /**
-     * The method is helpful to create some of the constant matrices.
-     *
-     * @param n        the dimension of the matrix
-     * @param operator the binary operation
-     *
-     * @return a two dimensional array
-     */
-    private static Number[][] calculateDoubleMatrix(final int n, DoubleBinaryOperator operator) {
-        if (n < 1)
-            throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
-
-        var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
-                e[i][j] = operator.applyAsDouble(i, j);
-
-        return e;
+        return null;
     }
 
     /**
@@ -936,6 +715,280 @@ public class ArrayMatrix implements Matrix {
                                   : n1[i][j].doubleValue() - n2[i][j].doubleValue();
 
         return n;
+    }
+
+    /**
+     * The method perform LU decomposition on a given matrix.
+     *
+     * @return the LU matrices
+     */
+    private Number[][][] lu() {
+        Number[][][] lu = new Number[2][d[0]][d[1]];
+        System.arraycopy(e, 0, lu[1], 0, d[0]);
+
+        for (int i = 0; i < d[0]; i++) {
+            if (i == 0)
+                for (int j = 1; j < d[1]; j++)
+                    lu[0][i][j] = 0;
+
+            lu[0][i][i] = 1;
+            for (int j = i + 1; j < d[0]; j++) {
+                var factor = e[j][i].doubleValue() / e[i][i].doubleValue();
+                for (int k = 0; k < d[1]; k++) {
+                    lu[1][j][k] = e[j][k].doubleValue() - (factor * e[i][k].doubleValue());
+
+                    if (k > j)
+                        lu[0][j][k] = 0;
+                }
+                lu[0][j][i] = factor;
+            }
+        }
+
+        return lu;
+    }
+
+    /**
+     * The method will return a zero or null matrix, whose all the elements are zero.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     *
+     * @return an ArrayMatrix with all 0 entries
+     *
+     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
+     *                                         this ensures that at least one element
+     *                                         exist all the time.
+     */
+    public static ArrayMatrix zeroMatrix(final int m, final int n) {
+        return calculateZeroOneMatrix(m, n, ZERO);
+    }
+
+    /**
+     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     *
+     * @return am ArrayMatrix with all 1 entries
+     *
+     * @throws InvalidMatrixDimensionException when m + n &lt; 2
+     */
+    public static ArrayMatrix oneMatrix(final int m, final int n) {
+        return calculateZeroOneMatrix(m, n, ONE);
+    }
+
+    /**
+     * The method produces Zero or One matrix, based on the type argument.
+     *
+     * @param m the number of rows
+     * @param n the number of columns
+     * @param t the type of matrix, i. e. Zero or One
+     *
+     * @return a one matrix
+     *
+     * @throws InvalidMatrixDimensionException when m + n < 2
+     */
+    private static ArrayMatrix calculateZeroOneMatrix(final int m, final int n, final MatrixType t) {
+        if (m + n < 2)
+            throw new InvalidMatrixDimensionException("One matrix should have at least one element");
+
+        var e = new Number[m][n];
+
+        if (t == ZERO)
+            Arrays.fill(e[0], 0);
+
+        if (t == ONE)
+            Arrays.fill(e[0], 1);
+
+        for (int i = 1; i < e.length; i++)
+            System.arraycopy(e[0], 0, e[i], 0, e[0].length);
+
+        return new ArrayMatrix(e, t);
+    }
+
+    /**
+     * The method will create a pascal's square matrix.
+     *
+     * @param n the number of rows and columns of a square matrix
+     * @param t the type of matrix
+     *          i.e. UPPER, LOWER or SYMMETRIC
+     *
+     * @return a Pascal's {@link Matrix}
+     *
+     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
+     */
+    public static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
+        if (n < 1)
+            throw new InvalidMatrixDimensionException("Pascal's matrix should have at least one element");
+
+        var r = new Number[n];
+        var e = new Number[n][n];
+
+        if (t == PascalMatrixType.UPPER) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++)
+                    e[i][j] = (i == j || i == 0) ? 1 : (j < i) ? 0 : e[i][j - 1].longValue() + r[j - 1].longValue();
+
+                r = e[i];
+            }
+        }
+
+        if (t == PascalMatrixType.LOWER) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++)
+                    e[i][j] = (i == j || j == 0) ? 1 : (i < j) ? 0 : r[j].longValue() + r[j - 1].longValue();
+
+                r = e[i];
+            }
+        }
+
+        if (t == PascalMatrixType.SYMMETRIC) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++)
+                    e[i][j] = (i == 0 || j == 0) ? 1 : e[i][j - 1].longValue() + r[j].longValue();
+
+                r = e[i];
+            }
+        }
+
+        return new ArrayMatrix(e, PASCAL);
+    }
+
+    /**
+     * A lehmer matrix is a constant systematic square matrix.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return the lehmer matrix
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix lehmerMatrix(final int n) {
+        return new ArrayMatrix(
+                calculateDoubleMatrix
+                        (n, (i, j) -> (j >= i) ? (i + 1) / (j + 1) : (j + 1) / (i + 1)), LEHMER);
+    }
+
+    /**
+     * A Hilbert matrix is a square matrix with entries being the unit fractions.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return a hilbert {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix hilbertMatrix(final int n) {
+        return new ArrayMatrix(
+                calculateDoubleMatrix
+                        (n, (i, j) -> 1 / (i + 1 + (j + 1) - 1)), HILBERT);
+    }
+
+    /**
+     * The identity matrix is a square matrix whose diagonal is always 1 and all the
+     * other elements are 0.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return an identity {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix identityMatrix(final int n) {
+        return new ArrayMatrix(
+                calculateIntMatrix
+                        (n, (i, j) -> (i.equals(j)) ? 1 : 0), IDENTITY);
+
+    }
+
+    /**
+     * An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+     * rest of the elements are 0.
+     *
+     * @param n the square matrix
+     *
+     * @return an exchange {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix exchangeMatrix(final int n) {
+        return new ArrayMatrix(
+                calculateIntMatrix
+                        (n, (i, j) -> (j == n - i - 1) ? 1 : 0), EXCHANGE);
+    }
+
+    /**
+     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
+     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
+     *
+     * @param n the number of rows and columns
+     *
+     * @return a redheffer {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix redhefferMatrix(final int n) {
+        return new ArrayMatrix(
+                calculateIntMatrix
+                        (n, (i, j) -> (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)), REDHEFFER);
+    }
+
+    /**
+     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
+     * super diagonal matrix, or lower diagonal matrix.
+     *
+     * @param n the number of rows and columns
+     * @param t the type of matrix, i.e UPPER or LOWER
+     *
+     * @return a shift {@link ArrayMatrix}
+     *
+     * @throws InvalidMatrixDimensionException if n &lt; 1
+     */
+    public static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
+        if (t == ShiftMatrixType.UPPER)
+            return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i + 1) ? 1 : 0), SHIFT);
+
+        return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i - 1) ? 1 : 0), SHIFT);
+    }
+
+    /**
+     * The method is helpful to create some of the constant matrices.
+     *
+     * @param n        the dimension of the matrix
+     * @param operator the binary operation
+     *
+     * @return a two dimensional array
+     */
+    private static Number[][] calculateIntMatrix(final int n, BinaryOperator<Integer> operator) {
+        if (n < 1)
+            throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
+
+        var e = new Number[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                e[i][j] = operator.apply(i, j);
+
+        return e;
+    }
+
+    /**
+     * The method is helpful to create some of the constant matrices.
+     *
+     * @param n        the dimension of the matrix
+     * @param operator the binary operation
+     *
+     * @return a two dimensional array
+     */
+    private static Number[][] calculateDoubleMatrix(final int n, DoubleBinaryOperator operator) {
+        if (n < 1)
+            throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
+
+        var e = new Number[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                e[i][j] = operator.applyAsDouble(i, j);
+
+        return e;
     }
 
     /**
