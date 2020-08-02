@@ -401,49 +401,62 @@ public class ArrayMatrix implements Matrix {
      * @return the rank
      */
     private int calculateRank() {
-        int rk = Math.min(d[0], d[1]);
-        Number[][] n = new Number[d[0]][d[1]];
-        System.arraycopy(e, 0, n, 0, d[0]);
 
-        for (int r = 0; r < rk; r++) {
-            if (n[r][r].doubleValue() == 0) {
-                for (int i = r + 1; i < rk; i++) {
-                    if (n[i][r].doubleValue() != 0) {
-                        var t = n[r];
-                        n[r] = n[i];
-                        n[i] = t;
+        var rank = 0;
+        if (isRowVector() || isColumnVector()) {
+            rank = 1;
+        } else if (isSquareMatrix()) {
+            Number[][][] n = lu();
+            for (int i = 0; i < n[1].length; i++)
+                if (n[1][i][i].doubleValue() != 0)
+                    ++rank;
+        } else {
+            int rk = Math.min(d[0], d[1]);
+            Number[][] n = new Number[d[0]][d[1]];
+            System.arraycopy(e, 0, n, 0, d[0]);
+
+            for (int r = 0; r < rk; r++) {
+                if (n[r][r].doubleValue() == 0) {
+                    for (int i = r + 1; i < rk; i++) {
+                        if (n[i][r].doubleValue() != 0) {
+                            var t = n[r];
+                            n[r] = n[i];
+                            n[i] = t;
+                        }
+                    }
+                } else if (n[r][r].doubleValue() != 1) {
+                    for (int c = d[1] - 1; c >= r; c--) {
+                        n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
                     }
                 }
-            } else if (n[r][r].doubleValue() != 1) {
-                for (int c = d[1] - 1; c >= r; c--) {
-                    n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
-                }
-            }
 
-            for (int _r = r + 1; _r < rk; _r++) {
-                if (n[_r][r].doubleValue() != 0) {
-                    for (int _c = d[1] - 1; _c >= r; _c--) {
-                        n[_r][_c] = n[_r][_c].doubleValue()
-                                            - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
+                for (int _r = r + 1; _r < rk; _r++) {
+                    if (n[_r][r].doubleValue() != 0) {
+                        for (int _c = d[1] - 1; _c >= r; _c--) {
+                            n[_r][_c] = n[_r][_c].doubleValue()
+                                                - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
+                        }
                     }
                 }
             }
-        }
 
-        for (int r = 0; r < d[0]; r++) {
-            var z = true;
+            for (int r = 0; r < d[0]; r++) {
+                var z = true;
 
-            for (int c = 0; c < d[1]; c++) {
-                if (n[r][c].doubleValue() != 0) {
-                    z = false;
-                    break;
+                for (int c = 0; c < d[1]; c++) {
+                    if (n[r][c].doubleValue() != 0) {
+                        z = false;
+                        break;
+                    }
                 }
+
+                if (z) rk--;
             }
 
-            if (z) rk--;
+            rank = rk == 0 ? 1 : rk;
         }
 
-        return rk == 0 ? 1 : rk;
+        return rank;
     }
 
     /**
@@ -722,7 +735,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the LU matrices
      */
-    private Number[][][] lu() {
+    public Number[][][] lu() {
         Number[][][] lu = new Number[2][d[0]][d[1]];
         System.arraycopy(e, 0, lu[1], 0, d[0]);
 

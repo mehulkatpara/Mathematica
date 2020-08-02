@@ -478,13 +478,25 @@ class ArrayMatrixTest {
 
     @Test
     void testLU() {
-        ArrayMatrix m = new ArrayMatrix(new Number[][]{
-                {4, -2, -7, -4, -8},
-                {9, -6, -6, -1, -5},
-                {-2, -9, 3, -5, 2},
-                {9, 7, -9, 5, -8},
-                {-1, 6, -3, 9, 6}
-        });
-        System.out.println(m.getDeterminant(Rounding.POINT.TEN));
+//        ArrayMatrix m = new ArrayMatrix(new Number[][]{
+//                {4, -2, -7, -4, -8},
+//                {9, -6, -6, -1, -5},
+//                {-2, -9, 3, -5, 2},
+//                {9, 7, -9, 5, -8},
+//                {-1, 6, -3, 9, 6}
+//        });
+//        System.out.println(m.getDeterminant(Rounding.POINT.TEN));
+
+//        () -> assertEquals(5, ArrayMatrix.identityMatrix(5).getRank()),
+//                () -> assertEquals(1, ArrayMatrix.oneMatrix(5, 10).getRank()),
+//                () -> assertEquals(4, ArrayMatrix.shiftMatrix(5, ArrayMatrix.ShiftMatrixType.LOWER).getRank()),
+//                () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).getRank()),
+//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).getRank()),
+//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).getRank()),
+//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}).getRank()),
+//                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{12, 29, 72}, {2, 7, 8}, {6, 5, 0}}).getRank()),
+//                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{2, 7, 8}, {0, 6, 5}, {5, 7, 0}, {5, 2, 1}}).getRank())
+
+//        System.out.println(new ArrayMatrix(new Number[][]{{2, 7, 8}, {0, 6, 5}, {5, 7, 0}, {5, 2, 1}}).getRank());
     }
 }
