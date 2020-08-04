@@ -1,7 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.commons.Rounding;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
@@ -167,6 +166,18 @@ public interface Matrix {
      * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
     Matrix inverse();
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @param point The efficiency to the given decimal places
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    Matrix inverse(final Rounding.POINT point);
 
     /**
      * The method performs a scalar addition on a square matrix.

@@ -362,7 +362,7 @@ public class ArrayMatrix implements Matrix {
     private double calculateTrace() {
         var s = 0;
 
-        for (int i = 0; i < d[0]; i++)
+        for (var i = 0; i < d[0]; i++)
             s += e[i][i].doubleValue();
 
         return s;
@@ -428,17 +428,16 @@ public class ArrayMatrix implements Matrix {
                     (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
                             (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
             );
-        } else if (isDiagonalNonZero()) {
+        } else {
             Number[][][] n = lu();
             det = n[1][0][0].doubleValue();
-            for (int i = 1; i < n[1].length; i++)
-                det *= n[1][i][i].doubleValue();
-        } else {
-            var m = new int[d[0]];
-            for (int i = 0; i < d[0]; i++)
-                m[i] = i;
-
-            det = naiveDeterminant(m, m);
+            for (var i = 1; i < n[1].length; i++)
+                if(n[1][i][i].doubleValue() == 0 || Double.isNaN(n[1][i][i].doubleValue())) {
+                    det = 0;
+                    break;
+                } else {
+                    det *= n[1][i][i].doubleValue();
+                }
         }
 
         return det;
@@ -467,8 +466,8 @@ public class ArrayMatrix implements Matrix {
     public Matrix transpose() {
         var n = new Number[d[1]][d[0]];
 
-        for (int i = 0; i < d[0]; i++)
-            for (int j = 0; j < d[1]; j++)
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
                 n[j][i] = e[i][j];
 
         return new ArrayMatrix(n);
@@ -484,6 +483,33 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix inverse() {
+        return calculateInverse(Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @param p The efficiency to the given decimal places
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix inverse(final Rounding.POINT p) {
+        return calculateInverse(p);
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    public Matrix calculateInverse(final Rounding.POINT p) {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix");
 
@@ -504,15 +530,72 @@ public class ArrayMatrix implements Matrix {
             return new ArrayMatrix(n);
         } else {
             Number[][][] lu = lu();
-            Number[][] l = lu[0];
-            Number[][] u = lu[1];
 
-            Matrix lm = new ArrayMatrix(l);
-            Matrix um = new ArrayMatrix(u);
+            for (var i = 0; i < lu[1].length; i++) {
+                if (lu[1][i][i].doubleValue() == 0) {
+                    throw new InvalidMatrixOperationException("The matrix is singular");
+                }
+            }
 
+            return new ArrayMatrix(backwardSubstitution(lu[1], forwardSubstitution(lu[0]), p));
+        }
+    }
+
+    /**
+     * The method performs the backward substitution on a given 2 matrix.
+     *
+     * @param n the matrix
+     * @param z the matrix
+     * @param p the accuracy to given decimal points
+     *
+     * @return the resulting array
+     */
+    private Number[][] backwardSubstitution(final Number[][] n, final Number[][] z, final Rounding.POINT p) {
+        var r = new Number[n.length][n.length];
+        for (var i = n.length - 1; i >= 0; i--) {
+            for (var j = n.length - 1; j >= 0; j--) {
+                if (i == n.length - 1) {
+                    r[i][j] = Rounding.round(z[i][j].doubleValue() / n[i][i].doubleValue(), p);
+                } else {
+                    var sum = 0.0;
+                    for (int k = n.length - 1; k > i; k--)
+                        sum -= n[i][k].doubleValue() * r[k][j].doubleValue();
+
+                    r[i][j] = Rounding.round((z[i][j].doubleValue() + sum) / n[i][i].doubleValue(), p);
+                }
+            }
         }
 
-        return null;
+        return r;
+    }
+
+    /**
+     * The method performs a forward substitution, on a given matrix.
+     *
+     * @param n the lover triangular matrix
+     *
+     * @return the resulting substitution
+     */
+    private Number[][] forwardSubstitution(final Number[][] n) {
+        var z = new Number[n.length][n.length];
+        for (var i = 0; i < n.length; i++) {
+            for (var j = 0; j < n.length; j++) {
+                if (j <= i) {
+                    if (j == i) {
+                        z[i][j] = 1;
+                    } else {
+                        var sum = 0.0;
+                        for (var k = 0; k < i; k++) {
+                            sum -= n[i][k].doubleValue() * z[k][j].doubleValue();
+                        }
+                        z[i][j] = sum;
+                    }
+                } else {
+                    z[i][j] = 0;
+                }
+            }
+        }
+        return z;
     }
 
     /**
@@ -588,8 +671,8 @@ public class ArrayMatrix implements Matrix {
     public Matrix multiply(final Number s) {
         var n = new Number[d[0]][d[1]];
 
-        for (int i = 0; i < d[0]; i++)
-            for (int j = 0; j < d[1]; j++)
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
                 n[i][j] = e[i][j].doubleValue() * s.doubleValue();
 
         return new ArrayMatrix(n);
@@ -618,8 +701,9 @@ public class ArrayMatrix implements Matrix {
 
         // If both matrix are square matrices and of 2 x 2 dimensions then do Strassen's algorithm
         // Otherwise use the native method.
+        Number[][] n;
         if (d[0] == 2 && d[1] == 2 && _e[0].length == 2) {
-            Number[][] n = new Number[2][2];
+            n = new Number[2][2];
 
             double _e1 = e[0][0].doubleValue(),
                     _e2 = e[0][1].doubleValue(),
@@ -643,21 +727,19 @@ public class ArrayMatrix implements Matrix {
             n[1][0] = _m2 + _m4;
             n[1][1] = _m1 - _m2 + _m3 + _m6;
 
-            return new ArrayMatrix(n);
-
         } else {
-            var n = new Number[d[0]][_e[1].length];
-            for (int i = 0; i < d[0]; i++) {
-                for (int j = 0; j < _e[1].length; j++) {
+            n = new Number[d[0]][_e[1].length];
+            for (var i = 0; i < d[0]; i++) {
+                for (var j = 0; j < _e[1].length; j++) {
                     n[i][j] = 0;
-                    for (int k = 0; k < d[1]; k++) {
+                    for (var k = 0; k < d[1]; k++) {
                         n[i][j] = n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue());
                     }
                 }
             }
 
-            return new ArrayMatrix(n);
         }
+        return new ArrayMatrix(n);
     }
 
     /**
@@ -671,8 +753,8 @@ public class ArrayMatrix implements Matrix {
      */
     private Number[][] addSubArrays(final Number[][] n1, final Number[][] n2, final boolean add) {
         var n = new Number[d[0]][d[1]];
-        for (int i = 0; i < d[0]; i++)
-            for (int j = 0; j < d[1]; j++)
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
                 n[i][j] = (add) ? n1[i][j].doubleValue() + n2[i][j].doubleValue()
                                   : n1[i][j].doubleValue() - n2[i][j].doubleValue();
 
@@ -684,21 +766,21 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the LU matrices
      */
-    public Number[][][] lu() {
+    private Number[][][] lu() {
         Number[][][] lu = new Number[2][d[0]][d[0]];
         System.arraycopy(e, 0, lu[1], 0, d[0]);
 
-        for (int i = 0; i < d[0]; i++) {
+        for (var i = 0; i < d[0]; i++) {
             if (i == 0)
-                for (int j = 1; j < d[1]; j++)
+                for (var j = 1; j < d[1]; j++)
                     lu[0][i][j] = 0;
 
             lu[0][i][i] = 1;
-            for (int j = i + 1; j < d[0]; j++) {
+            for (var j = i + 1; j < d[0]; j++) {
                 var factor = e[j][i].doubleValue() / e[i][i].doubleValue();
-                for (int k = 0; k < d[1]; k++) {
-                    lu[1][j][k] = Rounding.round(
-                            e[j][k].doubleValue() - (factor * e[i][k].doubleValue()), Rounding.POINT.TEN);
+                for (var k = 0; k < d[1]; k++) {
+                    lu[1][j][k] = Rounding.round(e[j][k].doubleValue() - (factor * e[i][k].doubleValue()),
+                            Rounding.POINT.TEN);
 
                     if (k > j)
                         lu[0][j][k] = 0;
@@ -714,61 +796,14 @@ public class ArrayMatrix implements Matrix {
      * The method checks if the main diagonal of a given matrix is non-zero.
      * This is very useful to determine if I need to implement LU decomposition or not.
      *
-     * @return true if all enteries are non-zero
+     * @return true if all entries are non-zero
      */
     private boolean isDiagonalNonZero() {
-        for (int i = 0; i < d[0]; i++)
+        for (var i = 0; i < d[0]; i++)
             if (e[i][i].doubleValue() == 0)
                 return false;
 
         return true;
-    }
-
-    /**
-     * The method calculates the determinant of a matrix using the recursion function.
-     * The method implements the naive method to find the diterminant of a given matrix.
-     *
-     * @param rs the number of rows
-     * @param cs the number of columns
-     *
-     * @return the determinant of the matrix
-     */
-    private double naiveDeterminant(final int[] rs, final int[] cs) {
-        int rl = rs.length, cl = cs.length;
-        if (rl == 2 && cl == 2) {
-            return (e[rs[0]][cs[0]].doubleValue() *
-                            e[rs[1]][cs[1]].doubleValue()
-                            - e[rs[1]][cs[0]].doubleValue() *
-                                      e[rs[0]][cs[1]].doubleValue());
-        }
-
-        var s = 0D;
-        int r = 0, c = 0;
-        int[] _r = new int[rl - 1], _c = new int[cl - 1];
-
-        while (r < rl) {
-            while (c < cl) {
-                var ct = e[rs[0]][cs[c]];
-                for (int i = 0, k = 0; i < rl; i++) {
-                    if (r != i)
-                        _r[k++] = rs[i];
-                }
-
-                for (int i = 0, k = 0; i < cl; i++) {
-                    if (c != i)
-                        _c[k++] = cs[i];
-                }
-
-                if (ct.doubleValue() == 0) {
-                    s += 0;
-                } else {
-                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * naiveDeterminant(_r, _c));
-                }
-                c++;
-            }
-            r++;
-        }
-        return s;
     }
 
     /**
@@ -786,7 +821,7 @@ public class ArrayMatrix implements Matrix {
         if (isSquareMatrix() && isDiagonalNonZero()) {
             var rank = 0;
             Number[][][] n = lu();
-            for (int i = 0; i < n[1].length; i++) {
+            for (var i = 0; i < n[1].length; i++) {
                 if (n[1][i][i].doubleValue() != 0) {
                     ++rank;
                 }
@@ -807,9 +842,9 @@ public class ArrayMatrix implements Matrix {
         Number[][] n = new Number[d[0]][d[1]];
         System.arraycopy(e, 0, n, 0, d[0]);
 
-        for (int r = 0; r < rk; r++) {
+        for (var r = 0; r < rk; r++) {
             if (n[r][r].doubleValue() == 0) {
-                for (int i = r + 1; i < rk; i++) {
+                for (var i = r + 1; i < rk; i++) {
                     if (n[i][r].doubleValue() != 0) {
                         var t = n[r];
                         n[r] = n[i];
@@ -817,14 +852,14 @@ public class ArrayMatrix implements Matrix {
                     }
                 }
             } else if (n[r][r].doubleValue() != 1) {
-                for (int c = d[1] - 1; c >= r; c--) {
+                for (var c = d[1] - 1; c >= r; c--) {
                     n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
                 }
             }
 
-            for (int _r = r + 1; _r < rk; _r++) {
+            for (var _r = r + 1; _r < rk; _r++) {
                 if (n[_r][r].doubleValue() != 0) {
-                    for (int _c = d[1] - 1; _c >= r; _c--) {
+                    for (var _c = d[1] - 1; _c >= r; _c--) {
                         n[_r][_c] = n[_r][_c].doubleValue()
                                             - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
                     }
@@ -832,10 +867,10 @@ public class ArrayMatrix implements Matrix {
             }
         }
 
-        for (int r = 0; r < d[0]; r++) {
+        for (var r = 0; r < d[0]; r++) {
             var z = true;
 
-            for (int c = 0; c < d[1]; c++) {
+            for (var c = 0; c < d[1]; c++) {
                 if (n[r][c].doubleValue() != 0) {
                     z = false;
                     break;
@@ -901,7 +936,7 @@ public class ArrayMatrix implements Matrix {
         if (t == ONE)
             Arrays.fill(e[0], 1);
 
-        for (int i = 1; i < e.length; i++)
+        for (var i = 1; i < e.length; i++)
             System.arraycopy(e[0], 0, e[i], 0, e[0].length);
 
         return new ArrayMatrix(e, t);
@@ -926,8 +961,8 @@ public class ArrayMatrix implements Matrix {
         var e = new Number[n][n];
 
         if (t == PascalMatrixType.UPPER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == j || i == 0) ? 1 : (j < i) ? 0 : e[i][j - 1].longValue() + r[j - 1].longValue();
 
                 r = e[i];
@@ -935,8 +970,8 @@ public class ArrayMatrix implements Matrix {
         }
 
         if (t == PascalMatrixType.LOWER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == j || j == 0) ? 1 : (i < j) ? 0 : r[j].longValue() + r[j - 1].longValue();
 
                 r = e[i];
@@ -944,8 +979,8 @@ public class ArrayMatrix implements Matrix {
         }
 
         if (t == PascalMatrixType.SYMMETRIC) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == 0 || j == 0) ? 1 : e[i][j - 1].longValue() + r[j].longValue();
 
                 r = e[i];
@@ -1065,8 +1100,8 @@ public class ArrayMatrix implements Matrix {
             throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
 
         var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        for (var i = 0; i < n; i++)
+            for (var j = 0; j < n; j++)
                 e[i][j] = operator.apply(i, j);
 
         return e;
@@ -1085,8 +1120,8 @@ public class ArrayMatrix implements Matrix {
             throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
 
         var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        for (var i = 0; i < n; i++)
+            for (var j = 0; j < n; j++)
                 e[i][j] = operator.applyAsDouble(i, j);
 
         return e;
@@ -1217,8 +1252,8 @@ public class ArrayMatrix implements Matrix {
         var o = that.toArray();
 
         if (!Arrays.equals(this.getDimension(), that.getDimension())) return false;
-        for (int j = 0; j < this.e.length; j++)
-            for (int k = 0; k < e[j].length; k++)
+        for (var j = 0; j < this.e.length; j++)
+            for (var k = 0; k < e[j].length; k++)
                 if (e[j][k].doubleValue() != o[j][k].doubleValue())
                     return false;
 

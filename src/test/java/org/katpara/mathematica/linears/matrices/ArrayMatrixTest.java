@@ -283,7 +283,7 @@ class ArrayMatrixTest {
                         {0, 3, 1, 1},
                         {-1, 0, 3, 1},
                         {3, 1, 2, 0}
-                }).getDeterminant()),
+                }).getDeterminant(Rounding.POINT.FOUR)),
                 () -> assertEquals(256, new ArrayMatrix(new Number[][]{
                         {3, 7, 0},
                         {8, 0, -2},
@@ -295,7 +295,13 @@ class ArrayMatrixTest {
                         {2, 3, 4, -5, 6},
                         {8, 6, 1, 4, 7},
                         {12, 8, -20, 17, 4}
-                }).getDeterminant(Rounding.POINT.SIX))
+                }).getDeterminant(Rounding.POINT.SIX)),
+                () -> assertEquals(0.0, new ArrayMatrix(new Number[][]{
+                        {0, 0, 0, 0},
+                        {0, 0, 0, 0},
+                        {0, 0, 0, 0},
+                        {0, 0, 0, 0},
+                }).getDeterminant())
         );
     }
 
@@ -406,34 +412,6 @@ class ArrayMatrixTest {
         );
     }
 
-
-    @Test
-    void testForLoop() {
-
-        double a = new ArrayMatrix(new Number[][]{
-                {1, 1, 1},
-                {4, 3, -1},
-                {3, 5, 3}
-        }).getDeterminant();
-
-        double l = new ArrayMatrix(new Number[][]{
-                {1, 0, 0},
-                {4, 1, 0},
-                {3, -2, 1}
-        }).getDeterminant();
-
-        double u = new ArrayMatrix(new Number[][]{
-                {1, 1, 1},
-                {0, -1, -5},
-                {0, 0, -10}
-        }).getDeterminant();
-
-        System.out.println(a);
-        System.out.println(l);
-        System.out.println(u);
-
-    }
-
     @Test
     void testAddition() {
 
@@ -473,23 +451,34 @@ class ArrayMatrixTest {
 
     @Test
     void testInverse() {
-        System.out.println(new ArrayMatrix(new Number[][]{{1, -1}, {-2, 2}}).inverse());
-    }
+        ArrayMatrix m = new ArrayMatrix(new Number[][]{
+                {25, 5, 1},
+                {64, 8, 1},
+                {144, 12, 1}
+        });
+        ArrayMatrix a = new ArrayMatrix(new Number[][]{
+                {0.0476, -0.0833, 0.0357},
+                {-0.9524, 1.4167, -0.4643},
+                {4.5714, -5.0, 1.4286}
+        });
+        ArrayMatrix m1 = new ArrayMatrix(new Number[][]{
+                {1, 2, 1},
+                {2, 2, 3},
+                {-1, -3, 0}
+        });
+        ArrayMatrix a1 = new ArrayMatrix(new Number[][]{
+                {-9.0, 3.0, -4.0},
+                {3.0, -1.0, 1.0},
+                {4.0, -1.0, 2.0}
+        });
 
-    @Test
-    void testLU() {
-//        ArrayMatrix m = new ArrayMatrix(new Number[][]{
-////                {25, 5, 1},
-////                {64, 8, 1},
-////                {144, 12, 1}
-//                {4, 0, 6},
-//                {1, -2, 3},
-//                {2, -1, 3}
-//        });
-//
-//        m.inverse();
-
-        Matrix m1 = new ArrayMatrix(new Number[][]{{0,0,0}, {0,0,0}, {0,0,0}});
-        System.out.println(m1.getRank());
+        assertAll(
+                () -> assertThrows(InvalidMatrixOperationException.class,
+                        () -> new ArrayMatrix(new Number[][]{{1, 2}}).inverse()),
+                () -> assertThrows(InvalidMatrixOperationException.class,
+                        () -> new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).inverse()),
+                () -> assertEquals(a, m.inverse(Rounding.POINT.FOUR)),
+                () -> assertEquals(a1, m1.inverse())
+        );
     }
 }
