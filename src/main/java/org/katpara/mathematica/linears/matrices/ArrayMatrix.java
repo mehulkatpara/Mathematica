@@ -537,7 +537,7 @@ public class ArrayMatrix implements Matrix {
                 }
             }
 
-            return new ArrayMatrix(backwardSubstitution(lu[1], forwardSubstitution(lu[0]), p));
+            return new ArrayMatrix(bs(lu[1], fs(lu[0]), p));
         }
     }
 
@@ -550,7 +550,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the resulting array
      */
-    private Number[][] backwardSubstitution(final Number[][] n, final Number[][] z, final Rounding.POINT p) {
+    private Number[][] bs(final Number[][] n, final Number[][] z, final Rounding.POINT p) {
         var r = new Number[n.length][n.length];
         for (var i = n.length - 1; i >= 0; i--) {
             for (var j = n.length - 1; j >= 0; j--) {
@@ -576,7 +576,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the resulting substitution
      */
-    private Number[][] forwardSubstitution(final Number[][] n) {
+    private Number[][] fs(final Number[][] n) {
         var z = new Number[n.length][n.length];
         for (var i = 0; i < n.length; i++) {
             for (var j = 0; j < n.length; j++) {
