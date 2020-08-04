@@ -396,70 +396,6 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
-     * The method calculates the rank of the matrix.
-     *
-     * @return the rank
-     */
-    private int calculateRank() {
-
-        var rank = 0;
-        if (isRowVector() || isColumnVector()) {
-            rank = 1;
-        } else if (isSquareMatrix()) {
-            Number[][][] n = lu();
-            for (int i = 0; i < n[1].length; i++)
-                if (n[1][i][i].doubleValue() != 0)
-                    ++rank;
-        } else {
-            int rk = Math.min(d[0], d[1]);
-            Number[][] n = new Number[d[0]][d[1]];
-            System.arraycopy(e, 0, n, 0, d[0]);
-
-            for (int r = 0; r < rk; r++) {
-                if (n[r][r].doubleValue() == 0) {
-                    for (int i = r + 1; i < rk; i++) {
-                        if (n[i][r].doubleValue() != 0) {
-                            var t = n[r];
-                            n[r] = n[i];
-                            n[i] = t;
-                        }
-                    }
-                } else if (n[r][r].doubleValue() != 1) {
-                    for (int c = d[1] - 1; c >= r; c--) {
-                        n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
-                    }
-                }
-
-                for (int _r = r + 1; _r < rk; _r++) {
-                    if (n[_r][r].doubleValue() != 0) {
-                        for (int _c = d[1] - 1; _c >= r; _c--) {
-                            n[_r][_c] = n[_r][_c].doubleValue()
-                                                - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
-                        }
-                    }
-                }
-            }
-
-            for (int r = 0; r < d[0]; r++) {
-                var z = true;
-
-                for (int c = 0; c < d[1]; c++) {
-                    if (n[r][c].doubleValue() != 0) {
-                        z = false;
-                        break;
-                    }
-                }
-
-                if (z) rk--;
-            }
-
-            rank = rk == 0 ? 1 : rk;
-        }
-
-        return rank;
-    }
-
-    /**
      * A determinant is a scalar value computed for a square matrix; that
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
@@ -492,11 +428,17 @@ public class ArrayMatrix implements Matrix {
                     (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
                             (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
             );
-        } else {
+        } else if (isDiagonalNonZero()) {
             Number[][][] n = lu();
             det = n[1][0][0].doubleValue();
             for (int i = 1; i < n[1].length; i++)
                 det *= n[1][i][i].doubleValue();
+        } else {
+            var m = new int[d[0]];
+            for (int i = 0; i < d[0]; i++)
+                m[i] = i;
+
+            det = naiveDeterminant(m, m);
         }
 
         return det;
@@ -560,6 +502,14 @@ public class ArrayMatrix implements Matrix {
             n[1][1] = a / v;
 
             return new ArrayMatrix(n);
+        } else {
+            Number[][][] lu = lu();
+            Number[][] l = lu[0];
+            Number[][] u = lu[1];
+
+            Matrix lm = new ArrayMatrix(l);
+            Matrix um = new ArrayMatrix(u);
+
         }
 
         return null;
@@ -699,11 +649,10 @@ public class ArrayMatrix implements Matrix {
             var n = new Number[d[0]][_e[1].length];
             for (int i = 0; i < d[0]; i++) {
                 for (int j = 0; j < _e[1].length; j++) {
-                    var sum = 0;
+                    n[i][j] = 0;
                     for (int k = 0; k < d[1]; k++) {
-                        sum += (e[i][k].doubleValue() * _e[k][j].doubleValue());
+                        n[i][j] = n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue());
                     }
-                    n[i][j] = sum;
                 }
             }
 
@@ -736,7 +685,7 @@ public class ArrayMatrix implements Matrix {
      * @return the LU matrices
      */
     public Number[][][] lu() {
-        Number[][][] lu = new Number[2][d[0]][d[1]];
+        Number[][][] lu = new Number[2][d[0]][d[0]];
         System.arraycopy(e, 0, lu[1], 0, d[0]);
 
         for (int i = 0; i < d[0]; i++) {
@@ -748,16 +697,155 @@ public class ArrayMatrix implements Matrix {
             for (int j = i + 1; j < d[0]; j++) {
                 var factor = e[j][i].doubleValue() / e[i][i].doubleValue();
                 for (int k = 0; k < d[1]; k++) {
-                    lu[1][j][k] = e[j][k].doubleValue() - (factor * e[i][k].doubleValue());
+                    lu[1][j][k] = Rounding.round(
+                            e[j][k].doubleValue() - (factor * e[i][k].doubleValue()), Rounding.POINT.TEN);
 
                     if (k > j)
                         lu[0][j][k] = 0;
                 }
-                lu[0][j][i] = factor;
+                lu[0][j][i] = Rounding.round(factor, Rounding.POINT.TEN);
             }
         }
 
         return lu;
+    }
+
+    /**
+     * The method checks if the main diagonal of a given matrix is non-zero.
+     * This is very useful to determine if I need to implement LU decomposition or not.
+     *
+     * @return true if all enteries are non-zero
+     */
+    private boolean isDiagonalNonZero() {
+        for (int i = 0; i < d[0]; i++)
+            if (e[i][i].doubleValue() == 0)
+                return false;
+
+        return true;
+    }
+
+    /**
+     * The method calculates the determinant of a matrix using the recursion function.
+     * The method implements the naive method to find the diterminant of a given matrix.
+     *
+     * @param rs the number of rows
+     * @param cs the number of columns
+     *
+     * @return the determinant of the matrix
+     */
+    private double naiveDeterminant(final int[] rs, final int[] cs) {
+        int rl = rs.length, cl = cs.length;
+        if (rl == 2 && cl == 2) {
+            return (e[rs[0]][cs[0]].doubleValue() *
+                            e[rs[1]][cs[1]].doubleValue()
+                            - e[rs[1]][cs[0]].doubleValue() *
+                                      e[rs[0]][cs[1]].doubleValue());
+        }
+
+        var s = 0D;
+        int r = 0, c = 0;
+        int[] _r = new int[rl - 1], _c = new int[cl - 1];
+
+        while (r < rl) {
+            while (c < cl) {
+                var ct = e[rs[0]][cs[c]];
+                for (int i = 0, k = 0; i < rl; i++) {
+                    if (r != i)
+                        _r[k++] = rs[i];
+                }
+
+                for (int i = 0, k = 0; i < cl; i++) {
+                    if (c != i)
+                        _c[k++] = cs[i];
+                }
+
+                if (ct.doubleValue() == 0) {
+                    s += 0;
+                } else {
+                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * naiveDeterminant(_r, _c));
+                }
+                c++;
+            }
+            r++;
+        }
+        return s;
+    }
+
+    /**
+     * The method calculates the rank of the matrix.
+     * It uses a couple of methods based on the type of matrix.
+     *
+     * @return the rank
+     */
+    private int calculateRank() {
+
+        if (isRowVector() || isColumnVector()) {
+            return 1;
+        }
+
+        if (isSquareMatrix() && isDiagonalNonZero()) {
+            var rank = 0;
+            Number[][][] n = lu();
+            for (int i = 0; i < n[1].length; i++) {
+                if (n[1][i][i].doubleValue() != 0) {
+                    ++rank;
+                }
+            }
+            return rank;
+        }
+
+        return gaussianRank();
+    }
+
+    /**
+     * The method implements gaussian algorithm to find out the rakn of a matrix.
+     *
+     * @return the rank
+     */
+    private int gaussianRank() {
+        int rk = Math.min(d[0], d[1]);
+        Number[][] n = new Number[d[0]][d[1]];
+        System.arraycopy(e, 0, n, 0, d[0]);
+
+        for (int r = 0; r < rk; r++) {
+            if (n[r][r].doubleValue() == 0) {
+                for (int i = r + 1; i < rk; i++) {
+                    if (n[i][r].doubleValue() != 0) {
+                        var t = n[r];
+                        n[r] = n[i];
+                        n[i] = t;
+                    }
+                }
+            } else if (n[r][r].doubleValue() != 1) {
+                for (int c = d[1] - 1; c >= r; c--) {
+                    n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
+                }
+            }
+
+            for (int _r = r + 1; _r < rk; _r++) {
+                if (n[_r][r].doubleValue() != 0) {
+                    for (int _c = d[1] - 1; _c >= r; _c--) {
+                        n[_r][_c] = n[_r][_c].doubleValue()
+                                            - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
+                    }
+                }
+            }
+        }
+
+        for (int r = 0; r < d[0]; r++) {
+            var z = true;
+
+            for (int c = 0; c < d[1]; c++) {
+                if (n[r][c].doubleValue() != 0) {
+                    z = false;
+                    break;
+                }
+            }
+
+            if (z) rk--;
+        }
+
+        return rk == 0 ? 1 : rk;
     }
 
     /**

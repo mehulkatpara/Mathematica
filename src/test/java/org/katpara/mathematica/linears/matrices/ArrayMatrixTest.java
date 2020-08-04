@@ -295,7 +295,7 @@ class ArrayMatrixTest {
                         {2, 3, 4, -5, 6},
                         {8, 6, 1, 4, 7},
                         {12, 8, -20, 17, 4}
-                }).getDeterminant())
+                }).getDeterminant(Rounding.POINT.SIX))
         );
     }
 
@@ -479,24 +479,17 @@ class ArrayMatrixTest {
     @Test
     void testLU() {
 //        ArrayMatrix m = new ArrayMatrix(new Number[][]{
-//                {4, -2, -7, -4, -8},
-//                {9, -6, -6, -1, -5},
-//                {-2, -9, 3, -5, 2},
-//                {9, 7, -9, 5, -8},
-//                {-1, 6, -3, 9, 6}
+////                {25, 5, 1},
+////                {64, 8, 1},
+////                {144, 12, 1}
+//                {4, 0, 6},
+//                {1, -2, 3},
+//                {2, -1, 3}
 //        });
-//        System.out.println(m.getDeterminant(Rounding.POINT.TEN));
+//
+//        m.inverse();
 
-//        () -> assertEquals(5, ArrayMatrix.identityMatrix(5).getRank()),
-//                () -> assertEquals(1, ArrayMatrix.oneMatrix(5, 10).getRank()),
-//                () -> assertEquals(4, ArrayMatrix.shiftMatrix(5, ArrayMatrix.ShiftMatrixType.LOWER).getRank()),
-//                () -> assertEquals(2, new ArrayMatrix(new Number[][]{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}).getRank()),
-//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1, 2, 3}}).getRank()),
-//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{1}, {2}, {3}}).getRank()),
-//                () -> assertEquals(1, new ArrayMatrix(new Number[][]{{0, 0}, {0, 0}}).getRank()),
-//                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{12, 29, 72}, {2, 7, 8}, {6, 5, 0}}).getRank()),
-//                () -> assertEquals(3, new ArrayMatrix(new Number[][]{{2, 7, 8}, {0, 6, 5}, {5, 7, 0}, {5, 2, 1}}).getRank())
-
-//        System.out.println(new ArrayMatrix(new Number[][]{{2, 7, 8}, {0, 6, 5}, {5, 7, 0}, {5, 2, 1}}).getRank());
+        Matrix m1 = new ArrayMatrix(new Number[][]{{0,0,0}, {0,0,0}, {0,0,0}});
+        System.out.println(m1.getRank());
     }
 }
