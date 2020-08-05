@@ -232,6 +232,19 @@ public interface Matrix {
     Matrix multiply(final Number scalar);
 
     /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param scalar a scalar to scale the matrix with
+     * @param point the rounding to the given decimal points
+     *
+     * @return a new scalded matrix
+     */
+    Matrix multiply(final Number scalar, final Rounding.POINT point);
+
+    /**
      * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
      * <p>
      * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
@@ -247,4 +260,22 @@ public interface Matrix {
      *                                         equal to the number of rows of another matrix
      */
     Matrix multiply(final Matrix matrix);
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param matrix the matrix to multiply
+     * @param point the rounding level to decimal places
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the number of columns of the matrix is not
+     *                                         equal to the number of rows of another matrix
+     */
+    Matrix multiply(final Matrix matrix, final Rounding.POINT point);
 }

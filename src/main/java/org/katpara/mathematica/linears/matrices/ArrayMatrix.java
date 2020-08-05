@@ -324,24 +324,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getTrace() {
-        if (!isSquareMatrix())
-            throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
-
-        switch (t) {
-            case IDENTITY:
-            case LEHMER:
-            case ONE:
-                return d[0];
-            case SHIFT:
-                return 0;
-            case EXCHANGE:
-                return (d[0] % 2 == 0) ? 0 : 1;
-            case PASCAL:
-                return ((d[1] > 1 && e[0][1].intValue() == 0)
-                                || (d[0] > 1 && e[1][0].intValue() == 0)) ? d[0] : calculateTrace();
-            default:
-                return calculateTrace();
-        }
+        return getTrace(Rounding.POINT.TEN);
     }
 
     /**
@@ -356,15 +339,34 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getTrace(final Rounding.POINT p) {
-        return Rounding.round(getTrace(), p).doubleValue();
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
+
+        switch (t) {
+            case IDENTITY:
+            case LEHMER:
+            case ONE:
+                return d[0];
+            case SHIFT:
+                return 0;
+            case EXCHANGE:
+                return (d[0] % 2 == 0) ? 0 : 1;
+            case PASCAL:
+                return ((d[1] > 1 && e[0][1].intValue() == 0)
+                                || (d[0] > 1 && e[1][0].intValue() == 0)) ? d[0] : calculateTrace(p);
+            default:
+                return calculateTrace(p);
+        }
     }
 
     /**
      * The method will calculate a trace of the square matrix.
      *
+     * @param p the precision level
+     *
      * @return the trace of the matrix
      */
-    private double calculateTrace() {
+    private double calculateTrace(final Rounding.POINT p) {
         if (c.getT() == null) {
             var t = 0.0;
 
@@ -374,7 +376,7 @@ public class ArrayMatrix implements Matrix {
             c.setT(t);
         }
 
-        return c.getT();
+        return Rounding.round(c.getT(), p).doubleValue();
     }
 
     /**
@@ -538,10 +540,10 @@ public class ArrayMatrix implements Matrix {
             if (v == 0)
                 return null;
 
-            n[0][0] = d / v;
-            n[0][1] = -b / v;
-            n[1][0] = -c / v;
-            n[1][1] = a / v;
+            n[0][0] = Rounding.round(d / v, p);
+            n[0][1] = Rounding.round(-b / v, p);
+            n[1][0] = Rounding.round(-c / v, p);
+            n[1][1] = Rounding.round(a / v, p);
 
             return new ArrayMatrix(n);
         } else {
@@ -685,11 +687,27 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix multiply(final Number s) {
+        return multiply(s, Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param s a scalar to scale the matrix with
+     * @param p the rounding to the given decimal points
+     *
+     * @return a new scalded matrix
+     */
+    @Override
+    public Matrix multiply(final Number s, final Rounding.POINT p) {
         var n = new Number[d[0]][d[1]];
 
         for (var i = 0; i < d[0]; i++)
             for (var j = 0; j < d[1]; j++)
-                n[i][j] = e[i][j].doubleValue() * s.doubleValue();
+                n[i][j] = Rounding.round(e[i][j].doubleValue() * s.doubleValue(), p);
 
         return new ArrayMatrix(n);
     }
@@ -710,6 +728,26 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix multiply(final Matrix m) {
+        return multiply(m, Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param m the matrix to multiply
+     * @param p the decimal precision
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices have different columns and rows
+     */
+    @Override
+    public Matrix multiply(final Matrix m, final Rounding.POINT p) {
         var _e = m.toArray();
 
         if (d[1] != _e.length)
@@ -738,10 +776,10 @@ public class ArrayMatrix implements Matrix {
                     _m6 = (_e3 - _e1) * (_n1 + _n2),
                     _m7 = (_e2 - _e4) * (_n3 + _n4);
 
-            n[0][0] = _m1 + _m4 - _m5 + _m7;
-            n[0][1] = _m3 + _m5;
-            n[1][0] = _m2 + _m4;
-            n[1][1] = _m1 - _m2 + _m3 + _m6;
+            n[0][0] = Rounding.round(_m1 + _m4 - _m5 + _m7, p);
+            n[0][1] = Rounding.round(_m3 + _m5, p);
+            n[1][0] = Rounding.round(_m2 + _m4, p);
+            n[1][1] = Rounding.round(_m1 - _m2 + _m3 + _m6, p);
 
         } else {
             n = new Number[d[0]][_e[1].length];
@@ -749,7 +787,7 @@ public class ArrayMatrix implements Matrix {
                 for (var j = 0; j < _e[1].length; j++) {
                     n[i][j] = 0;
                     for (var k = 0; k < d[1]; k++) {
-                        n[i][j] = n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue());
+                        n[i][j] = Rounding.round(n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue()), p);
                     }
                 }
             }
@@ -795,13 +833,12 @@ public class ArrayMatrix implements Matrix {
             for (var j = i + 1; j < d[0]; j++) {
                 var factor = e[j][i].doubleValue() / e[i][i].doubleValue();
                 for (var k = 0; k < d[1]; k++) {
-                    lu[1][j][k] = Rounding.round(e[j][k].doubleValue() - (factor * e[i][k].doubleValue()),
-                            Rounding.POINT.TEN);
+                    lu[1][j][k] = e[j][k].doubleValue() - (factor * e[i][k].doubleValue());
 
                     if (k > j)
                         lu[0][j][k] = 0;
                 }
-                lu[0][j][i] = Rounding.round(factor, Rounding.POINT.TEN);
+                lu[0][j][i] = factor;
             }
         }
 
