@@ -17,24 +17,37 @@ import org.katpara.mathematica.linears.vectors.ArrayVector;
 ### The basics:
 #### To quickly create a vector using:
 ```
-Vector v = ArrayVector.of(1, 2);                                   //=> <1, 2>
-Vector v = ArrayVector.of(1, 2, 3);                                //=> <1, 2, 3>
-Vector v = ArrayVector.of(1, 2, 3, 4);                             //=> <1, 2, 3, 4>
+// Generates two, three and four dimensional vectors
+ArrayVector.of(1, 2);                                       //=> <1, 2>
+ArrayVector.of(1, 2, 3);                                    //=> <1, 2, 3>
+ArrayVector.of(1, 2, 3, 4);                                 //=> <1, 2, 3, 4>
 ```
 
 #### To create a unit vector:
 ```
 // 3 dimensional unit vector
-Vector v = ArrayVector.unitOf(3);                                //=> <1, 1, 1>
+Vector v = ArrayVector.of(3);                                //=> <1, 1, 1>
 ```
 
 #### To create a vector with random values
 ```
-// creates a 3 dimensional vector with values between 0 and 1, with 3 decimal values.
-Vector v = ArrayVector.randomOf(3, Rounding.POINT.THREE);        //=> <0.273, 0.983, 0.72>
+// (dimension, precision)
+ArrayVector.of(3, Rounding.POINT.THREE)                     //=> <0.234, 0.768, 0.882>
 
-// creates a 3 dimensional vector with values between 10 and 20, with 4 decimal points.
-Vector v = ArrayVector.randomOf(3, Rounding.POINT.FOUR);        //=> <10.3223, 18.9283, 13.7244>
+// (dimension, min, max, precision)
+ArrayVector.of(3, 10, 20, Rounding.POINT.TWO)               //=> <14.24, 18.03, 17.82>
+```
+
+#### To create a vector using a function
+```
+// (dimension, lambda)
+ArrayVector.of(2, (e) -> e * 1);                            //=> <0.0, 1.0>
+// (dimension, lambda, precision)
+ArrayVector.of(2, (e) -> e * 1.2, Rounding.POINT.ONE);      //=> <0.0, 1.2>
+// (dimension, min, max, lambda)
+ArrayVector.of(3, -1, 0, (e) -> e * 10)                     //=> <-3.75..., -6.80..., -8.27...>
+// (dimension, min, max, lambda, precision)
+ArrayVector.of(4, 0, 1, Math::log, Rounding.POINT.THREE)    //=> <-1.883, -0.108, -0.001, -0.186>
 ```
 
 #### To create a vector from an array

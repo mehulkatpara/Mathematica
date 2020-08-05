@@ -1,6 +1,7 @@
 package org.katpara.mathematica.linears.matrices;
 
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
+import org.katpara.mathematica.commons.Rounding;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
 import java.util.List;
@@ -55,14 +56,6 @@ public interface Matrix {
     int[] getDimension();
 
     /**
-     * The method returns the type of a matrix.
-     * For more details see {@link MatrixType}
-     *
-     * @return the type of matrix
-     */
-    MatrixType getType();
-
-    /**
      * The method returns all the elements of a matrix.
      *
      * @return the matrix elements
@@ -115,7 +108,19 @@ public interface Matrix {
      *
      * @return the trace of the square matrix
      */
-    double trace();
+    double getTrace();
+
+    /**
+     * The trace of the matrix is defined as the sum of all the elements,
+     * on the main diagonal.
+     * <p>
+     * The trace only exist for a square matrix.
+     *
+     * @param point the decimal points of accuracy
+     *
+     * @return the trace of the square matrix
+     */
+    double getTrace(final Rounding.POINT point);
 
     /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many
@@ -123,7 +128,7 @@ public interface Matrix {
      *
      * @return the rank of matrix
      */
-    int rank();
+    int getRank();
 
     /**
      * A determinant is a scalar value computed for a square matrix; that
@@ -132,133 +137,145 @@ public interface Matrix {
      *
      * @return the determinant of the square matrix
      */
-    double determinant();
+    double getDeterminant();
 
     /**
-     * The method will return a zero or null matrix, whose all the elements are zero.
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param m the number of rows
-     * @param n the number of columns
+     * @param point the decimal point accuracy
      *
-     * @return a {@link Matrix} with all 0 entries
-     *
-     * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
-     *                                         this ensures that at least one element
-     *                                         exist all the time.
+     * @return the determinant of the square matrix
      */
-    static ArrayMatrix zeroArrayMatrix(final int m, final int n) {
-        return ArrayMatrix.zeroMatrix(m, n);
-    }
+    double getDeterminant(final Rounding.POINT point);
 
     /**
-     * In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.
+     * The method transposes the matrix.
      *
-     * @param m the number of rows
-     * @param n the number of columns
-     *
-     * @return a one matrix
-     *
-     * @throws InvalidMatrixDimensionException when m + n &lt; 2
+     * @return the transposed matrix
      */
-    static ArrayMatrix oneArrayMatrix(final int m, final int n) {
-        return ArrayMatrix.oneMatrix(m, n);
-    }
+    Matrix transpose();
 
     /**
-     * The method will return a zero or null matrix, whose all the elements are zero.
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
      *
-     * @param n the number of rows and columns
-     * @param t the type of matrix;
-     *          LOWER       - Lover triangular
-     *          UPPER       - Upper triangular
-     *          SYMMETRIC   - a symmetric matrix
+     * @return The inverse matrix
      *
-     * @return a Pascal's {@link Matrix}
-     *
-     * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
-    static ArrayMatrix pascalArrayMatrix(final int n, final PascalMatrixType t) {
-        return ArrayMatrix.pascalMatrix(n, t);
-    }
+    Matrix inverse();
 
     /**
-     * A lehmer matrix is a constant systematic square matrix.
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
      *
-     * @param n the number of rows and columns
+     * @param point The efficiency to the given decimal places
      *
-     * @return the lehmer {@link ArrayMatrix}
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
-    static ArrayMatrix lehmerArrayMatrix(final int n) {
-        return ArrayMatrix.lehmerMatrix(n);
-    }
+    Matrix inverse(final Rounding.POINT point);
 
     /**
-     * The identity matrix is a square matrix whose diagonal is always 1 and all the
-     * other elements are 0.
+     * The method performs a scalar addition on a square matrix.
+     * The operation is somewhat be described as;
+     * Let's consider a matrix "M", and scalar "a"
+     * then M + a = M + a(I), where I is an identity matrix.
      *
-     * @param n the number of rows and columns
+     * @param scalar the scalar to add
      *
-     * @return an identity {@link ArrayMatrix}
+     * @return the resulting matrix
      *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
-    static ArrayMatrix identityArrayMatrix(final int n) {
-        return ArrayMatrix.identityMatrix(n);
-    }
+    Matrix add(final Number scalar);
 
     /**
-     * A Hilbert matrix is a square matrix with entries being the unit fractions.
+     * The method adds two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A + B operation, and returns the resulting matrix.
      *
-     * @param n the number of rows and columns
+     * @param matrix the matrix to add
      *
-     * @return a hilbert {@link ArrayMatrix}
+     * @return the resulting matrix
      *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
      */
-    static ArrayMatrix hilbertArrayMatrix(final int n) {
-        return ArrayMatrix.hilbertMatrix(n);
-    }
+    Matrix add(final Matrix matrix);
 
     /**
-     * An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
-     * rest of the elements are 0.
+     * The method subtracts two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A - B operation, and returns the resulting matrix.
      *
-     * @param n the square matrix
+     * @param matrix the matrix to subtract
      *
-     * @return an exchange {@link ArrayMatrix}
+     * @return the resulting matrix
      *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
      */
-    static ArrayMatrix exchangeArrayMatrix(final int n) {
-        return ArrayMatrix.exchangeMatrix(n);
-    }
+    Matrix subtract(final Matrix matrix);
 
     /**
-     * A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
-     * The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
      *
-     * @param n the number of rows and columns
+     * @param scalar a scalar to scale the matrix with
      *
-     * @return a redheffer {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
+     * @return a new scalded matrix
      */
-    static ArrayMatrix redhefferArrayMatrix(final int n) {
-        return ArrayMatrix.redhefferMatrix(n);
-    }
+    Matrix multiply(final Number scalar);
 
     /**
-     * The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
-     * super diagonal matrix, or lower diagonal matrix.
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
      *
-     * @param n the number of rows and columns
-     * @param t the type of matrix, i.e UPPER or LOWER
+     * @param scalar a scalar to scale the matrix with
+     * @param point the rounding to the given decimal points
      *
-     * @return a shift {@link ArrayMatrix}
-     *
-     * @throws InvalidMatrixDimensionException if n &lt; 1
+     * @return a new scalded matrix
      */
-    static ArrayMatrix shiftArrayMatrix(final int n, final ShiftMatrixType t) {
-        return ArrayMatrix.shiftMatrix(n, t);
-    }
+    Matrix multiply(final Number scalar, final Rounding.POINT point);
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param matrix the matrix to multiply
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the number of columns of the matrix is not
+     *                                         equal to the number of rows of another matrix
+     */
+    Matrix multiply(final Matrix matrix);
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param matrix the matrix to multiply
+     * @param point the rounding level to decimal places
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the number of columns of the matrix is not
+     *                                         equal to the number of rows of another matrix
+     */
+    Matrix multiply(final Matrix matrix, final Rounding.POINT point);
 }

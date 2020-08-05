@@ -1,7 +1,10 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.commons.Rounding;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
+import org.katpara.mathematica.linears.matrices.Matrix;
 
 import java.io.Serializable;
 import java.util.List;
@@ -351,4 +354,17 @@ public interface Vector extends Cloneable, Serializable {
      * @return the rejection vector
      */
     Vector vectorRejection(final Vector vector);
+
+    /**
+     * The method will perform multiplication of a matrix with a vector.
+     * The vector must have the dimension equal to the number of columns of the matrix.
+     *
+     * @param matrix the matrix to multiply
+     *
+     * @return the resulting vector
+     *
+     * @throws InvalidVectorOperationException if the number of columns is not equal to
+     *                                         the dimension of a given vector
+     */
+    Vector multiply(final Matrix matrix);
 }

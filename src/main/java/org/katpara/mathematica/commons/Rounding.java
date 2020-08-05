@@ -15,6 +15,7 @@ public interface Rounding {
      * Some of the constants used for rounding.
      */
     enum POINT {
+        ZERO("0"),
         ONE("0.0"),
         TWO("0.00"),
         THREE("0.000"),
@@ -51,7 +52,7 @@ public interface Rounding {
      *
      * @return the rounded point
      */
-    static double round(final Number n, final POINT p) {
+    static Number round(final Number n, final POINT p) {
         return round(n, p, RoundingMode.HALF_UP);
     }
 
@@ -65,9 +66,14 @@ public interface Rounding {
      *
      * @return the rounded point
      */
-    static double round(final Number n, final POINT p, final RoundingMode m) {
+    static Number round(final Number n, final POINT p, final RoundingMode m) {
         f.applyPattern(p.getValue());
-        f.setRoundingMode(m);
-        return Double.parseDouble(f.format(n));
+
+        if(p == POINT.ZERO) {
+            return Integer.parseInt(f.format(n));
+        } else {
+            f.setRoundingMode(m);
+            return Double.parseDouble(f.format(n));
+        }
     }
 }

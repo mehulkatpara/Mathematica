@@ -1,5 +1,6 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
@@ -49,6 +50,11 @@ public class ArrayMatrix implements Matrix {
      * The dimension of the matrix
      */
     private final int[] d;
+
+    /**
+     * Useful to cache some of the calculated properties
+     */
+    private final ArrayMatrix.Cache c = new ArrayMatrix.Cache();
 
     /**
      * The field holds the type of matrix
@@ -101,14 +107,14 @@ public class ArrayMatrix implements Matrix {
         if (vl.size() < 1)
             throw new InvalidMatrixDimensionException("The list is empty");
 
-        int dimension = 0, i = 0;
+        int d = 0, i = 0;
         Number[][] n = null;
 
         for (Vector v : vl) {
-            if (dimension == 0) {
-                dimension = v.getDimension();
-                n = new Number[vl.size()][dimension];
-            } else if (dimension != v.getDimension()) {
+            if (d == 0) {
+                d = v.getDimension();
+                n = new Number[vl.size()][d];
+            } else if (d != v.getDimension()) {
                 throw new InvalidMatrixDimensionException("The vectors have different dimensions.");
             }
             n[i++] = v.toArray();
@@ -174,8 +180,7 @@ public class ArrayMatrix implements Matrix {
         if (lists.size() == 0)
             throw new InvalidMatrixDimensionException("The list must have at least one list");
 
-        var d = 0;
-        var i = 0;
+        int d = 0, i = 0;
         Number[][] n = null;
 
         for (var list : lists) {
@@ -224,17 +229,6 @@ public class ArrayMatrix implements Matrix {
     @Override
     public int[] getDimension() {
         return d;
-    }
-
-    /**
-     * The method returns the type of a matrix.
-     * For more details see {@link MatrixType}
-     *
-     * @return the type of matrix
-     */
-    @Override
-    public MatrixType getType() {
-        return t;
     }
 
     /**
@@ -329,7 +323,22 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the square matrix
      */
     @Override
-    public double trace() {
+    public double getTrace() {
+        return getTrace(Rounding.POINT.TEN);
+    }
+
+    /**
+     * The trace of the matrix is defined as the sum of all the elements,
+     * on the main diagonal.
+     * <p>
+     * The trace only exist for a square matrix.
+     *
+     * @param p the decimal points of accuracy
+     *
+     * @return the trace of the square matrix
+     */
+    @Override
+    public double getTrace(final Rounding.POINT p) {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
@@ -344,26 +353,30 @@ public class ArrayMatrix implements Matrix {
                 return (d[0] % 2 == 0) ? 0 : 1;
             case PASCAL:
                 return ((d[1] > 1 && e[0][1].intValue() == 0)
-                                || (d[0] > 1 && e[1][0].intValue() == 0)) ? d[0] : calculateTrace();
+                                || (d[0] > 1 && e[1][0].intValue() == 0)) ? d[0] : calculateTrace(p);
             default:
-                return calculateTrace();
+                return calculateTrace(p);
         }
     }
 
     /**
      * The method will calculate a trace of the square matrix.
      *
+     * @param p the precision level
+     *
      * @return the trace of the matrix
      */
-    private double calculateTrace() {
-        var s = 0;
+    private double calculateTrace(final Rounding.POINT p) {
+        if (c.getT() == null) {
+            var t = 0.0;
 
-        for (int i = 0; i < d[0]; i++)
-            for (int j = 0; j < d[0]; j++)
-                if (i == j)
-                    s += e[i][i].doubleValue();
+            for (var i = 0; i < d[0]; i++)
+                t += e[i][i].doubleValue();
 
-        return s;
+            c.setT(t);
+        }
+
+        return Rounding.round(c.getT(), p).doubleValue();
     }
 
     /**
@@ -373,8 +386,7 @@ public class ArrayMatrix implements Matrix {
      * @return the rank of matrix
      */
     @Override
-    public int rank() {
-        //TODO: Rank calculation for other matrices.
+    public int getRank() {
         switch (t) {
             case ONE:
             case ZERO:
@@ -395,18 +407,503 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @return the determinant of the square matrix
+     */
+    @Override
+    public double getDeterminant() {
+        return getDeterminant(Rounding.POINT.TEN);
+    }
+
+    /**
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
+     *
+     * @param point the decimal point accuracy
+     *
+     * @return the determinant of the square matrix
+     */
+    @Override
+    public double getDeterminant(final Rounding.POINT point) {
+        if (c.getD() == null) {
+            if (!isSquareMatrix())
+                throw new InvalidMatrixOperationException();
+
+            var det = 0.0;
+            if (d[0] == 1) {
+                det = e[0][0].doubleValue();
+            } else if (d[0] == 2) {
+                det = (e[0][0].doubleValue() * e[1][1].doubleValue()) -
+                              (e[0][1].doubleValue() * e[1][0].doubleValue());
+            } else if (d[1] == 3) {
+                double _e1 = e[0][0].doubleValue(),
+                        _e2 = e[0][1].doubleValue(),
+                        _e3 = e[0][2].doubleValue(),
+                        _e4 = e[1][0].doubleValue(),
+                        _e5 = e[1][1].doubleValue(),
+                        _e6 = e[1][2].doubleValue(),
+                        _e7 = e[2][0].doubleValue(),
+                        _e8 = e[2][1].doubleValue(),
+                        _e9 = e[2][2].doubleValue();
+
+                det = (
+                        (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
+                                (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
+                );
+            } else {
+                Number[][][] n = lu();
+                det = n[1][0][0].doubleValue();
+                for (var i = 1; i < n[1].length; i++)
+                    if (n[1][i][i].doubleValue() == 0 || Double.isNaN(n[1][i][i].doubleValue())) {
+                        det = 0;
+                        break;
+                    } else {
+                        det *= n[1][i][i].doubleValue();
+                    }
+            }
+
+            c.setD(det);
+        }
+
+        return Rounding.round(c.getD(), point).doubleValue();
+    }
+
+    /**
+     * The method transposes the matrix.
+     *
+     * @return the transposed matrix
+     */
+    @Override
+    public Matrix transpose() {
+        var n = new Number[d[1]][d[0]];
+
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
+                n[j][i] = e[i][j];
+
+        return new ArrayMatrix(n);
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix inverse() {
+        return inverse(Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @param p The efficiency to the given decimal places
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix inverse(final Rounding.POINT p) {
+        if (c.getI() == null) {
+            c.setI(calculateInverse(p));
+        }
+        return c.getI();
+    }
+
+    /**
+     * The method will return an inverse matrix of a given matrix.
+     * It returns a null matrix if the inverse is not possible.
+     *
+     * @return The inverse matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    public Matrix calculateInverse(final Rounding.POINT p) {
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("The matrix is not a square matrix");
+
+        if (d[0] == 2) {
+            var n = new Number[2][2];
+            double a = e[0][0].doubleValue(), b = e[0][1].doubleValue(),
+                    c = e[1][0].doubleValue(), d = e[1][1].doubleValue(),
+                    v = (a * d) - (b * c);
+
+            if (v == 0)
+                return null;
+
+            n[0][0] = Rounding.round(d / v, p);
+            n[0][1] = Rounding.round(-b / v, p);
+            n[1][0] = Rounding.round(-c / v, p);
+            n[1][1] = Rounding.round(a / v, p);
+
+            return new ArrayMatrix(n);
+        } else {
+            Number[][][] lu = lu();
+
+            for (var i = 0; i < lu[1].length; i++) {
+                if (lu[1][i][i].doubleValue() == 0) {
+                    throw new InvalidMatrixOperationException("The matrix is singular");
+                }
+            }
+
+            return new ArrayMatrix(bs(lu[1], fs(lu[0]), p));
+        }
+    }
+
+    /**
+     * The method performs the backward substitution on a given 2 matrix.
+     *
+     * @param n the matrix
+     * @param z the matrix
+     * @param p the accuracy to given decimal points
+     *
+     * @return the resulting array
+     */
+    private Number[][] bs(final Number[][] n, final Number[][] z, final Rounding.POINT p) {
+        var r = new Number[n.length][n.length];
+        for (var i = n.length - 1; i >= 0; i--) {
+            for (var j = n.length - 1; j >= 0; j--) {
+                if (i == n.length - 1) {
+                    r[i][j] = Rounding.round(z[i][j].doubleValue() / n[i][i].doubleValue(), p);
+                } else {
+                    var sum = 0.0;
+                    for (int k = n.length - 1; k > i; k--)
+                        sum -= n[i][k].doubleValue() * r[k][j].doubleValue();
+
+                    r[i][j] = Rounding.round((z[i][j].doubleValue() + sum) / n[i][i].doubleValue(), p);
+                }
+            }
+        }
+
+        return r;
+    }
+
+    /**
+     * The method performs a forward substitution, on a given matrix.
+     *
+     * @param n the lover triangular matrix
+     *
+     * @return the resulting substitution
+     */
+    private Number[][] fs(final Number[][] n) {
+        var z = new Number[n.length][n.length];
+        for (var i = 0; i < n.length; i++) {
+            for (var j = 0; j < n.length; j++) {
+                if (j <= i) {
+                    if (j == i) {
+                        z[i][j] = 1;
+                    } else {
+                        var sum = 0.0;
+                        for (var k = 0; k < i; k++) {
+                            sum -= n[i][k].doubleValue() * z[k][j].doubleValue();
+                        }
+                        z[i][j] = sum;
+                    }
+                } else {
+                    z[i][j] = 0;
+                }
+            }
+        }
+        return z;
+    }
+
+    /**
+     * The method performs a scalar addition on a square matrix.
+     * The operation is somewhat be described as;
+     * Let's consider a matrix "M", and scalar "a"
+     * then M + a = M + a(I), where I is an identity matrix.
+     *
+     * @param s the scalar to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if the matrix is not a square matrix
+     */
+    @Override
+    public Matrix add(final Number s) {
+        if (!isSquareMatrix())
+            throw new InvalidMatrixOperationException("Scalar addition is only for square matrices.");
+
+        return new ArrayMatrix(
+                addSubArrays(e, calculateDoubleMatrix(d[0], (i, j) -> (i == j) ? s.doubleValue() : 0), true));
+    }
+
+    /**
+     * The method adds two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A + B operation, and returns the resulting matrix.
+     *
+     * @param m the matrix to add
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    @Override
+    public Matrix add(final Matrix m) {
+        if (!Arrays.equals(d, m.getDimension()))
+            throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
+
+        return new ArrayMatrix(addSubArrays(e, m.toArray(), true));
+    }
+
+    /**
+     * The method subtracts two matrices together.
+     * Let's consider matrices "A" and "B";
+     * The method performs, A - B operation, and returns the resulting matrix.
+     *
+     * @param m the matrix to subtract
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
+     */
+    @Override
+    public Matrix subtract(final Matrix m) {
+        if (!Arrays.equals(d, m.getDimension()))
+            throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
+
+        return new ArrayMatrix(addSubArrays(e, m.toArray(), false));
+    }
+
+    /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param s a scalar to scale the matrix with
+     *
+     * @return a new scalded matrix
+     */
+    @Override
+    public Matrix multiply(final Number s) {
+        return multiply(s, Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will perform a scalar multiplication on a matrix and returns a new matrix.
+     * For example, Let us consider a matrix A, and any scalar c. The scalar multiplication
+     * can be defined as;
+     * c x A = cA.
+     *
+     * @param s a scalar to scale the matrix with
+     * @param p the rounding to the given decimal points
+     *
+     * @return a new scalded matrix
+     */
+    @Override
+    public Matrix multiply(final Number s, final Rounding.POINT p) {
+        var n = new Number[d[0]][d[1]];
+
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
+                n[i][j] = Rounding.round(e[i][j].doubleValue() * s.doubleValue(), p);
+
+        return new ArrayMatrix(n);
+    }
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param m the matrix to multiply
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices have different columns and rows
+     */
+    @Override
+    public Matrix multiply(final Matrix m) {
+        return multiply(m, Rounding.POINT.TEN);
+    }
+
+    /**
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * <p>
+     * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
+     * number of column of a matrix A has to be equal to the number of rows B. The resulting
+     * matrix would be the dimensions of m x p.
+     * (A)mxn X (B)nxp = (C)mxp, where # or columns of A and and # of rows of B are equal.
+     *
+     * @param m the matrix to multiply
+     * @param p the decimal precision
+     *
+     * @return the resulting matrix
+     *
+     * @throws InvalidMatrixOperationException if two matrices have different columns and rows
+     */
+    @Override
+    public Matrix multiply(final Matrix m, final Rounding.POINT p) {
+        var _e = m.toArray();
+
+        if (d[1] != _e.length)
+            throw new InvalidMatrixOperationException("the rows and columns don't match");
+
+        // If both matrix are square matrices and of 2 x 2 dimensions then do Strassen's algorithm
+        // Otherwise use the native method.
+        Number[][] n;
+        if (d[0] == 2 && d[1] == 2 && _e[0].length == 2) {
+            n = new Number[2][2];
+
+            double _e1 = e[0][0].doubleValue(),
+                    _e2 = e[0][1].doubleValue(),
+                    _e3 = e[1][0].doubleValue(),
+                    _e4 = e[1][1].doubleValue(),
+                    _n1 = _e[0][0].doubleValue(),
+                    _n2 = _e[0][1].doubleValue(),
+                    _n3 = _e[1][0].doubleValue(),
+                    _n4 = _e[1][1].doubleValue();
+
+            double _m1 = (_e1 + _e4) * (_n1 + _n4),
+                    _m2 = (_e3 + _e4) * _n1,
+                    _m3 = _e1 * (_n2 - _n4),
+                    _m4 = _e4 * (_n3 - _n1),
+                    _m5 = (_e1 + _e2) * _n4,
+                    _m6 = (_e3 - _e1) * (_n1 + _n2),
+                    _m7 = (_e2 - _e4) * (_n3 + _n4);
+
+            n[0][0] = Rounding.round(_m1 + _m4 - _m5 + _m7, p);
+            n[0][1] = Rounding.round(_m3 + _m5, p);
+            n[1][0] = Rounding.round(_m2 + _m4, p);
+            n[1][1] = Rounding.round(_m1 - _m2 + _m3 + _m6, p);
+
+        } else {
+            n = new Number[d[0]][_e[1].length];
+            for (var i = 0; i < d[0]; i++) {
+                for (var j = 0; j < _e[1].length; j++) {
+                    n[i][j] = 0;
+                    for (var k = 0; k < d[1]; k++) {
+                        n[i][j] = Rounding.round(n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue()), p);
+                    }
+                }
+            }
+
+        }
+        return new ArrayMatrix(n);
+    }
+
+    /**
+     * The method will do addition or subtraction on two two-dimensional arrays.
+     *
+     * @param n1  the first two-dimensional array
+     * @param n2  the second two-dimensional array
+     * @param add either addition or subtraction
+     *
+     * @return the resulting new array
+     */
+    private Number[][] addSubArrays(final Number[][] n1, final Number[][] n2, final boolean add) {
+        var n = new Number[d[0]][d[1]];
+        for (var i = 0; i < d[0]; i++)
+            for (var j = 0; j < d[1]; j++)
+                n[i][j] = (add) ? n1[i][j].doubleValue() + n2[i][j].doubleValue()
+                                  : n1[i][j].doubleValue() - n2[i][j].doubleValue();
+
+        return n;
+    }
+
+    /**
+     * The method perform LU decomposition on a given matrix.
+     *
+     * @return the LU matrices
+     */
+    private Number[][][] lu() {
+        Number[][][] lu = new Number[2][d[0]][d[0]];
+        System.arraycopy(e, 0, lu[1], 0, d[0]);
+
+        for (var i = 0; i < d[0]; i++) {
+            if (i == 0)
+                for (var j = 1; j < d[1]; j++)
+                    lu[0][i][j] = 0;
+
+            lu[0][i][i] = 1;
+            for (var j = i + 1; j < d[0]; j++) {
+                var factor = e[j][i].doubleValue() / e[i][i].doubleValue();
+                for (var k = 0; k < d[1]; k++) {
+                    lu[1][j][k] = e[j][k].doubleValue() - (factor * e[i][k].doubleValue());
+
+                    if (k > j)
+                        lu[0][j][k] = 0;
+                }
+                lu[0][j][i] = factor;
+            }
+        }
+
+        return lu;
+    }
+
+    /**
+     * The method checks if the main diagonal of a given matrix is non-zero.
+     * This is very useful to determine if I need to implement LU decomposition or not.
+     *
+     * @return true if all entries are non-zero
+     */
+    private boolean isDiagonalNonZero() {
+        for (var i = 0; i < d[0]; i++)
+            if (e[i][i].doubleValue() == 0)
+                return false;
+
+        return true;
+    }
+
+    /**
      * The method calculates the rank of the matrix.
+     * It uses a couple of methods based on the type of matrix.
      *
      * @return the rank
      */
     private int calculateRank() {
+
+        if (c.getR() == null) {
+            var r = 0;
+
+            if (isRowVector() || isColumnVector()) {
+                r = 1;
+            } else if (isSquareMatrix() && isDiagonalNonZero()) {
+                var _r = 0;
+                Number[][][] n = lu();
+                for (var i = 0; i < n[1].length; i++) {
+                    if (n[1][i][i].doubleValue() != 0) {
+                        ++_r;
+                    }
+                }
+                r = _r;
+            } else {
+                r = gaussianRank();
+            }
+
+            c.setR(r);
+        }
+
+        return c.getR();
+    }
+
+    /**
+     * The method implements gaussian algorithm to find out the rakn of a matrix.
+     *
+     * @return the rank
+     */
+    private int gaussianRank() {
         int rk = Math.min(d[0], d[1]);
         Number[][] n = new Number[d[0]][d[1]];
         System.arraycopy(e, 0, n, 0, d[0]);
 
-        for (int r = 0; r < rk; r++) {
+        for (var r = 0; r < rk; r++) {
             if (n[r][r].doubleValue() == 0) {
-                for (int i = r + 1; i < rk; i++) {
+                for (var i = r + 1; i < rk; i++) {
                     if (n[i][r].doubleValue() != 0) {
                         var t = n[r];
                         n[r] = n[i];
@@ -414,14 +911,14 @@ public class ArrayMatrix implements Matrix {
                     }
                 }
             } else if (n[r][r].doubleValue() != 1) {
-                for (int c = d[1] - 1; c >= r; c--) {
+                for (var c = d[1] - 1; c >= r; c--) {
                     n[r][c] = n[r][c].doubleValue() / n[r][r].doubleValue();
                 }
             }
 
-            for (int _r = r + 1; _r < rk; _r++) {
+            for (var _r = r + 1; _r < rk; _r++) {
                 if (n[_r][r].doubleValue() != 0) {
-                    for (int _c = d[1] - 1; _c >= r; _c--) {
+                    for (var _c = d[1] - 1; _c >= r; _c--) {
                         n[_r][_c] = n[_r][_c].doubleValue()
                                             - (n[_r][r].doubleValue() * n[r][_c].doubleValue());
                     }
@@ -429,10 +926,10 @@ public class ArrayMatrix implements Matrix {
             }
         }
 
-        for (int r = 0; r < d[0]; r++) {
+        for (var r = 0; r < d[0]; r++) {
             var z = true;
 
-            for (int c = 0; c < d[1]; c++) {
+            for (var c = 0; c < d[1]; c++) {
                 if (n[r][c].doubleValue() != 0) {
                     z = false;
                     break;
@@ -443,75 +940,6 @@ public class ArrayMatrix implements Matrix {
         }
 
         return rk == 0 ? 1 : rk;
-    }
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @return the determinant of the square matrix
-     */
-    @Override
-    public double determinant() {
-        if (!isSquareMatrix())
-            throw new InvalidMatrixOperationException();
-
-        if (d[0] == 1) {
-            return e[0][0].doubleValue();
-        } else {
-            var m = new int[d[0]];
-            for (int i = 0; i < d[0]; i++)
-                m[i] = i;
-
-            return determinant(m, m);
-        }
-    }
-
-    /**
-     * The method calculates the determinant of a matrix using the recursion function.
-     *
-     * @param rs the number of rows
-     * @param cs the number of columns
-     *
-     * @return the determinant of the matrix
-     */
-    private double determinant(final int[] rs, final int[] cs) {
-        int rl = rs.length, cl = cs.length;
-        if (rl == 2 && cl == 2) {
-            return (e[rs[0]][cs[0]].doubleValue() *
-                            e[rs[1]][cs[1]].doubleValue()
-                            - e[rs[1]][cs[0]].doubleValue() *
-                                      e[rs[0]][cs[1]].doubleValue());
-        }
-
-        var s = 0D;
-        int r = 0, c = 0;
-        int[] _r = new int[rl - 1], _c = new int[cl - 1];
-
-        while (r < rl) {
-            while (c < cl) {
-                var ct = e[rs[0]][cs[c]];
-                for (int i = 0, k = 0; i < rl; i++) {
-                    if (r != i)
-                        _r[k++] = rs[i];
-                }
-
-                for (int i = 0, k = 0; i < cl; i++) {
-                    if (c != i)
-                        _c[k++] = cs[i];
-                }
-
-                if (ct.doubleValue() == 0) {
-                    s += 0;
-                } else {
-                    s += ((r + c % 2 == 0) ? 1 : -1) * (ct.doubleValue() * determinant(_r, _c));
-                }
-                c++;
-            }
-            r++;
-        }
-        return s;
     }
 
     /**
@@ -526,7 +954,7 @@ public class ArrayMatrix implements Matrix {
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
-    static ArrayMatrix zeroMatrix(final int m, final int n) {
+    public static ArrayMatrix zeroMatrix(final int m, final int n) {
         return calculateZeroOneMatrix(m, n, ZERO);
     }
 
@@ -540,7 +968,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException when m + n &lt; 2
      */
-    static ArrayMatrix oneMatrix(final int m, final int n) {
+    public static ArrayMatrix oneMatrix(final int m, final int n) {
         return calculateZeroOneMatrix(m, n, ONE);
     }
 
@@ -567,7 +995,7 @@ public class ArrayMatrix implements Matrix {
         if (t == ONE)
             Arrays.fill(e[0], 1);
 
-        for (int i = 1; i < e.length; i++)
+        for (var i = 1; i < e.length; i++)
             System.arraycopy(e[0], 0, e[i], 0, e[0].length);
 
         return new ArrayMatrix(e, t);
@@ -584,7 +1012,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
      */
-    static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
+    public static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Pascal's matrix should have at least one element");
 
@@ -592,8 +1020,8 @@ public class ArrayMatrix implements Matrix {
         var e = new Number[n][n];
 
         if (t == PascalMatrixType.UPPER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == j || i == 0) ? 1 : (j < i) ? 0 : e[i][j - 1].longValue() + r[j - 1].longValue();
 
                 r = e[i];
@@ -601,8 +1029,8 @@ public class ArrayMatrix implements Matrix {
         }
 
         if (t == PascalMatrixType.LOWER) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == j || j == 0) ? 1 : (i < j) ? 0 : r[j].longValue() + r[j - 1].longValue();
 
                 r = e[i];
@@ -610,8 +1038,8 @@ public class ArrayMatrix implements Matrix {
         }
 
         if (t == PascalMatrixType.SYMMETRIC) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++)
+            for (var i = 0; i < n; i++) {
+                for (var j = 0; j < n; j++)
                     e[i][j] = (i == 0 || j == 0) ? 1 : e[i][j - 1].longValue() + r[j].longValue();
 
                 r = e[i];
@@ -630,7 +1058,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix lehmerMatrix(final int n) {
+    public static ArrayMatrix lehmerMatrix(final int n) {
         return new ArrayMatrix(
                 calculateDoubleMatrix
                         (n, (i, j) -> (j >= i) ? (i + 1) / (j + 1) : (j + 1) / (i + 1)), LEHMER);
@@ -645,7 +1073,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix hilbertMatrix(final int n) {
+    public static ArrayMatrix hilbertMatrix(final int n) {
         return new ArrayMatrix(
                 calculateDoubleMatrix
                         (n, (i, j) -> 1 / (i + 1 + (j + 1) - 1)), HILBERT);
@@ -661,7 +1089,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix identityMatrix(final int n) {
+    public static ArrayMatrix identityMatrix(final int n) {
         return new ArrayMatrix(
                 calculateIntMatrix
                         (n, (i, j) -> (i.equals(j)) ? 1 : 0), IDENTITY);
@@ -678,7 +1106,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix exchangeMatrix(final int n) {
+    public static ArrayMatrix exchangeMatrix(final int n) {
         return new ArrayMatrix(
                 calculateIntMatrix
                         (n, (i, j) -> (j == n - i - 1) ? 1 : 0), EXCHANGE);
@@ -694,7 +1122,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix redhefferMatrix(final int n) {
+    public static ArrayMatrix redhefferMatrix(final int n) {
         return new ArrayMatrix(
                 calculateIntMatrix
                         (n, (i, j) -> (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)), REDHEFFER);
@@ -711,11 +1139,145 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
+    public static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
         if (t == ShiftMatrixType.UPPER)
             return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i + 1) ? 1 : 0), SHIFT);
 
         return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i - 1) ? 1 : 0), SHIFT);
+    }
+
+    /**
+     * The method creates a random square matrix of given number rows and columns.
+     * The default lower bound is 0 and upper bound is 1.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r the number of rows/columns
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r) {
+        return new ArrayMatrix(random(r, r, 0, 1, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method creates a square matrix with the given rows and columns.
+     * The lower and upper bound can be provided.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r   the number of rows/columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final double min, final double max) {
+        return new ArrayMatrix(random(r, r, min, max, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method creates a random square matrix of given number rows and columns.
+     * You can also provide the level of decimal point precision.
+     *
+     * @param r the number of rows/columns
+     * @param p the precision to decimal point
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, r, 0, 1, p));
+    }
+
+    /**
+     * The method creates a square matrix with the given rows and columns.
+     * The lower and upper bound can be provided.
+     *
+     * @param r   the number of rows/columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final double min, final double max, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, r, min, max, p));
+    }
+
+    /**
+     * The method is used to generate a random value matrix.
+     * The lower bound is 0, upper bound is 1.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c) {
+        return new ArrayMatrix(random(r, c, 0, 1, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the precision level.
+     * The lower bound is 0, upper bound is 1.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     * @param p the precision to the dacimal points
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, c, 0, 1, p));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the lower and upper bound.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r   the number of rows
+     * @param c   the number of columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final double min, final double max) {
+        return new ArrayMatrix(random(r, c, min, max, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the lower and upper boun,
+     * also the decimal point precision can be configured.
+     *
+     * @param r   the number of rows
+     * @param c   the number of columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     * @param p   the precision level
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final double min, final double max, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, c, min, max, p));
+    }
+
+    /**
+     * The method generates random values between the given range.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     * @param l the minimum value, it is included.
+     * @param u the maximum value, it is excluded
+     *
+     * @return an array of random values
+     */
+    private static Number[][] random(final int r, final int c, final double l, final double u, final Rounding.POINT p) {
+        var n = new Number[r][c];
+
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                n[i][j] = Rounding.round(l + (Math.random() * (u - l)), p);
+
+        return n;
     }
 
     /**
@@ -731,8 +1293,8 @@ public class ArrayMatrix implements Matrix {
             throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
 
         var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        for (var i = 0; i < n; i++)
+            for (var j = 0; j < n; j++)
                 e[i][j] = operator.apply(i, j);
 
         return e;
@@ -751,11 +1313,53 @@ public class ArrayMatrix implements Matrix {
             throw new InvalidMatrixDimensionException("Shift matrix should have at least one element");
 
         var e = new Number[n][n];
-        for (int i = 0; i < n; i++)
-            for (int j = 0; j < n; j++)
+        for (var i = 0; i < n; i++)
+            for (var j = 0; j < n; j++)
                 e[i][j] = operator.applyAsDouble(i, j);
 
         return e;
+    }
+
+    /*
+     * The class caches some properties of a given matrix to save computation.
+     */
+    private static class Cache {
+        private Integer r;
+        private Double t;
+        private Double d;
+        private Matrix i;
+
+        private Double getT() {
+            return t;
+        }
+
+        private void setT(final Double t) {
+            this.t = t;
+        }
+
+        private Integer getR() {
+            return r;
+        }
+
+        private void setR(final Integer r) {
+            this.r = r;
+        }
+
+        private Double getD() {
+            return d;
+        }
+
+        private void setD(final Double d) {
+            this.d = d;
+        }
+
+        private Matrix getI() {
+            return i;
+        }
+
+        private void setI(final Matrix i) {
+            this.i = i;
+        }
     }
 
     /**
@@ -785,7 +1389,7 @@ public class ArrayMatrix implements Matrix {
             var ls = new LinkedList<String>();
             Arrays.stream(r).forEach(e -> ls.add(e.toString()));
             s.append("|");
-            s.append(String.join(",\t\t", ls));
+            s.append(String.join(",", ls));
             s.append("|\n");
         });
         return s.toString();
@@ -821,7 +1425,9 @@ public class ArrayMatrix implements Matrix {
      * @see System#identityHashCode
      */
     public int hashCode() {
-        return Arrays.hashCode(e);
+        int hash = 0;
+        for (var n : e) hash += Arrays.hashCode(n);
+        return hash;
     }
 
     /**
@@ -874,20 +1480,18 @@ public class ArrayMatrix implements Matrix {
      */
     public boolean equals(final Object obj) {
         if (this == obj) return true;
-
         if (obj == null || getClass() != obj.getClass()) return false;
+        if (this.hashCode() == obj.hashCode()) return true;
 
-        final ArrayMatrix that = (ArrayMatrix) obj;
+        final Matrix that = (Matrix) obj;
         var o = that.toArray();
 
         if (!Arrays.equals(this.getDimension(), that.getDimension())) return false;
-
-        for (int j = 0; j < this.e.length; j++) {
-            for (int k = 0; k < e[j].length; k++) {
-                if (!e[j][k].equals(o[j][k]))
+        for (var j = 0; j < this.e.length; j++)
+            for (var k = 0; k < e[j].length; k++)
+                if (e[j][k].doubleValue() != o[j][k].doubleValue())
                     return false;
-            }
-        }
+
         return true;
     }
 }
