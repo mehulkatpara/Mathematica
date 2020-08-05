@@ -178,7 +178,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double getMagnitude(final Rounding.POINT point) {
-        return Rounding.round(getMagnitude(), point);
+        return Rounding.round(getMagnitude(), point).doubleValue();
     }
 
     /**
@@ -215,7 +215,7 @@ public final class ArrayVector implements Vector {
     public double[] getCosines(final Angle a, final Rounding.POINT p) {
         var n = getCosines(a);
         for (var i = 0; i < d; i++)
-            n[i++] = Rounding.round(n[i], p);
+            n[i++] = Rounding.round(n[i], p).doubleValue();
 
         return n;
     }
@@ -340,7 +340,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double angle(final Vector v, final Angle a, final Rounding.POINT p) {
-        return Rounding.round(angle(v, a), p);
+        return Rounding.round(angle(v, a), p).doubleValue();
     }
 
     /**
@@ -550,7 +550,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double dot(final Vector v, final Rounding.POINT p) {
-        return Rounding.round(dot(v), p);
+        return Rounding.round(dot(v), p).doubleValue();
     }
 
     /**
@@ -621,7 +621,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double scalarProjection(final Vector v, final Rounding.POINT p) {
-        return Rounding.round(scalarProjection(v), p);
+        return Rounding.round(scalarProjection(v), p).doubleValue();
     }
 
     /**

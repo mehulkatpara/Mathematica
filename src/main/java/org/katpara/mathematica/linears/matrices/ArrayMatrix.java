@@ -52,6 +52,11 @@ public class ArrayMatrix implements Matrix {
     private final int[] d;
 
     /**
+     * Useful to cache some of the calculated properties
+     */
+    private final ArrayMatrix.Cache c = new ArrayMatrix.Cache();
+
+    /**
      * The field holds the type of matrix
      */
     private final Matrix.MatrixType t;
@@ -351,7 +356,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getTrace(final Rounding.POINT p) {
-        return Rounding.round(getTrace(), p);
+        return Rounding.round(getTrace(), p).doubleValue();
     }
 
     /**
@@ -360,12 +365,16 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the matrix
      */
     private double calculateTrace() {
-        var s = 0;
+        if (c.getT() == null) {
+            var t = 0.0;
 
-        for (var i = 0; i < d[0]; i++)
-            s += e[i][i].doubleValue();
+            for (var i = 0; i < d[0]; i++)
+                t += e[i][i].doubleValue();
 
-        return s;
+            c.setT(t);
+        }
+
+        return c.getT();
     }
 
     /**
@@ -404,43 +413,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getDeterminant() {
-        if (!isSquareMatrix())
-            throw new InvalidMatrixOperationException();
-
-        var det = 0.0;
-        if (d[0] == 1) {
-            det = e[0][0].doubleValue();
-        } else if (d[0] == 2) {
-            det = (e[0][0].doubleValue() * e[1][1].doubleValue()) -
-                           (e[0][1].doubleValue() * e[1][0].doubleValue());
-        } else if (d[1] == 3) {
-            double _e1 = e[0][0].doubleValue(),
-                    _e2 = e[0][1].doubleValue(),
-                    _e3 = e[0][2].doubleValue(),
-                    _e4 = e[1][0].doubleValue(),
-                    _e5 = e[1][1].doubleValue(),
-                    _e6 = e[1][2].doubleValue(),
-                    _e7 = e[2][0].doubleValue(),
-                    _e8 = e[2][1].doubleValue(),
-                    _e9 = e[2][2].doubleValue();
-
-            det = (
-                    (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
-                            (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
-            );
-        } else {
-            Number[][][] n = lu();
-            det = n[1][0][0].doubleValue();
-            for (var i = 1; i < n[1].length; i++)
-                if(n[1][i][i].doubleValue() == 0 || Double.isNaN(n[1][i][i].doubleValue())) {
-                    det = 0;
-                    break;
-                } else {
-                    det *= n[1][i][i].doubleValue();
-                }
-        }
-
-        return det;
+        return getDeterminant(Rounding.POINT.TEN);
     }
 
     /**
@@ -454,7 +427,47 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getDeterminant(final Rounding.POINT point) {
-        return Rounding.round(getDeterminant(), point);
+        if (c.getD() == null) {
+            if (!isSquareMatrix())
+                throw new InvalidMatrixOperationException();
+
+            var det = 0.0;
+            if (d[0] == 1) {
+                det = e[0][0].doubleValue();
+            } else if (d[0] == 2) {
+                det = (e[0][0].doubleValue() * e[1][1].doubleValue()) -
+                              (e[0][1].doubleValue() * e[1][0].doubleValue());
+            } else if (d[1] == 3) {
+                double _e1 = e[0][0].doubleValue(),
+                        _e2 = e[0][1].doubleValue(),
+                        _e3 = e[0][2].doubleValue(),
+                        _e4 = e[1][0].doubleValue(),
+                        _e5 = e[1][1].doubleValue(),
+                        _e6 = e[1][2].doubleValue(),
+                        _e7 = e[2][0].doubleValue(),
+                        _e8 = e[2][1].doubleValue(),
+                        _e9 = e[2][2].doubleValue();
+
+                det = (
+                        (_e1 * _e5 * _e9) + (_e2 * _e6 * _e7) + (_e3 * _e4 * _e8) -
+                                (_e3 * _e5 * _e7) - (_e2 * _e4 * _e9) - (_e1 * _e6 * _e8)
+                );
+            } else {
+                Number[][][] n = lu();
+                det = n[1][0][0].doubleValue();
+                for (var i = 1; i < n[1].length; i++)
+                    if (n[1][i][i].doubleValue() == 0 || Double.isNaN(n[1][i][i].doubleValue())) {
+                        det = 0;
+                        break;
+                    } else {
+                        det *= n[1][i][i].doubleValue();
+                    }
+            }
+
+            c.setD(det);
+        }
+
+        return Rounding.round(c.getD(), point).doubleValue();
     }
 
     /**
@@ -483,7 +496,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix inverse() {
-        return calculateInverse(Rounding.POINT.TEN);
+        return inverse(Rounding.POINT.TEN);
     }
 
     /**
@@ -498,7 +511,10 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public Matrix inverse(final Rounding.POINT p) {
-        return calculateInverse(p);
+        if (c.getI() == null) {
+            c.setI(calculateInverse(p));
+        }
+        return c.getI();
     }
 
     /**
@@ -814,22 +830,28 @@ public class ArrayMatrix implements Matrix {
      */
     private int calculateRank() {
 
-        if (isRowVector() || isColumnVector()) {
-            return 1;
-        }
+        if (c.getR() == null) {
+            var r = 0;
 
-        if (isSquareMatrix() && isDiagonalNonZero()) {
-            var rank = 0;
-            Number[][][] n = lu();
-            for (var i = 0; i < n[1].length; i++) {
-                if (n[1][i][i].doubleValue() != 0) {
-                    ++rank;
+            if (isRowVector() || isColumnVector()) {
+                r = 1;
+            } else if (isSquareMatrix() && isDiagonalNonZero()) {
+                var _r = 0;
+                Number[][][] n = lu();
+                for (var i = 0; i < n[1].length; i++) {
+                    if (n[1][i][i].doubleValue() != 0) {
+                        ++_r;
+                    }
                 }
+                r = _r;
+            } else {
+                r = gaussianRank();
             }
-            return rank;
+
+            c.setR(r);
         }
 
-        return gaussianRank();
+        return c.getR();
     }
 
     /**
@@ -1088,6 +1110,140 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
+     * The method creates a random square matrix of given number rows and columns.
+     * The default lower bound is 0 and upper bound is 1.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r the number of rows/columns
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r) {
+        return new ArrayMatrix(random(r, r, 0, 1, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method creates a square matrix with the given rows and columns.
+     * The lower and upper bound can be provided.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r   the number of rows/columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final double min, final double max) {
+        return new ArrayMatrix(random(r, r, min, max, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method creates a random square matrix of given number rows and columns.
+     * You can also provide the level of decimal point precision.
+     *
+     * @param r the number of rows/columns
+     * @param p the precision to decimal point
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, r, 0, 1, p));
+    }
+
+    /**
+     * The method creates a square matrix with the given rows and columns.
+     * The lower and upper bound can be provided.
+     *
+     * @param r   the number of rows/columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the square matrix
+     */
+    public static ArrayMatrix of(final int r, final double min, final double max, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, r, min, max, p));
+    }
+
+    /**
+     * The method is used to generate a random value matrix.
+     * The lower bound is 0, upper bound is 1.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c) {
+        return new ArrayMatrix(random(r, c, 0, 1, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the precision level.
+     * The lower bound is 0, upper bound is 1.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     * @param p the precision to the dacimal points
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, c, 0, 1, p));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the lower and upper bound.
+     * By default the precision level is set to 10 decimal places.
+     *
+     * @param r   the number of rows
+     * @param c   the number of columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final double min, final double max) {
+        return new ArrayMatrix(random(r, c, min, max, Rounding.POINT.TEN));
+    }
+
+    /**
+     * The method is used to generate a random value matrix, with the lower and upper boun,
+     * also the decimal point precision can be configured.
+     *
+     * @param r   the number of rows
+     * @param c   the number of columns
+     * @param min the lower bound value
+     * @param max the upper bound value
+     * @param p   the precision level
+     *
+     * @return the matrix with random values
+     */
+    public static ArrayMatrix of(final int r, final int c, final double min, final double max, final Rounding.POINT p) {
+        return new ArrayMatrix(random(r, c, min, max, p));
+    }
+
+    /**
+     * The method generates random values between the given range.
+     *
+     * @param r the number of rows
+     * @param c the number of columns
+     * @param l the minimum value, it is included.
+     * @param u the maximum value, it is excluded
+     *
+     * @return an array of random values
+     */
+    private static Number[][] random(final int r, final int c, final double l, final double u, final Rounding.POINT p) {
+        var n = new Number[r][c];
+
+        for (int i = 0; i < r; i++)
+            for (int j = 0; j < c; j++)
+                n[i][j] = Rounding.round(l + (Math.random() * (u - l)), p);
+
+        return n;
+    }
+
+    /**
      * The method is helpful to create some of the constant matrices.
      *
      * @param n        the dimension of the matrix
@@ -1125,6 +1281,48 @@ public class ArrayMatrix implements Matrix {
                 e[i][j] = operator.applyAsDouble(i, j);
 
         return e;
+    }
+
+    /*
+     * The class caches some properties of a given matrix to save computation.
+     */
+    private static class Cache {
+        private Integer r;
+        private Double t;
+        private Double d;
+        private Matrix i;
+
+        private Double getT() {
+            return t;
+        }
+
+        private void setT(final Double t) {
+            this.t = t;
+        }
+
+        private Integer getR() {
+            return r;
+        }
+
+        private void setR(final Integer r) {
+            this.r = r;
+        }
+
+        private Double getD() {
+            return d;
+        }
+
+        private void setD(final Double d) {
+            this.d = d;
+        }
+
+        private Matrix getI() {
+            return i;
+        }
+
+        private void setI(final Matrix i) {
+            this.i = i;
+        }
     }
 
     /**

@@ -8,10 +8,7 @@ import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationExceptio
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -480,5 +477,29 @@ class ArrayMatrixTest {
                 () -> assertEquals(a, m.inverse(Rounding.POINT.FOUR)),
                 () -> assertEquals(a1, m1.inverse())
         );
+    }
+
+    @Test
+    void testStaticGenerators() {
+        Matrix m1 = ArrayMatrix.of(5);
+        Matrix m2 = ArrayMatrix.of(5, Rounding.POINT.FOUR);
+        Matrix m3 = ArrayMatrix.of(5, 10, 100, Rounding.POINT.ZERO);
+        Matrix m4 = ArrayMatrix.of(5, 5, 10, Rounding.POINT.FOUR);
+
+        System.out.println(m1);
+        System.out.println(m2);
+        System.out.println(m3);
+        System.out.println(m4);
+
+
+        Matrix m5 = ArrayMatrix.of(3, 2);
+        Matrix m6 = ArrayMatrix.of(2, 4, Rounding.POINT.SIX);
+        Matrix m7 = ArrayMatrix.of(3, 1, -9, 9, Rounding.POINT.ZERO);
+        Matrix m8 = ArrayMatrix.of(5, 7, 50, 100, Rounding.POINT.FOUR);
+
+        System.out.println(m5);
+        System.out.println(m6);
+        System.out.println(m7);
+        System.out.println(m8);
     }
 }
