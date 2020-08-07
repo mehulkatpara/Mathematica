@@ -501,5 +501,20 @@ class ArrayMatrixTest {
         System.out.println(m6);
         System.out.println(m7);
         System.out.println(m8);
+
+        System.out.println(Double.MAX_VALUE);
+        System.out.println(Double.MIN_VALUE);
+    }
+
+    @Test
+    void testHilbert() {
+        Matrix h1 = ArrayMatrix.hilbertMatrix(2);
+        Matrix h2 = ArrayMatrix.hilbertMatrix(3);
+
+        System.out.println(h1);
+        System.out.println(h2);
+
+        System.out.println(h1.inverse());
+        System.out.println(h2.inverse());
     }
 }

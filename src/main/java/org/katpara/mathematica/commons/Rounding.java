@@ -9,12 +9,17 @@ import java.text.DecimalFormat;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public interface Rounding {
+public class Rounding {
+
+    /**
+     * The rounding format object
+     */
+    private static final DecimalFormat f = new DecimalFormat();
 
     /**
      * Some of the constants used for rounding.
      */
-    enum POINT {
+    public enum POINT {
         ZERO("0"),
         ONE("0.0"),
         TWO("0.00"),
@@ -39,11 +44,6 @@ public interface Rounding {
     }
 
     /**
-     * The rounding format object
-     */
-    DecimalFormat f = new DecimalFormat();
-
-    /**
      * The method helps to creat a rounding number until the given decimal point.
      * The default rounding mode for this method is RoundingMode.HALF_UP.
      *
@@ -52,27 +52,13 @@ public interface Rounding {
      *
      * @return the rounded point
      */
-    static Number round(final Number n, final POINT p) {
-        return round(n, p, RoundingMode.HALF_UP);
-    }
-
-    /**
-     * The method helps to creat a rounding number until the given decimal point.
-     * The last argument is the rounding mode, which are the same as {@link java.math.RoundingMode}
-     *
-     * @param n the number to be formatted
-     * @param p the rounding configuration
-     * @param m the rounding mode
-     *
-     * @return the rounded point
-     */
-    static Number round(final Number n, final POINT p, final RoundingMode m) {
+    public static Number round(final Number n, final POINT p) {
         f.applyPattern(p.getValue());
 
         if(p == POINT.ZERO) {
             return Integer.parseInt(f.format(n));
         } else {
-            f.setRoundingMode(m);
+            f.setRoundingMode(RoundingMode.HALF_UP);
             return Double.parseDouble(f.format(n));
         }
     }
