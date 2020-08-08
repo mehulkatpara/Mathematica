@@ -9,12 +9,12 @@ import java.text.DecimalFormat;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public interface Rounding {
+public class Rounding {
 
     /**
      * Some of the constants used for rounding.
      */
-    enum POINT {
+    public enum POINT {
         ZERO("0"),
         ONE("0.0"),
         TWO("0.00"),
@@ -25,7 +25,9 @@ public interface Rounding {
         SEVEN("0.0000000"),
         EIGHT("0.00000000"),
         NINE("0.000000000"),
-        TEN("0.0000000000");
+        TEN("0.0000000000"),
+        ELEVEN("0.00000000000"),
+        TWELVE("0.000000000000");
 
         private final String value;
 
@@ -41,38 +43,42 @@ public interface Rounding {
     /**
      * The rounding format object
      */
-    DecimalFormat f = new DecimalFormat();
+    private static final DecimalFormat f = new DecimalFormat();
 
     /**
-     * The method helps to creat a rounding number until the given decimal point.
-     * The default rounding mode for this method is RoundingMode.HALF_UP.
+     * The method rounds a number to default 4 decimal places.
      *
-     * @param n the number to be formatted
-     * @param p the rounding configuration
+     * @param n the number to be rounded
      *
-     * @return the rounded point
+     * @return the rounded number until 4 decimal places
      */
-    static Number round(final Number n, final POINT p) {
-        return round(n, p, RoundingMode.HALF_UP);
+    public static String round(final Number n) {
+        return round(n, POINT.FOUR);
     }
 
     /**
-     * The method helps to creat a rounding number until the given decimal point.
+     * The method helps to round a number at the given decimal places.
      * The last argument is the rounding mode, which are the same as {@link java.math.RoundingMode}
      *
      * @param n the number to be formatted
      * @param p the rounding configuration
-     * @param m the rounding mode
      *
      * @return the rounded point
      */
-    static Number round(final Number n, final POINT p, final RoundingMode m) {
+    public static String round(final Number n, final POINT p) {
+        f.applyPattern(p.getValue());
+        f.setRoundingMode(RoundingMode.HALF_UP);
+        return f.format(n);
+    }
+
+    @Deprecated
+    public static Number roundToDouble(final Number n, final POINT p) {
         f.applyPattern(p.getValue());
 
-        if(p == POINT.ZERO) {
+        if (p == POINT.ZERO) {
             return Integer.parseInt(f.format(n));
         } else {
-            f.setRoundingMode(m);
+            f.setRoundingMode(RoundingMode.HALF_UP);
             return Double.parseDouble(f.format(n));
         }
     }

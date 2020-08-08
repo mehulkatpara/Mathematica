@@ -376,7 +376,7 @@ public class ArrayMatrix implements Matrix {
             c.setT(t);
         }
 
-        return Rounding.round(c.getT(), p).doubleValue();
+        return Rounding.roundToDouble(c.getT(), p).doubleValue();
     }
 
     /**
@@ -469,7 +469,7 @@ public class ArrayMatrix implements Matrix {
             c.setD(det);
         }
 
-        return Rounding.round(c.getD(), point).doubleValue();
+        return Rounding.roundToDouble(c.getD(), point).doubleValue();
     }
 
     /**
@@ -540,10 +540,10 @@ public class ArrayMatrix implements Matrix {
             if (v == 0)
                 return null;
 
-            n[0][0] = Rounding.round(d / v, p);
-            n[0][1] = Rounding.round(-b / v, p);
-            n[1][0] = Rounding.round(-c / v, p);
-            n[1][1] = Rounding.round(a / v, p);
+            n[0][0] = Rounding.roundToDouble(d / v, p);
+            n[0][1] = Rounding.roundToDouble(-b / v, p);
+            n[1][0] = Rounding.roundToDouble(-c / v, p);
+            n[1][1] = Rounding.roundToDouble(a / v, p);
 
             return new ArrayMatrix(n);
         } else {
@@ -573,13 +573,13 @@ public class ArrayMatrix implements Matrix {
         for (var i = n.length - 1; i >= 0; i--) {
             for (var j = n.length - 1; j >= 0; j--) {
                 if (i == n.length - 1) {
-                    r[i][j] = Rounding.round(z[i][j].doubleValue() / n[i][i].doubleValue(), p);
+                    r[i][j] = Rounding.roundToDouble(z[i][j].doubleValue() / n[i][i].doubleValue(), p);
                 } else {
                     var sum = 0.0;
                     for (int k = n.length - 1; k > i; k--)
                         sum -= n[i][k].doubleValue() * r[k][j].doubleValue();
 
-                    r[i][j] = Rounding.round((z[i][j].doubleValue() + sum) / n[i][i].doubleValue(), p);
+                    r[i][j] = Rounding.roundToDouble((z[i][j].doubleValue() + sum) / n[i][i].doubleValue(), p);
                 }
             }
         }
@@ -707,7 +707,7 @@ public class ArrayMatrix implements Matrix {
 
         for (var i = 0; i < d[0]; i++)
             for (var j = 0; j < d[1]; j++)
-                n[i][j] = Rounding.round(e[i][j].doubleValue() * s.doubleValue(), p);
+                n[i][j] = Rounding.roundToDouble(e[i][j].doubleValue() * s.doubleValue(), p);
 
         return new ArrayMatrix(n);
     }
@@ -776,10 +776,10 @@ public class ArrayMatrix implements Matrix {
                     _m6 = (_e3 - _e1) * (_n1 + _n2),
                     _m7 = (_e2 - _e4) * (_n3 + _n4);
 
-            n[0][0] = Rounding.round(_m1 + _m4 - _m5 + _m7, p);
-            n[0][1] = Rounding.round(_m3 + _m5, p);
-            n[1][0] = Rounding.round(_m2 + _m4, p);
-            n[1][1] = Rounding.round(_m1 - _m2 + _m3 + _m6, p);
+            n[0][0] = Rounding.roundToDouble(_m1 + _m4 - _m5 + _m7, p);
+            n[0][1] = Rounding.roundToDouble(_m3 + _m5, p);
+            n[1][0] = Rounding.roundToDouble(_m2 + _m4, p);
+            n[1][1] = Rounding.roundToDouble(_m1 - _m2 + _m3 + _m6, p);
 
         } else {
             n = new Number[d[0]][_e[1].length];
@@ -787,7 +787,7 @@ public class ArrayMatrix implements Matrix {
                 for (var j = 0; j < _e[1].length; j++) {
                     n[i][j] = 0;
                     for (var k = 0; k < d[1]; k++) {
-                        n[i][j] = Rounding.round(n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue()), p);
+                        n[i][j] = Rounding.roundToDouble(n[i][j].doubleValue() + (e[i][k].doubleValue() * _e[k][j].doubleValue()), p);
                     }
                 }
             }
@@ -1275,7 +1275,7 @@ public class ArrayMatrix implements Matrix {
 
         for (int i = 0; i < r; i++)
             for (int j = 0; j < c; j++)
-                n[i][j] = Rounding.round(l + (Math.random() * (u - l)), p);
+                n[i][j] = Rounding.roundToDouble(l + (Math.random() * (u - l)), p);
 
         return n;
     }

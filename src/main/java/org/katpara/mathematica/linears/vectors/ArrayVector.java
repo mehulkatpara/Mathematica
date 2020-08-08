@@ -3,7 +3,6 @@ package org.katpara.mathematica.linears.vectors;
 import org.katpara.mathematica.commons.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
 import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
 import org.katpara.mathematica.linears.matrices.Matrix;
@@ -178,7 +177,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double getMagnitude(final Rounding.POINT point) {
-        return Rounding.round(getMagnitude(), point).doubleValue();
+        return Rounding.roundToDouble(getMagnitude(), point).doubleValue();
     }
 
     /**
@@ -215,7 +214,7 @@ public final class ArrayVector implements Vector {
     public double[] getCosines(final Angle a, final Rounding.POINT p) {
         var n = getCosines(a);
         for (var i = 0; i < d; i++)
-            n[i++] = Rounding.round(n[i], p).doubleValue();
+            n[i++] = Rounding.roundToDouble(n[i], p).doubleValue();
 
         return n;
     }
@@ -340,7 +339,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double angle(final Vector v, final Angle a, final Rounding.POINT p) {
-        return Rounding.round(angle(v, a), p).doubleValue();
+        return Rounding.roundToDouble(angle(v, a), p).doubleValue();
     }
 
     /**
@@ -550,7 +549,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double dot(final Vector v, final Rounding.POINT p) {
-        return Rounding.round(dot(v), p).doubleValue();
+        return Rounding.roundToDouble(dot(v), p).doubleValue();
     }
 
     /**
@@ -621,7 +620,7 @@ public final class ArrayVector implements Vector {
      */
     @Override
     public double scalarProjection(final Vector v, final Rounding.POINT p) {
-        return Rounding.round(scalarProjection(v), p).doubleValue();
+        return Rounding.roundToDouble(scalarProjection(v), p).doubleValue();
     }
 
     /**
@@ -790,7 +789,7 @@ public final class ArrayVector implements Vector {
         var n = new Number[d];
 
         for (var i = 0; i < d; i++)
-            n[i] = Rounding.round(o.applyAsDouble(i), p);
+            n[i] = Rounding.roundToDouble(o.applyAsDouble(i), p);
 
         return new ArrayVector(n);
     }
@@ -832,7 +831,7 @@ public final class ArrayVector implements Vector {
         var n = random(d, min, max);
 
         for (var i = 0; i < d; i++)
-            n[i] = Rounding.round(o.applyAsDouble(n[i].doubleValue()), p);
+            n[i] = Rounding.roundToDouble(o.applyAsDouble(n[i].doubleValue()), p);
 
         return new ArrayVector(n);
     }
@@ -879,7 +878,7 @@ public final class ArrayVector implements Vector {
         var n = random(d, min, max);
 
         for (var i = 0; i < d; i++)
-            n[i] = Rounding.round(n[i], p);
+            n[i] = Rounding.roundToDouble(n[i], p);
 
         return n;
     }
