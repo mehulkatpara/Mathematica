@@ -1,10 +1,9 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.commons.Rounding;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
-import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.dep.Matrix_Old;
+import org.katpara.mathematica.util.Rounding;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorOperationException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -57,12 +56,12 @@ public interface Vector extends Cloneable, Serializable {
      * For n-dimensional vector, the magnitude is defined as;
      * |v| = sqrt(v1^2 + v2^2 + ... + vn^2).
      *
-     * @param point the value round up to the given decimal point
-     *              see, {@link Rounding.POINT}
+     * @param decimals the value round up to the given decimal decimals
+     *              see, {@link Rounding.Decimals}
      *
      * @return the magnitude of the vector
      */
-    double getMagnitude(final Rounding.POINT point);
+    double getMagnitude(final Rounding.Decimals decimals);
 
     /**
      * The method calculates the cosines with respect to their dimensional axioms.
@@ -81,11 +80,11 @@ public interface Vector extends Cloneable, Serializable {
      * dimensions.
      *
      * @param angle the angle, see {@link Angle}
-     * @param point the rounding point
+     * @param decimals the rounding decimals
      *
      * @return an array of cosines with respect to axiom.
      */
-    double[] getCosines(final Angle angle, final Rounding.POINT point);
+    double[] getCosines(final Angle angle, final Rounding.Decimals decimals);
 
     /**
      * The method returns the elements of a vector as an array.
@@ -153,11 +152,11 @@ public interface Vector extends Cloneable, Serializable {
      *
      * @param vector the another vector to calculate
      * @param angle  the angle either in degree or radian, See, {@link Angle}
-     * @param point  the decimal point you want to round up to
+     * @param decimals  the decimal decimals you want to round up to
      *
      * @return the angle in degrees or radian.
      */
-    double angle(final Vector vector, final Angle angle, final Rounding.POINT point);
+    double angle(final Vector vector, final Angle angle, final Rounding.Decimals decimals);
 
     /**
      * The method will return the inverse vector.
@@ -270,14 +269,14 @@ public interface Vector extends Cloneable, Serializable {
      * {@link InvalidVectorDimensionException} exception is thrown.
      *
      * @param vector the second vector
-     * @param point the rounding point, {@link Rounding.POINT}
+     * @param decimals the rounding decimals, {@link Rounding.Decimals}
      *
      * @return the resulting dot product
      *
      * @throws InvalidVectorDimensionException when both products are on different
      *                                         dimensions.
      */
-    double dot(final Vector vector, final Rounding.POINT point);
+    double dot(final Vector vector, final Rounding.Decimals decimals);
 
     /**
      * The method returns the cross product of two vectors.
@@ -324,11 +323,11 @@ public interface Vector extends Cloneable, Serializable {
      * dot(V, W) / magnitude(V)
      *
      * @param vector the projecting vector
-     * @param point the rounding point, {@link Rounding.POINT}
+     * @param decimals the rounding decimals, {@link Rounding.Decimals}
      *
      * @return the projected scalar
      */
-    double scalarProjection(final Vector vector, final Rounding.POINT point);
+    double scalarProjection(final Vector vector, final Rounding.Decimals decimals);
 
     /**
      * The method calculates the vector project of a given vector onto
@@ -356,15 +355,15 @@ public interface Vector extends Cloneable, Serializable {
     Vector vectorRejection(final Vector vector);
 
     /**
-     * The method will perform multiplication of a matrix with a vector.
-     * The vector must have the dimension equal to the number of columns of the matrix.
+     * The method will perform multiplication of a matrixOld with a vector.
+     * The vector must have the dimension equal to the number of columns of the matrixOld.
      *
-     * @param matrix the matrix to multiply
+     * @param matrixOld the matrixOld to multiply
      *
      * @return the resulting vector
      *
      * @throws InvalidVectorOperationException if the number of columns is not equal to
      *                                         the dimension of a given vector
      */
-    Vector multiply(final Matrix matrix);
+    Vector multiply(final Matrix_Old matrixOld);
 }

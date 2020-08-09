@@ -221,7 +221,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#angle(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.linears.vectors.Vector.Angle,org.katpara.mathematica.commons.Rounding.POINT)">angle</a></span>&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
      <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors">Vector.Angle</a>&nbsp;angle,
-     <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+     <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The method returns the angle between two vectors.</div>
 </td>
@@ -243,7 +243,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#dot(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.commons.Rounding.POINT)">dot</a></span>&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
-   <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+   <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The method will return a dot product of two vectors.</div>
 </td>
@@ -258,7 +258,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getCosines(org.katpara.mathematica.linears.vectors.Vector.Angle,org.katpara.mathematica.commons.Rounding.POINT)">getCosines</a></span>&#8203;(<a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors">Vector.Angle</a>&nbsp;angle,
-          <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+          <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The method calculates the cosines with respect to their dimensional axioms.</div>
 </td>
@@ -281,7 +281,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMagnitude(org.katpara.mathematica.commons.Rounding.POINT)">getMagnitude</a></span>&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMagnitude(org.katpara.mathematica.commons.Rounding.POINT)">getMagnitude</a></span>&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The magnitude of a vector, also known as "norm", is square root of
  the sum all the vector elements powered by 2.</div>
@@ -321,7 +321,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#scalarProjection(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.commons.Rounding.POINT)">scalarProjection</a></span>&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
-                <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+                <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The method calculates the scalar project of a given vector onto
  the current vector.</div>
@@ -440,7 +440,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <ul class="blockList">
 <li class="blockList">
 <h4>getMagnitude</h4>
-<pre class="methodSignature">double&nbsp;getMagnitude&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+<pre class="methodSignature">double&nbsp;getMagnitude&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The magnitude of a vector, also known as "norm", is square root of
  the sum all the vector elements powered by 2. A magnitude of a vector
  is represented by the length of a vector and written as |V| for vector V.
@@ -449,7 +449,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
  |v| = sqrt(v1^2 + v2^2 + ... + vn^2).</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>point</code> - the value round up to the given decimal point
+<dd><code>decimals</code> - the value round up to the given decimal decimals
               see, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the magnitude of the vector</dd>
@@ -481,14 +481,14 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <li class="blockList">
 <h4>getCosines</h4>
 <pre class="methodSignature">double[]&nbsp;getCosines&#8203;(<a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors">Vector.Angle</a>&nbsp;angle,
-                    <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+                    <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The method calculates the cosines with respect to their dimensional axioms.
  The number of elements in the returned array will be equal to the number of
  dimensions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>angle</code> - the angle, see <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors"><code>Vector.Angle</code></a></dd>
-<dd><code>point</code> - the rounding point</dd>
+<dd><code>decimals</code> - the rounding decimals</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of cosines with respect to axiom.</dd>
 </dl>
@@ -532,8 +532,8 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <div class="block">If the given vector is orthogonal to the current vector, then it returns true;
  otherwise it would be false.
  <p>
- Orthogonality is known as a vector that is perpendicular to the given matrix,
- i.e. if the vector makes the 90 degrees angle with the current matrix.</div>
+ Orthogonality is known as a vector that is perpendicular to the given matrixOld,
+ i.e. if the vector makes the 90 degrees angle with the current matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the vector to check orthogonality</dd>
@@ -597,7 +597,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <h4>angle</h4>
 <pre class="methodSignature">double&nbsp;angle&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
              <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors">Vector.Angle</a>&nbsp;angle,
-             <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+             <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The method returns the angle between two vectors.
  The second parameter can be true/false, depending on if you want the angle
  in degrees (true) or in radian (false).</div>
@@ -605,7 +605,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the another vector to calculate</dd>
 <dd><code>angle</code> - the angle either in degree or radian, See, <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors"><code>Vector.Angle</code></a></dd>
-<dd><code>point</code> - the decimal point you want to round up to</dd>
+<dd><code>decimals</code> - the decimal decimals you want to round up to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the angle in degrees or radian.</dd>
 </dl>
@@ -779,14 +779,14 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <li class="blockList">
 <h4>dot</h4>
 <pre class="methodSignature">double&nbsp;dot&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
-           <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+           <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The method will return a dot product of two vectors.
  If both vectors are on different dimensions then
  <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the second vector</dd>
-<dd><code>point</code> - the rounding point, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
+<dd><code>decimals</code> - the rounding decimals, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -852,7 +852,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <li class="blockList">
 <h4>scalarProjection</h4>
 <pre class="methodSignature">double&nbsp;scalarProjection&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector,
-                        <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+                        <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The method calculates the scalar project of a given vector onto
  the current vector.
  <p>
@@ -862,7 +862,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the projecting vector</dd>
-<dd><code>point</code> - the rounding point, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
+<dd><code>decimals</code> - the rounding decimals, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the projected scalar</dd>
 </dl>

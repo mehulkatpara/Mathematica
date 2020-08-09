@@ -11,17 +11,12 @@ public class NullArgumentProvidedException extends RuntimeException {
     private static final long serialVersionUID = 1392183545974749989L;
 
     /**
-     * The default message in case of the specialized message is not provided.
-     */
-    private static final String MESSAGE = "Null argument provided";
-
-    /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
     public NullArgumentProvidedException() {
-        super(MESSAGE);
+        super(ExceptionMessages.NULL_ARGUMENT_PROVIDED_MESSAGE);
     }
 
     /**

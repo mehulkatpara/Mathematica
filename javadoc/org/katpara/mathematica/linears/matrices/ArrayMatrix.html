@@ -125,7 +125,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li>java.lang.Object</li>
 <li>
 <ul class="inheritance">
-<li>org.katpara.mathematica.linears.matrices.ArrayMatrix</li>
+<li>org.katpara.mathematica.linears.matrices.dep.ArrayMatrixOld</li>
 </ul>
 </li>
 </ul>
@@ -144,21 +144,21 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
  Internally the class has three properties;
  <ul>
      <li>e: a two-dimensional array</li>
-     <li>d: the dimension of the matrix</li>
+     <li>d: the dimension of the matrixOld</li>
      <li>t: a type of Matrix</li>
  </ul>
  <p>
- e: It is a two-dimensional array that holds all the elements of a matrix.
+ e: It is a two-dimensional array that holds all the elements of a matrixOld.
  t: It is a type defined as <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a>.
  <p>
- When you create a matrix using one of these constructors, the type is absolutely "NOT_SPECIFIED".
- Which means that I have no way to predetermine the type of matrix you are creating.
- However, the things get interesting when you are creating a matrix using <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface.
+ When you create a matrixOld using one of these constructors, the type is absolutely "NOT_SPECIFIED".
+ Which means that I have no way to predetermine the type of matrixOld you are creating.
+ However, the things get interesting when you are creating a matrixOld using <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface.
  I have already implemented a logic to create almost all kind of constant matrices. So if you are
- creating a matrix of a certain kind, that I have already coded, please use the interface.
+ creating a matrixOld of a certain kind, that I have already coded, please use the interface.
  <p>
- The reason is that, I am doing many calculations based on the type of matrix. If I already know
- the type of the matrix, I can optimize the process to work really really fast. Thank you :)</div>
+ The reason is that, I am doing many calculations based on the type of matrixOld. If I already know
+ the type of the matrixOld, I can optimize the process to work really really fast. Thank you :)</div>
 <dl>
 <dt><span class="simpleTagLabel">Since:</span></dt>
 <dd>1.0.0</dd>
@@ -179,7 +179,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 </a>
 <h3>Nested Class Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a id="nested.classes.inherited.from.class.org.katpara.mathematica.linears.matrices.Matrix">
+<li class="blockList"><a id="nested.classes.inherited.from.class.org.katpara.mathematica.linears.matrices.dep.Matrix_Old">
 <!--   -->
 </a>
 <h3>Nested classes/interfaces inherited from interface&nbsp;org.katpara.mathematica.linears.matrices.<a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></h3>
@@ -208,36 +208,36 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 </td>
 </tr>
 <tr class="rowColor">
-<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Number%5B%5D%5B%5D,org.katpara.mathematica.linears.matrices.Matrix.MatrixType)">ArrayMatrix</a></span>&#8203;(java.lang.Number[][]&nbsp;e,
+<th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.lang.Number%5B%5D%5B%5D,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.MatrixType)">ArrayMatrix</a></span>&#8203;(java.lang.Number[][]&nbsp;e,
            <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a>&nbsp;t)</code></th>
 <td class="colLast">
-<div class="block">The constructor creates a matrix out of two-dimensional array and
+<div class="block">The constructor creates a matrixOld out of two-dimensional array and
  <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a> parameter.</div>
 </td>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Collection)">ArrayMatrix</a></span>&#8203;(java.util.Collection&lt;java.util.List&lt;java.lang.Number&gt;&gt;&nbsp;lists)</code></th>
 <td class="colLast">
-<div class="block">The constructor creates a matrix out of the list containing a list of numbers,
+<div class="block">The constructor creates a matrixOld out of the list containing a list of numbers,
  or a set containing a list of numbers.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.List)">ArrayMatrix</a></span>&#8203;(java.util.List&lt;? extends <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vl)</code></th>
 <td class="colLast">
-<div class="block">The constructor is used to create a matrix out of a list of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.</div>
+<div class="block">The constructor is used to create a matrixOld out of a list of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.</div>
 </td>
 </tr>
 <tr class="altColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Map)">ArrayMatrix</a></span>&#8203;(java.util.Map&lt;?,&#8203;? extends <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vm)</code></th>
 <td class="colLast">
-<div class="block">The constructor creates a matrix out of a map of vectors.</div>
+<div class="block">The constructor creates a matrixOld out of a map of vectors.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <th class="colConstructorName" scope="row"><code><span class="memberNameLink"><a href="#%3Cinit%3E(java.util.Set)">ArrayMatrix</a></span>&#8203;(java.util.Set&lt;<a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vs)</code></th>
 <td class="colLast">
-<div class="block">The constructor is used to create a matrix out of a set of matrices.</div>
+<div class="block">The constructor is used to create a matrixOld out of a set of matrices.</div>
 </td>
 </tr>
 </table>
@@ -262,8 +262,8 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determinant()">determinant</a></span>()</code></th>
 <td class="colLast">
-<div class="block">A determinant is a scalar value computed for a square matrix; that
- encodes many properties of the linear algebra described by the matrix.</div>
+<div class="block">A determinant is a scalar value computed for a square matrixOld; that
+ encodes many properties of the linear algebra described by the matrixOld.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -277,7 +277,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exchangeMatrix(int)">exchangeMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+<div class="block">An exchange matrixOld is a square matrixOld whose counterdiagonal is always 1 and the
  rest of the elements are 0.</div>
 </td>
 </tr>
@@ -285,14 +285,14 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>int[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDimension()">getDimension</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns the dimension of a matrix.</div>
+<div class="block">The method returns the dimension of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns the type of a matrix.</div>
+<div class="block">The method returns the type of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -306,14 +306,14 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hilbertMatrix(int)">hilbertMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A Hilbert matrix is a square matrix with entries being the unit fractions.</div>
+<div class="block">A Hilbert matrixOld is a square matrixOld with entries being the unit fractions.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#identityMatrix(int)">identityMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">The identity matrix is a square matrix whose diagonal is always 1 and all the
+<div class="block">The identity matrixOld is a square matrixOld whose diagonal is always 1 and all the
  other elements are 0.</div>
 </td>
 </tr>
@@ -321,7 +321,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isColumnVector()">isColumnVector</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  column vector, which is n x 1.</div>
 </td>
 </tr>
@@ -329,7 +329,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRowVector()">isRowVector</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  row vector, which is 1 x n</div>
 </td>
 </tr>
@@ -337,15 +337,15 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSquareMatrix()">isSquareMatrix</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
- square matrix, which is n x n.</div>
+<div class="block">The method will return true if the matrixOld is a
+ square matrixOld, which is n x n.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lehmerMatrix(int)">lehmerMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A lehmer matrix is a constant systematic square matrix.</div>
+<div class="block">A lehmer matrixOld is a constant systematic square matrixOld.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
@@ -353,45 +353,45 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#oneMatrix(int,int)">oneMatrix</a></span>&#8203;(int&nbsp;m,
          int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.</div>
+<div class="block">In mathematics, a matrixOld of one, or all-ones matrixOld is a matrixOld whose all elements are 1.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pascalMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.PascalMatrixType)">pascalMatrix</a></span>&#8203;(int&nbsp;n,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pascalMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.PascalMatrixType)">pascalMatrix</a></span>&#8203;(int&nbsp;n,
             <a href="Matrix.PascalMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.PascalMatrixType</a>&nbsp;t)</code></th>
 <td class="colLast">
-<div class="block">The method will create a pascal's square matrix.</div>
+<div class="block">The method will create a pascal's square matrixOld.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rank()">rank</a></span>()</code></th>
 <td class="colLast">
-<div class="block">A rank of a matrix is independent rows of a matrix.</div>
+<div class="block">A rank of a matrixOld is independent rows of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#redhefferMatrix(int)">redhefferMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.</div>
+<div class="block">A redheffer matrixOld is a (0-1) square matrixOld, whose entries are either 1 or 0.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
 <td class="colFirst"><code>(package private) static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.ShiftMatrixType)">shiftMatrix</a></span>&#8203;(int&nbsp;n,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.ShiftMatrixType)">shiftMatrix</a></span>&#8203;(int&nbsp;n,
            <a href="Matrix.ShiftMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.ShiftMatrixType</a>&nbsp;t)</code></th>
 <td class="colLast">
-<div class="block">The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
- super diagonal matrix, or lower diagonal matrix.</div>
+<div class="block">The shift matrixOld is a matrixOld whose diagonal has shifted one level up or down, known as
+ super diagonal matrixOld, or lower diagonal matrixOld.</div>
 </td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>java.lang.Number[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray()">toArray</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns all the elements of a matrix.</div>
+<div class="block">The method returns all the elements of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -419,7 +419,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#trace()">trace</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The trace of the matrix is defined as the sum of all the elements,
+<div class="block">The trace of the matrixOld is defined as the sum of all the elements,
  on the main diagonal.</div>
 </td>
 </tr>
@@ -428,7 +428,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#zeroMatrix(int,int)">zeroMatrix</a></span>&#8203;(int&nbsp;m,
           int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 </td>
 </tr>
 </table>
@@ -455,7 +455,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a id="&lt;init&gt;(java.lang.Number[][],org.katpara.mathematica.linears.matrices.Matrix.MatrixType)">
+<a id="&lt;init&gt;(java.lang.Number[][],org.katpara.mathematica.linears.matrices.dep.Matrix_Old.MatrixType)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -463,22 +463,22 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>ArrayMatrix</h4>
 <pre>ArrayMatrix&#8203;(java.lang.Number[][]&nbsp;e,
             <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a>&nbsp;t)</pre>
-<div class="block">The constructor creates a matrix out of two-dimensional array and
+<div class="block">The constructor creates a matrixOld out of two-dimensional array and
  <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a> parameter.
  <p>
  The <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a> is useful to
  calculate various properties much faster than going through all the necessary calculations.
  <p>
- When a user creates the type of a matrix is usually "NOT_SPECIFIED", since I have no way to
- figure out what kind of constant matrix you are defining. The only way I can figure out the
- type is by when you use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface to create a predefined matrix for you.
- So if you are creating a matrix that is already pre-defined, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface.</div>
+ When a user creates the type of a matrixOld is usually "NOT_SPECIFIED", since I have no way to
+ figure out what kind of constant matrixOld you are defining. The only way I can figure out the
+ type is by when you use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface to create a predefined matrixOld for you.
+ So if you are creating a matrixOld that is already pre-defined, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - a two-dimensional elements array</dd>
-<dd><code>t</code> - a type of matrix</dd>
+<dd><code>t</code> - a type of matrixOld</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrix doesn't have at least one element.</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
 <dd><code><a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions">NullArgumentProvidedException</a></code> - when the array has a null value</dd>
 </dl>
 </li>
@@ -490,9 +490,9 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>ArrayMatrix</h4>
 <pre>public&nbsp;ArrayMatrix&#8203;(java.util.List&lt;? extends <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vl)</pre>
-<div class="block">The constructor is used to create a matrix out of a list of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.
- Each row of a matrix is a <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.
- The type of the matrix is "NOT_SPECIFIED".</div>
+<div class="block">The constructor is used to create a matrixOld out of a list of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.
+ Each row of a matrixOld is a <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.
+ The type of the matrixOld is "NOT_SPECIFIED".</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vl</code> - the <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a> List</dd>
@@ -509,9 +509,9 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>ArrayMatrix</h4>
 <pre>public&nbsp;ArrayMatrix&#8203;(java.util.Set&lt;<a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vs)</pre>
-<div class="block">The constructor is used to create a matrix out of a set of matrices.
+<div class="block">The constructor is used to create a matrixOld out of a set of matrices.
  The constructor internally relies on <a href="#%3Cinit%3E(java.util.List)"><code>ArrayMatrix(List)</code></a> to
- create a matrix, please note.</div>
+ create a matrixOld, please note.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vs</code> - a set of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a></dd>
@@ -528,13 +528,13 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>ArrayMatrix</h4>
 <pre>public&nbsp;ArrayMatrix&#8203;(java.util.Map&lt;?,&#8203;? extends <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&gt;&nbsp;vm)</pre>
-<div class="block">The constructor creates a matrix out of a map of vectors. The keys of the map
- is disregarded when creating a matrix out of a Map. In that case, the keys
+<div class="block">The constructor creates a matrixOld out of a map of vectors. The keys of the map
+ is disregarded when creating a matrixOld out of a Map. In that case, the keys
  can be anything as long as it makes a valid map, however the values must be
  a type of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a>.
  <p>
  Please note, that this constructor internally relies on <a href="#%3Cinit%3E(java.util.List)"><code>ArrayMatrix(List)</code></a>
- to create a matrix.</div>
+ to create a matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vm</code> - a map of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a></dd>
@@ -551,11 +551,11 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>ArrayMatrix</h4>
 <pre>public&nbsp;ArrayMatrix&#8203;(java.util.Collection&lt;java.util.List&lt;java.lang.Number&gt;&gt;&nbsp;lists)</pre>
-<div class="block">The constructor creates a matrix out of the list containing a list of numbers,
- or a set containing a list of numbers. The type of this matrix is "NOT_SPECIFIED".
+<div class="block">The constructor creates a matrixOld out of the list containing a list of numbers,
+ or a set containing a list of numbers. The type of this matrixOld is "NOT_SPECIFIED".
  <p>
- If you are creating a predefined matrix, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface
- to create a matrix for you, it's easy and helps me to optimize various calculations
+ If you are creating a predefined matrixOld, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface
+ to create a matrixOld for you, it's easy and helps me to optimize various calculations
  much faster. I have many predefined matrices for you to use out of the box, to help
  you create various matrices with ease, please check
  <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a> for more information.</div>
@@ -577,18 +577,18 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>ArrayMatrix</h4>
 <pre>public&nbsp;ArrayMatrix&#8203;(java.lang.Number[][]&nbsp;e)</pre>
 <div class="block">The constructor creates a Matrix using two-dimensional array.
- The type of created matrix is "NOT_SPECIFIED"; since it's user generated.
+ The type of created matrixOld is "NOT_SPECIFIED"; since it's user generated.
  <p>
- If you are creating a predefined matrix, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface
- to create a matrix for you, it's easy and helps me to optimize various calculations
+ If you are creating a predefined matrixOld, please use <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a> interface
+ to create a matrixOld for you, it's easy and helps me to optimize various calculations
  much faster. I have many predefined matrices for you to use out of the box, to help
  you create various matrices with ease, please check
  <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a> for more information.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>e</code> - the matrix array.</dd>
+<dd><code>e</code> - the matrixOld array.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrix doesn't have at least one element.</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
 <dd><code><a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions">NullArgumentProvidedException</a></code> - when the array has a null value</dd>
 </dl>
 </li>
@@ -610,12 +610,12 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>getDimension</h4>
 <pre class="methodSignature">public&nbsp;int[]&nbsp;getDimension()</pre>
-<div class="block">The method returns the dimension of a matrix.</div>
+<div class="block">The method returns the dimension of a matrixOld.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#getDimension()">getDimension</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the dimension of the matrix</dd>
+<dd>the dimension of the matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -626,13 +626,13 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>getType</h4>
 <pre class="methodSignature">public&nbsp;<a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a>&nbsp;getType()</pre>
-<div class="block">The method returns the type of a matrix.
+<div class="block">The method returns the type of a matrixOld.
  For more details see <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#getType()">getType</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the type of matrix</dd>
+<dd>the type of matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -643,12 +643,12 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>toArray</h4>
 <pre class="methodSignature">public&nbsp;java.lang.Number[][]&nbsp;toArray()</pre>
-<div class="block">The method returns all the elements of a matrix.</div>
+<div class="block">The method returns all the elements of a matrixOld.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#toArray()">toArray</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements</dd>
+<dd>the matrixOld elements</dd>
 </dl>
 </li>
 </ul>
@@ -664,7 +664,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#toList()">toList</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements as a list of lists</dd>
+<dd>the matrixOld elements as a list of lists</dd>
 </dl>
 </li>
 </ul>
@@ -680,7 +680,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#toArrayVectors()">toArrayVectors</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements as a list of vectors</dd>
+<dd>the matrixOld elements as a list of vectors</dd>
 </dl>
 </li>
 </ul>
@@ -691,7 +691,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>isRowVector</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isRowVector()</pre>
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  row vector, which is 1 x n</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -708,7 +708,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>isColumnVector</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isColumnVector()</pre>
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  column vector, which is n x 1.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -725,13 +725,13 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>isSquareMatrix</h4>
 <pre class="methodSignature">public&nbsp;boolean&nbsp;isSquareMatrix()</pre>
-<div class="block">The method will return true if the matrix is a
- square matrix, which is n x n.</div>
+<div class="block">The method will return true if the matrixOld is a
+ square matrixOld, which is n x n.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#isSquareMatrix()">isSquareMatrix</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if it is a square matrix</dd>
+<dd>true if it is a square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -742,15 +742,15 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>trace</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;trace()</pre>
-<div class="block">The trace of the matrix is defined as the sum of all the elements,
+<div class="block">The trace of the matrixOld is defined as the sum of all the elements,
  on the main diagonal.
  <p>
- The trace only exist for a square matrix.</div>
+ The trace only exist for a square matrixOld.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#trace()">trace</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the trace of the square matrix</dd>
+<dd>the trace of the square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -761,13 +761,13 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>rank</h4>
 <pre class="methodSignature">public&nbsp;int&nbsp;rank()</pre>
-<div class="block">A rank of a matrix is independent rows of a matrix. That shows that how many
- rows of a matrix are totally independent, or co-dependent on other rows.</div>
+<div class="block">A rank of a matrixOld is independent rows of a matrixOld. That shows that how many
+ rows of a matrixOld are totally independent, or co-dependent on other rows.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#rank()">rank</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the rank of matrix</dd>
+<dd>the rank of matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -778,14 +778,14 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>determinant</h4>
 <pre class="methodSignature">public&nbsp;double&nbsp;determinant()</pre>
-<div class="block">A determinant is a scalar value computed for a square matrix; that
- encodes many properties of the linear algebra described by the matrix.
- It is denoted as det(A), where A is a matrix or |A|.</div>
+<div class="block">A determinant is a scalar value computed for a square matrixOld; that
+ encodes many properties of the linear algebra described by the matrixOld.
+ It is denoted as det(A), where A is a matrixOld or |A|.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Matrix.html#determinant()">determinant</a></code>&nbsp;in interface&nbsp;<code><a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices">Matrix</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the determinant of the square matrix</dd>
+<dd>the determinant of the square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -797,7 +797,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>zeroMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;zeroMatrix&#8203;(int&nbsp;m,
                               int&nbsp;n)</pre>
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - the number of rows</dd>
@@ -819,7 +819,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>oneMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;oneMatrix&#8203;(int&nbsp;m,
                              int&nbsp;n)</pre>
-<div class="block">In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.</div>
+<div class="block">In mathematics, a matrixOld of one, or all-ones matrixOld is a matrixOld whose all elements are 1.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - the number of rows</dd>
@@ -831,7 +831,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 </dl>
 </li>
 </ul>
-<a id="pascalMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.PascalMatrixType)">
+<a id="pascalMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.PascalMatrixType)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -839,11 +839,11 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>pascalMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;pascalMatrix&#8203;(int&nbsp;n,
                                 <a href="Matrix.PascalMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.PascalMatrixType</a>&nbsp;t)</pre>
-<div class="block">The method will create a pascal's square matrix.</div>
+<div class="block">The method will create a pascal's square matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - the number of rows and columns of a square matrix</dd>
-<dd><code>t</code> - the type of matrix
+<dd><code>n</code> - the number of rows and columns of a square matrixOld</dd>
+<dd><code>t</code> - the type of matrixOld
           i.e. UPPER, LOWER or SYMMETRIC</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a Pascal's <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a></dd>
@@ -859,12 +859,12 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>lehmerMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;lehmerMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A lehmer matrix is a constant systematic square matrix.</div>
+<div class="block">A lehmer matrixOld is a constant systematic square matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the lehmer matrix</dd>
+<dd>the lehmer matrixOld</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
@@ -877,7 +877,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>hilbertMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;hilbertMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A Hilbert matrix is a square matrix with entries being the unit fractions.</div>
+<div class="block">A Hilbert matrixOld is a square matrixOld with entries being the unit fractions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
@@ -895,7 +895,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>identityMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;identityMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">The identity matrix is a square matrix whose diagonal is always 1 and all the
+<div class="block">The identity matrixOld is a square matrixOld whose diagonal is always 1 and all the
  other elements are 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -914,11 +914,11 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>exchangeMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;exchangeMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+<div class="block">An exchange matrixOld is a square matrixOld whose counterdiagonal is always 1 and the
  rest of the elements are 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - the square matrix</dd>
+<dd><code>n</code> - the square matrixOld</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an exchange <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -933,8 +933,8 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <li class="blockList">
 <h4>redhefferMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;redhefferMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
- The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.</div>
+<div class="block">A redheffer matrixOld is a (0-1) square matrixOld, whose entries are either 1 or 0.
+ The matrixOld is calculated as if n is divisible by m, then it's 1 otherwise it's 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
@@ -945,7 +945,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 </dl>
 </li>
 </ul>
-<a id="shiftMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.ShiftMatrixType)">
+<a id="shiftMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.ShiftMatrixType)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -953,12 +953,12 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <h4>shiftMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;shiftMatrix&#8203;(int&nbsp;n,
                                <a href="Matrix.ShiftMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.ShiftMatrixType</a>&nbsp;t)</pre>
-<div class="block">The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
- super diagonal matrix, or lower diagonal matrix.</div>
+<div class="block">The shift matrixOld is a matrixOld whose diagonal has shifted one level up or down, known as
+ super diagonal matrixOld, or lower diagonal matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
-<dd><code>t</code> - the type of matrix, i.e UPPER or LOWER</dd>
+<dd><code>t</code> - the type of matrixOld, i.e UPPER or LOWER</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a shift <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>

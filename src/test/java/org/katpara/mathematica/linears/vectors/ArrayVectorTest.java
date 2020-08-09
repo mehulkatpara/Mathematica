@@ -1,13 +1,13 @@
 package org.katpara.mathematica.linears.vectors;
 
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.commons.Rounding;
+import org.katpara.mathematica.linears.matrices.dep.ArrayMatrixOld;
+import org.katpara.mathematica.linears.matrices.dep.Matrix_Old;
+import org.katpara.mathematica.util.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
-import org.katpara.mathematica.linears.matrices.ArrayMatrix;
-import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorOperationException;
 
 import java.util.*;
 
@@ -190,7 +190,7 @@ class ArrayVectorTest {
                                                               .angle(ArrayVector.of(0, 3), Vector.Angle.DEGREE)),
                 () -> assertEquals(45.0,
                         ArrayVector.of(2, 2)
-                                .angle(ArrayVector.of(0, 3), Vector.Angle.DEGREE, Rounding.POINT.TWO)),
+                                .angle(ArrayVector.of(0, 3), Vector.Angle.DEGREE, Rounding.Decimals.TWO)),
                 () -> assertEquals(0.7853981633974484, ArrayVector.of(2, 2)
                                                                .angle(ArrayVector.of(0, 3), Vector.Angle.RADIAN)),
                 () -> assertEquals(131.647015792716, ArrayVector.of(3, -4, 5)
@@ -280,27 +280,27 @@ class ArrayVectorTest {
     void testRandomVector() {
         assertAll(
                 () -> assertEquals(3, ArrayVector.of(0.876, 0.409, 0.822).getDimension()),
-                () -> assertEquals(3, ArrayVector.of(3, 98, 100, Rounding.POINT.TWO).getDimension()),
-                () -> assertEquals(5, ArrayVector.of(5, Rounding.POINT.FOUR).getDimension())
+                () -> assertEquals(3, ArrayVector.of(3, 98, 100, Rounding.Decimals.TWO).getDimension()),
+                () -> assertEquals(5, ArrayVector.of(5, Rounding.Decimals.FOUR).getDimension())
         );
     }
 
     @Test
     void testVectorFunction() {
         assertAll(
-                () -> assertThrows(InvalidVectorDimensionException.class, () -> ArrayVector.of(1, Math::sqrt, Rounding.POINT.TWO)),
-                () -> System.out.println(ArrayVector.of(4, 0, 1, Math::acos, Rounding.POINT.THREE)),
-                () -> System.out.println(ArrayVector.of(3, Math::sqrt, Rounding.POINT.SEVEN)),
-                () -> ArrayVector.of(4, 0, 1, Math::log, Rounding.POINT.THREE),
+                () -> assertThrows(InvalidVectorDimensionException.class, () -> ArrayVector.of(1, Math::sqrt, Rounding.Decimals.TWO)),
+                () -> System.out.println(ArrayVector.of(4, 0, 1, Math::acos, Rounding.Decimals.THREE)),
+                () -> System.out.println(ArrayVector.of(3, Math::sqrt, Rounding.Decimals.SEVEN)),
+                () -> ArrayVector.of(4, 0, 1, Math::log, Rounding.Decimals.THREE),
                 () -> ArrayVector.of(3, -1, 0, (e) -> e * 10),
-                () -> ArrayVector.of(2, (e) -> e * 1.2, Rounding.POINT.TWO),
+                () -> ArrayVector.of(2, (e) -> e * 1.2, Rounding.Decimals.TWO),
                 () -> ArrayVector.of(2, (e) -> e * 1)
         );
     }
 
     @Test
     void testMatrixMultiplication() {
-        Matrix f = new ArrayMatrix(new Number[][]{{1, 2, 3},{4, 5, 6},{7, 8, 9}});
+        Matrix_Old f = new ArrayMatrixOld(new Number[][]{{1, 2, 3},{4, 5, 6},{7, 8, 9}});
         Vector v = ArrayVector.of(2, 1, 3);
 
         assertAll(

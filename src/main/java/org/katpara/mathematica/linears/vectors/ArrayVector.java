@@ -1,11 +1,11 @@
 package org.katpara.mathematica.linears.vectors;
 
-import org.katpara.mathematica.commons.Rounding;
+import org.katpara.mathematica.linears.matrices.dep.Matrix_Old;
+import org.katpara.mathematica.util.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorDimensionException;
-import org.katpara.mathematica.exceptions.linears.InvalidVectorOperationException;
-import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorOperationException;
 
 import java.util.*;
 import java.util.function.DoubleUnaryOperator;
@@ -170,14 +170,14 @@ public final class ArrayVector implements Vector {
      * For n-dimensional vector, the magnitude is defined as;
      * |v| = sqrt(v1^2 + v2^2 + ... + vn^2).
      *
-     * @param point the value round up to the given decimal point
-     *              see, {@link Rounding.POINT}
+     * @param decimals the value round up to the given decimal decimals
+     *              see, {@link Rounding.Decimals}
      *
      * @return the magnitude of the vector
      */
     @Override
-    public double getMagnitude(final Rounding.POINT point) {
-        return Rounding.roundToDouble(getMagnitude(), point).doubleValue();
+    public double getMagnitude(final Rounding.Decimals decimals) {
+        return Rounding.roundToDouble(getMagnitude(), decimals).doubleValue();
     }
 
     /**
@@ -211,7 +211,7 @@ public final class ArrayVector implements Vector {
      * @return an array of cosines with respect to axiom.
      */
     @Override
-    public double[] getCosines(final Angle a, final Rounding.POINT p) {
+    public double[] getCosines(final Angle a, final Rounding.Decimals p) {
         var n = getCosines(a);
         for (var i = 0; i < d; i++)
             n[i++] = Rounding.roundToDouble(n[i], p).doubleValue();
@@ -338,7 +338,7 @@ public final class ArrayVector implements Vector {
      * @return the angle in degrees or radian.
      */
     @Override
-    public double angle(final Vector v, final Angle a, final Rounding.POINT p) {
+    public double angle(final Vector v, final Angle a, final Rounding.Decimals p) {
         return Rounding.roundToDouble(angle(v, a), p).doubleValue();
     }
 
@@ -540,7 +540,7 @@ public final class ArrayVector implements Vector {
      * {@link InvalidVectorOperationException} exception is thrown.
      *
      * @param v the second vector
-     * @param p  the rounding point, {@link Rounding.POINT}
+     * @param p  the rounding point, {@link Rounding.Decimals}
      *
      * @return the resulting dot product
      *
@@ -548,7 +548,7 @@ public final class ArrayVector implements Vector {
      *                                         dimensions.
      */
     @Override
-    public double dot(final Vector v, final Rounding.POINT p) {
+    public double dot(final Vector v, final Rounding.Decimals p) {
         return Rounding.roundToDouble(dot(v), p).doubleValue();
     }
 
@@ -614,12 +614,12 @@ public final class ArrayVector implements Vector {
      * dot(V, W) / magnitude(V)
      *
      * @param v the projecting vector
-     * @param p  the rounding point, {@link Rounding.POINT}
+     * @param p  the rounding point, {@link Rounding.Decimals}
      *
      * @return the projected scalar
      */
     @Override
-    public double scalarProjection(final Vector v, final Rounding.POINT p) {
+    public double scalarProjection(final Vector v, final Rounding.Decimals p) {
         return Rounding.roundToDouble(scalarProjection(v), p).doubleValue();
     }
 
@@ -671,7 +671,7 @@ public final class ArrayVector implements Vector {
      *                                         the dimension of a given vector
      */
     @Override
-    public Vector multiply(final Matrix m) {
+    public Vector multiply(final Matrix_Old m) {
         Number[][] _e = m.toArray();
 
         if(d != _e[0].length)
@@ -785,7 +785,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the {@link ArrayVector}
      */
-    public static Vector of(final int d, final DoubleUnaryOperator o, final Rounding.POINT p) {
+    public static Vector of(final int d, final DoubleUnaryOperator o, final Rounding.Decimals p) {
         var n = new Number[d];
 
         for (var i = 0; i < d; i++)
@@ -827,7 +827,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the {@link ArrayVector}
      */
-    public static Vector of(final int d, final double min, final double max, final DoubleUnaryOperator o, final Rounding.POINT p) {
+    public static Vector of(final int d, final double min, final double max, final DoubleUnaryOperator o, final Rounding.Decimals p) {
         var n = random(d, min, max);
 
         for (var i = 0; i < d; i++)
@@ -844,7 +844,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the random vector
      */
-    public static Vector of(final int d, final Rounding.POINT p) {
+    public static Vector of(final int d, final Rounding.Decimals p) {
         return new ArrayVector(random(d, 0, 1, p));
     }
 
@@ -859,7 +859,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the random vector
      */
-    public static Vector of(final int d, final double min, final double max, final Rounding.POINT p) {
+    public static Vector of(final int d, final double min, final double max, final Rounding.Decimals p) {
         final Number[] n = random(d, min, max, p);
         return new ArrayVector(n);
     }
@@ -874,7 +874,7 @@ public final class ArrayVector implements Vector {
      *
      * @return the array of values with decimal point precision
      */
-    private static Number[] random(final int d, final double min, final double max, final Rounding.POINT p) {
+    private static Number[] random(final int d, final double min, final double max, final Rounding.Decimals p) {
         var n = random(d, min, max);
 
         for (var i = 0; i < d; i++)

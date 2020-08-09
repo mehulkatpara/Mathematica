@@ -1,10 +1,10 @@
-package org.katpara.mathematica.linears.matrices;
+package org.katpara.mathematica.linears.matrices.dep;
 
-import org.katpara.mathematica.commons.Rounding;
+import org.katpara.mathematica.util.Rounding;
 import org.katpara.mathematica.exceptions.InvalidParameterProvidedException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionException;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixOperationException;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linears.dep.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 
@@ -12,15 +12,15 @@ import java.util.*;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 
-import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
+import static org.katpara.mathematica.linears.matrices.dep.Matrix_Old.MatrixType.*;
 
 /**
- * The class is an implementations of the Matrix interface.
+ * The class is an implementations of the Matrix_Old interface.
  * Internally the class has three properties;
  * <ul>
  *     <li>e: a two-dimensional array</li>
  *     <li>d: the dimension of the matrix</li>
- *     <li>t: a type of Matrix</li>
+ *     <li>t: a type of Matrix_Old</li>
  * </ul>
  * <p>
  * e: It is a two-dimensional array that holds all the elements of a matrix.
@@ -28,7 +28,7 @@ import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
  * <p>
  * When you create a matrix using one of these constructors, the type is absolutely "NOT_SPECIFIED".
  * Which means that I have no way to predetermine the type of matrix you are creating.
- * However, the things get interesting when you are creating a matrix using {@link Matrix} interface.
+ * However, the things get interesting when you are creating a matrix using {@link Matrix_Old} interface.
  * I have already implemented a logic to create almost all kind of constant matrices. So if you are
  * creating a matrix of a certain kind, that I have already coded, please use the interface.
  * <p>
@@ -38,7 +38,7 @@ import static org.katpara.mathematica.linears.matrices.Matrix.MatrixType.*;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public class ArrayMatrix implements Matrix {
+public class ArrayMatrixOld implements Matrix_Old {
     private static final long serialVersionUID = 3493256845029049971L;
 
     /**
@@ -54,12 +54,12 @@ public class ArrayMatrix implements Matrix {
     /**
      * Useful to cache some of the calculated properties
      */
-    private final ArrayMatrix.Cache c = new ArrayMatrix.Cache();
+    private final ArrayMatrixOld.Cache c = new ArrayMatrixOld.Cache();
 
     /**
      * The field holds the type of matrix
      */
-    private final Matrix.MatrixType t;
+    private final Matrix_Old.MatrixType t;
 
     /**
      * The constructor creates a matrix out of two-dimensional array and
@@ -70,8 +70,8 @@ public class ArrayMatrix implements Matrix {
      * <p>
      * When a user creates the type of a matrix is usually "NOT_SPECIFIED", since I have no way to
      * figure out what kind of constant matrix you are defining. The only way I can figure out the
-     * type is by when you use {@link Matrix} interface to create a predefined matrix for you.
-     * So if you are creating a matrix that is already pre-defined, please use {@link Matrix} interface.
+     * type is by when you use {@link Matrix_Old} interface to create a predefined matrix for you.
+     * So if you are creating a matrix that is already pre-defined, please use {@link Matrix_Old} interface.
      *
      * @param e a two-dimensional elements array
      * @param t a type of matrix
@@ -79,7 +79,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
      * @throws NullArgumentProvidedException   when the array has a null value
      */
-    ArrayMatrix(final Number[][] e, final MatrixType t) {
+    ArrayMatrixOld(final Number[][] e, final MatrixType t) {
         if (e.length == 0 || e.length + e[0].length < 2)
             throw new InvalidMatrixDimensionException("The matrix should have at least one element");
 
@@ -103,7 +103,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException if the list is empty,
      *                                         when given vectors are on various dimensions
      */
-    public ArrayMatrix(final List<? extends Vector> vl) {
+    public ArrayMatrixOld(final List<? extends Vector> vl) {
         if (vl.size() < 1)
             throw new InvalidMatrixDimensionException("The list is empty");
 
@@ -127,7 +127,7 @@ public class ArrayMatrix implements Matrix {
 
     /**
      * The constructor is used to create a matrix out of a set of matrices.
-     * The constructor internally relies on {@link #ArrayMatrix(List)} to
+     * The constructor internally relies on {@link #ArrayMatrixOld(List)} to
      * create a matrix, please note.
      *
      * @param vs a set of {@link Vector}
@@ -135,7 +135,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException if the set is empty,
      *                                         when given vectors are on various dimensions
      */
-    public ArrayMatrix(final Set<Vector> vs) {
+    public ArrayMatrixOld(final Set<Vector> vs) {
         this(new ArrayList<>(vs));
     }
 
@@ -145,7 +145,7 @@ public class ArrayMatrix implements Matrix {
      * can be anything as long as it makes a valid map, however the values must be
      * a type of {@link Vector}.
      * <p>
-     * Please note, that this constructor internally relies on {@link #ArrayMatrix(List)}
+     * Please note, that this constructor internally relies on {@link #ArrayMatrixOld(List)}
      * to create a matrix.
      *
      * @param vm a map of {@link Vector}
@@ -153,7 +153,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException if the map is empty,
      *                                         when given vectors are on various dimensions
      */
-    public ArrayMatrix(final Map<?, ? extends Vector> vm) {
+    public ArrayMatrixOld(final Map<?, ? extends Vector> vm) {
         this(new ArrayList<>(vm.values()));
     }
 
@@ -161,7 +161,7 @@ public class ArrayMatrix implements Matrix {
      * The constructor creates a matrix out of the list containing a list of numbers,
      * or a set containing a list of numbers. The type of this matrix is "NOT_SPECIFIED".
      * <p>
-     * If you are creating a predefined matrix, please use {@link Matrix} interface
+     * If you are creating a predefined matrix, please use {@link Matrix_Old} interface
      * to create a matrix for you, it's easy and helps me to optimize various calculations
      * much faster. I have many predefined matrices for you to use out of the box, to help
      * you create various matrices with ease, please check
@@ -173,7 +173,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException   when the collection is empty
      * @throws InvalidMatrixDimensionException   when rows are of variable length
      */
-    public ArrayMatrix(final Collection<List<Number>> lists) {
+    public ArrayMatrixOld(final Collection<List<Number>> lists) {
         if (!(lists instanceof List) && !(lists instanceof Set))
             throw new InvalidParameterProvidedException("The matrix can only be a type of List or Set");
 
@@ -203,10 +203,10 @@ public class ArrayMatrix implements Matrix {
     }
 
     /**
-     * The constructor creates a Matrix using two-dimensional array.
+     * The constructor creates a Matrix_Old using two-dimensional array.
      * The type of created matrix is "NOT_SPECIFIED"; since it's user generated.
      * <p>
-     * If you are creating a predefined matrix, please use {@link Matrix} interface
+     * If you are creating a predefined matrix, please use {@link Matrix_Old} interface
      * to create a matrix for you, it's easy and helps me to optimize various calculations
      * much faster. I have many predefined matrices for you to use out of the box, to help
      * you create various matrices with ease, please check
@@ -217,7 +217,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixDimensionException when matrix doesn't have at least one element.
      * @throws NullArgumentProvidedException   when the array has a null value
      */
-    public ArrayMatrix(final Number[][] e) {
+    public ArrayMatrixOld(final Number[][] e) {
         this(e, NOT_SPECIFIED);
     }
 
@@ -324,7 +324,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getTrace() {
-        return getTrace(Rounding.POINT.TEN);
+        return getTrace(Rounding.Decimals.TEN);
     }
 
     /**
@@ -338,7 +338,7 @@ public class ArrayMatrix implements Matrix {
      * @return the trace of the square matrix
      */
     @Override
-    public double getTrace(final Rounding.POINT p) {
+    public double getTrace(final Rounding.Decimals p) {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix.");
 
@@ -366,7 +366,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the trace of the matrix
      */
-    private double calculateTrace(final Rounding.POINT p) {
+    private double calculateTrace(final Rounding.Decimals p) {
         if (c.getT() == null) {
             var t = 0.0;
 
@@ -415,7 +415,7 @@ public class ArrayMatrix implements Matrix {
      */
     @Override
     public double getDeterminant() {
-        return getDeterminant(Rounding.POINT.TEN);
+        return getDeterminant(Rounding.Decimals.TEN);
     }
 
     /**
@@ -423,12 +423,12 @@ public class ArrayMatrix implements Matrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param point the decimal point accuracy
+     * @param decimals the decimal decimals accuracy
      *
      * @return the determinant of the square matrix
      */
     @Override
-    public double getDeterminant(final Rounding.POINT point) {
+    public double getDeterminant(final Rounding.Decimals decimals) {
         if (c.getD() == null) {
             if (!isSquareMatrix())
                 throw new InvalidMatrixOperationException();
@@ -469,7 +469,7 @@ public class ArrayMatrix implements Matrix {
             c.setD(det);
         }
 
-        return Rounding.roundToDouble(c.getD(), point).doubleValue();
+        return Rounding.roundToDouble(c.getD(), decimals).doubleValue();
     }
 
     /**
@@ -478,14 +478,14 @@ public class ArrayMatrix implements Matrix {
      * @return the transposed matrix
      */
     @Override
-    public Matrix transpose() {
+    public Matrix_Old transpose() {
         var n = new Number[d[1]][d[0]];
 
         for (var i = 0; i < d[0]; i++)
             for (var j = 0; j < d[1]; j++)
                 n[j][i] = e[i][j];
 
-        return new ArrayMatrix(n);
+        return new ArrayMatrixOld(n);
     }
 
     /**
@@ -497,8 +497,8 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
     @Override
-    public Matrix inverse() {
-        return inverse(Rounding.POINT.TEN);
+    public Matrix_Old inverse() {
+        return inverse(Rounding.Decimals.TEN);
     }
 
     /**
@@ -512,7 +512,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
     @Override
-    public Matrix inverse(final Rounding.POINT p) {
+    public Matrix_Old inverse(final Rounding.Decimals p) {
         if (c.getI() == null) {
             c.setI(calculateInverse(p));
         }
@@ -527,7 +527,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
-    public Matrix calculateInverse(final Rounding.POINT p) {
+    public Matrix_Old calculateInverse(final Rounding.Decimals p) {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("The matrix is not a square matrix");
 
@@ -545,7 +545,7 @@ public class ArrayMatrix implements Matrix {
             n[1][0] = Rounding.roundToDouble(-c / v, p);
             n[1][1] = Rounding.roundToDouble(a / v, p);
 
-            return new ArrayMatrix(n);
+            return new ArrayMatrixOld(n);
         } else {
             Number[][][] lu = lu();
 
@@ -555,7 +555,7 @@ public class ArrayMatrix implements Matrix {
                 }
             }
 
-            return new ArrayMatrix(bs(lu[1], fs(lu[0]), p));
+            return new ArrayMatrixOld(bs(lu[1], fs(lu[0]), p));
         }
     }
 
@@ -568,7 +568,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the resulting array
      */
-    private Number[][] bs(final Number[][] n, final Number[][] z, final Rounding.POINT p) {
+    private Number[][] bs(final Number[][] n, final Number[][] z, final Rounding.Decimals p) {
         var r = new Number[n.length][n.length];
         for (var i = n.length - 1; i >= 0; i--) {
             for (var j = n.length - 1; j >= 0; j--) {
@@ -629,11 +629,11 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if the matrix is not a square matrix
      */
     @Override
-    public Matrix add(final Number s) {
+    public Matrix_Old add(final Number s) {
         if (!isSquareMatrix())
             throw new InvalidMatrixOperationException("Scalar addition is only for square matrices.");
 
-        return new ArrayMatrix(
+        return new ArrayMatrixOld(
                 addSubArrays(e, calculateDoubleMatrix(d[0], (i, j) -> (i == j) ? s.doubleValue() : 0), true));
     }
 
@@ -649,11 +649,11 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
      */
     @Override
-    public Matrix add(final Matrix m) {
+    public Matrix_Old add(final Matrix_Old m) {
         if (!Arrays.equals(d, m.getDimension()))
             throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
 
-        return new ArrayMatrix(addSubArrays(e, m.toArray(), true));
+        return new ArrayMatrixOld(addSubArrays(e, m.toArray(), true));
     }
 
     /**
@@ -668,11 +668,11 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if two matrices don't have the same dimension
      */
     @Override
-    public Matrix subtract(final Matrix m) {
+    public Matrix_Old subtract(final Matrix_Old m) {
         if (!Arrays.equals(d, m.getDimension()))
             throw new InvalidMatrixOperationException("Matrices dimensions must be the same.");
 
-        return new ArrayMatrix(addSubArrays(e, m.toArray(), false));
+        return new ArrayMatrixOld(addSubArrays(e, m.toArray(), false));
     }
 
     /**
@@ -686,8 +686,8 @@ public class ArrayMatrix implements Matrix {
      * @return a new scalded matrix
      */
     @Override
-    public Matrix multiply(final Number s) {
-        return multiply(s, Rounding.POINT.TEN);
+    public Matrix_Old multiply(final Number s) {
+        return multiply(s, Rounding.Decimals.TEN);
     }
 
     /**
@@ -702,18 +702,18 @@ public class ArrayMatrix implements Matrix {
      * @return a new scalded matrix
      */
     @Override
-    public Matrix multiply(final Number s, final Rounding.POINT p) {
+    public Matrix_Old multiply(final Number s, final Rounding.Decimals p) {
         var n = new Number[d[0]][d[1]];
 
         for (var i = 0; i < d[0]; i++)
             for (var j = 0; j < d[1]; j++)
                 n[i][j] = Rounding.roundToDouble(e[i][j].doubleValue() * s.doubleValue(), p);
 
-        return new ArrayMatrix(n);
+        return new ArrayMatrixOld(n);
     }
 
     /**
-     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix_Old.
      * <p>
      * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
      * number of column of a matrix A has to be equal to the number of rows B. The resulting
@@ -727,12 +727,12 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if two matrices have different columns and rows
      */
     @Override
-    public Matrix multiply(final Matrix m) {
-        return multiply(m, Rounding.POINT.TEN);
+    public Matrix_Old multiply(final Matrix_Old m) {
+        return multiply(m, Rounding.Decimals.TEN);
     }
 
     /**
-     * The method will perform a matrix multiplication of a matrix and returns a new Matrix.
+     * The method will perform a matrix multiplication of a matrix and returns a new Matrix_Old.
      * <p>
      * If the given matrices are A, and B, of respective dimensions m x n and n x p. then
      * number of column of a matrix A has to be equal to the number of rows B. The resulting
@@ -747,7 +747,7 @@ public class ArrayMatrix implements Matrix {
      * @throws InvalidMatrixOperationException if two matrices have different columns and rows
      */
     @Override
-    public Matrix multiply(final Matrix m, final Rounding.POINT p) {
+    public Matrix_Old multiply(final Matrix_Old m, final Rounding.Decimals p) {
         var _e = m.toArray();
 
         if (d[1] != _e.length)
@@ -793,7 +793,7 @@ public class ArrayMatrix implements Matrix {
             }
 
         }
-        return new ArrayMatrix(n);
+        return new ArrayMatrixOld(n);
     }
 
     /**
@@ -948,13 +948,13 @@ public class ArrayMatrix implements Matrix {
      * @param m the number of rows
      * @param n the number of columns
      *
-     * @return an ArrayMatrix with all 0 entries
+     * @return an ArrayMatrixOld with all 0 entries
      *
      * @throws InvalidMatrixDimensionException when # of row + # of column &lt; 2;
      *                                         this ensures that at least one element
      *                                         exist all the time.
      */
-    public static ArrayMatrix zeroMatrix(final int m, final int n) {
+    public static ArrayMatrixOld zeroMatrix(final int m, final int n) {
         return calculateZeroOneMatrix(m, n, ZERO);
     }
 
@@ -964,11 +964,11 @@ public class ArrayMatrix implements Matrix {
      * @param m the number of rows
      * @param n the number of columns
      *
-     * @return am ArrayMatrix with all 1 entries
+     * @return am ArrayMatrixOld with all 1 entries
      *
      * @throws InvalidMatrixDimensionException when m + n &lt; 2
      */
-    public static ArrayMatrix oneMatrix(final int m, final int n) {
+    public static ArrayMatrixOld oneMatrix(final int m, final int n) {
         return calculateZeroOneMatrix(m, n, ONE);
     }
 
@@ -983,7 +983,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException when m + n < 2
      */
-    private static ArrayMatrix calculateZeroOneMatrix(final int m, final int n, final MatrixType t) {
+    private static ArrayMatrixOld calculateZeroOneMatrix(final int m, final int n, final MatrixType t) {
         if (m + n < 2)
             throw new InvalidMatrixDimensionException("One matrix should have at least one element");
 
@@ -998,7 +998,7 @@ public class ArrayMatrix implements Matrix {
         for (var i = 1; i < e.length; i++)
             System.arraycopy(e[0], 0, e[i], 0, e[0].length);
 
-        return new ArrayMatrix(e, t);
+        return new ArrayMatrixOld(e, t);
     }
 
     /**
@@ -1008,11 +1008,11 @@ public class ArrayMatrix implements Matrix {
      * @param t the type of matrix
      *          i.e. UPPER, LOWER or SYMMETRIC
      *
-     * @return a Pascal's {@link Matrix}
+     * @return a Pascal's {@link Matrix_Old}
      *
      * @throws InvalidMatrixDimensionException when n &lt; 1, at least one element should exist.
      */
-    public static ArrayMatrix pascalMatrix(final int n, final PascalMatrixType t) {
+    public static ArrayMatrixOld pascalMatrix(final int n, final PascalMatrixType t) {
         if (n < 1)
             throw new InvalidMatrixDimensionException("Pascal's matrix should have at least one element");
 
@@ -1046,7 +1046,7 @@ public class ArrayMatrix implements Matrix {
             }
         }
 
-        return new ArrayMatrix(e, PASCAL);
+        return new ArrayMatrixOld(e, PASCAL);
     }
 
     /**
@@ -1058,8 +1058,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix lehmerMatrix(final int n) {
-        return new ArrayMatrix(
+    public static ArrayMatrixOld lehmerMatrix(final int n) {
+        return new ArrayMatrixOld(
                 calculateDoubleMatrix
                         (n, (i, j) -> (j >= i) ? (i + 1) / (j + 1) : (j + 1) / (i + 1)), LEHMER);
     }
@@ -1069,12 +1069,12 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return a hilbert {@link ArrayMatrix}
+     * @return a hilbert {@link ArrayMatrixOld}
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix hilbertMatrix(final int n) {
-        return new ArrayMatrix(
+    public static ArrayMatrixOld hilbertMatrix(final int n) {
+        return new ArrayMatrixOld(
                 calculateDoubleMatrix
                         (n, (i, j) -> 1 / (i + 1 + (j + 1) - 1)), HILBERT);
     }
@@ -1085,12 +1085,12 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return an identity {@link ArrayMatrix}
+     * @return an identity {@link ArrayMatrixOld}
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix identityMatrix(final int n) {
-        return new ArrayMatrix(
+    public static ArrayMatrixOld identityMatrix(final int n) {
+        return new ArrayMatrixOld(
                 calculateIntMatrix
                         (n, (i, j) -> (i.equals(j)) ? 1 : 0), IDENTITY);
 
@@ -1102,12 +1102,12 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the square matrix
      *
-     * @return an exchange {@link ArrayMatrix}
+     * @return an exchange {@link ArrayMatrixOld}
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix exchangeMatrix(final int n) {
-        return new ArrayMatrix(
+    public static ArrayMatrixOld exchangeMatrix(final int n) {
+        return new ArrayMatrixOld(
                 calculateIntMatrix
                         (n, (i, j) -> (j == n - i - 1) ? 1 : 0), EXCHANGE);
     }
@@ -1118,12 +1118,12 @@ public class ArrayMatrix implements Matrix {
      *
      * @param n the number of rows and columns
      *
-     * @return a redheffer {@link ArrayMatrix}
+     * @return a redheffer {@link ArrayMatrixOld}
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix redhefferMatrix(final int n) {
-        return new ArrayMatrix(
+    public static ArrayMatrixOld redhefferMatrix(final int n) {
+        return new ArrayMatrixOld(
                 calculateIntMatrix
                         (n, (i, j) -> (j == 0) ? 1 : (((j + 1) % (i + 1) == 0) ? 1 : 0)), REDHEFFER);
     }
@@ -1135,15 +1135,15 @@ public class ArrayMatrix implements Matrix {
      * @param n the number of rows and columns
      * @param t the type of matrix, i.e UPPER or LOWER
      *
-     * @return a shift {@link ArrayMatrix}
+     * @return a shift {@link ArrayMatrixOld}
      *
      * @throws InvalidMatrixDimensionException if n &lt; 1
      */
-    public static ArrayMatrix shiftMatrix(final int n, final ShiftMatrixType t) {
+    public static ArrayMatrixOld shiftMatrix(final int n, final ShiftMatrixType t) {
         if (t == ShiftMatrixType.UPPER)
-            return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i + 1) ? 1 : 0), SHIFT);
+            return new ArrayMatrixOld(calculateIntMatrix(n, (i, j) -> (j == i + 1) ? 1 : 0), SHIFT);
 
-        return new ArrayMatrix(calculateIntMatrix(n, (i, j) -> (j == i - 1) ? 1 : 0), SHIFT);
+        return new ArrayMatrixOld(calculateIntMatrix(n, (i, j) -> (j == i - 1) ? 1 : 0), SHIFT);
     }
 
     /**
@@ -1155,8 +1155,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the square matrix
      */
-    public static ArrayMatrix of(final int r) {
-        return new ArrayMatrix(random(r, r, 0, 1, Rounding.POINT.TEN));
+    public static ArrayMatrixOld of(final int r) {
+        return new ArrayMatrixOld(random(r, r, 0, 1, Rounding.Decimals.TEN));
     }
 
     /**
@@ -1170,8 +1170,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the square matrix
      */
-    public static ArrayMatrix of(final int r, final double min, final double max) {
-        return new ArrayMatrix(random(r, r, min, max, Rounding.POINT.TEN));
+    public static ArrayMatrixOld of(final int r, final double min, final double max) {
+        return new ArrayMatrixOld(random(r, r, min, max, Rounding.Decimals.TEN));
     }
 
     /**
@@ -1183,8 +1183,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the square matrix
      */
-    public static ArrayMatrix of(final int r, final Rounding.POINT p) {
-        return new ArrayMatrix(random(r, r, 0, 1, p));
+    public static ArrayMatrixOld of(final int r, final Rounding.Decimals p) {
+        return new ArrayMatrixOld(random(r, r, 0, 1, p));
     }
 
     /**
@@ -1197,8 +1197,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the square matrix
      */
-    public static ArrayMatrix of(final int r, final double min, final double max, final Rounding.POINT p) {
-        return new ArrayMatrix(random(r, r, min, max, p));
+    public static ArrayMatrixOld of(final int r, final double min, final double max, final Rounding.Decimals p) {
+        return new ArrayMatrixOld(random(r, r, min, max, p));
     }
 
     /**
@@ -1211,8 +1211,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the matrix with random values
      */
-    public static ArrayMatrix of(final int r, final int c) {
-        return new ArrayMatrix(random(r, c, 0, 1, Rounding.POINT.TEN));
+    public static ArrayMatrixOld of(final int r, final int c) {
+        return new ArrayMatrixOld(random(r, c, 0, 1, Rounding.Decimals.TEN));
     }
 
     /**
@@ -1225,8 +1225,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the matrix with random values
      */
-    public static ArrayMatrix of(final int r, final int c, final Rounding.POINT p) {
-        return new ArrayMatrix(random(r, c, 0, 1, p));
+    public static ArrayMatrixOld of(final int r, final int c, final Rounding.Decimals p) {
+        return new ArrayMatrixOld(random(r, c, 0, 1, p));
     }
 
     /**
@@ -1240,8 +1240,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the matrix with random values
      */
-    public static ArrayMatrix of(final int r, final int c, final double min, final double max) {
-        return new ArrayMatrix(random(r, c, min, max, Rounding.POINT.TEN));
+    public static ArrayMatrixOld of(final int r, final int c, final double min, final double max) {
+        return new ArrayMatrixOld(random(r, c, min, max, Rounding.Decimals.TEN));
     }
 
     /**
@@ -1256,8 +1256,8 @@ public class ArrayMatrix implements Matrix {
      *
      * @return the matrix with random values
      */
-    public static ArrayMatrix of(final int r, final int c, final double min, final double max, final Rounding.POINT p) {
-        return new ArrayMatrix(random(r, c, min, max, p));
+    public static ArrayMatrixOld of(final int r, final int c, final double min, final double max, final Rounding.Decimals p) {
+        return new ArrayMatrixOld(random(r, c, min, max, p));
     }
 
     /**
@@ -1270,7 +1270,7 @@ public class ArrayMatrix implements Matrix {
      *
      * @return an array of random values
      */
-    private static Number[][] random(final int r, final int c, final double l, final double u, final Rounding.POINT p) {
+    private static Number[][] random(final int r, final int c, final double l, final double u, final Rounding.Decimals p) {
         var n = new Number[r][c];
 
         for (int i = 0; i < r; i++)
@@ -1327,7 +1327,7 @@ public class ArrayMatrix implements Matrix {
         private Integer r;
         private Double t;
         private Double d;
-        private Matrix i;
+        private Matrix_Old i;
 
         private Double getT() {
             return t;
@@ -1353,11 +1353,11 @@ public class ArrayMatrix implements Matrix {
             this.d = d;
         }
 
-        private Matrix getI() {
+        private Matrix_Old getI() {
             return i;
         }
 
-        private void setI(final Matrix i) {
+        private void setI(final Matrix_Old i) {
             this.i = i;
         }
     }
@@ -1483,7 +1483,7 @@ public class ArrayMatrix implements Matrix {
         if (obj == null || getClass() != obj.getClass()) return false;
         if (this.hashCode() == obj.hashCode()) return true;
 
-        final Matrix that = (Matrix) obj;
+        final Matrix_Old that = (Matrix_Old) obj;
         var o = that.toArray();
 
         if (!Arrays.equals(this.getDimension(), that.getDimension())) return false;

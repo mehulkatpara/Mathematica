@@ -327,7 +327,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMagnitude(org.katpara.mathematica.commons.Rounding.POINT)">getMagnitude</a></span>&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</code></th>
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getMagnitude(org.katpara.mathematica.commons.Rounding.POINT)">getMagnitude</a></span>&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</code></th>
 <td class="colLast">
 <div class="block">The magnitude of a vector, also known as "norm", is square root of
  the sum all the vector elements powered by 2.</div>
@@ -652,7 +652,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <ul class="blockList">
 <li class="blockList">
 <h4>getMagnitude</h4>
-<pre class="methodSignature">public&nbsp;double&nbsp;getMagnitude&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;point)</pre>
+<pre class="methodSignature">public&nbsp;double&nbsp;getMagnitude&#8203;(<a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The magnitude of a vector, also known as "norm", is square root of
  the sum all the vector elements powered by 2. A magnitude of a vector
  is represented by the length of a vector and written as |V| for vector V.
@@ -663,7 +663,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Vector.html#getMagnitude(org.katpara.mathematica.commons.Rounding.POINT)">getMagnitude</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>point</code> - the value round up to the given decimal point
+<dd><code>decimals</code> - the value round up to the given decimal decimals
               see, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the magnitude of the vector</dd>
@@ -706,7 +706,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dd><code><a href="Vector.html#getCosines(org.katpara.mathematica.linears.vectors.Vector.Angle,org.katpara.mathematica.commons.Rounding.POINT)">getCosines</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>a</code> - the angle, see <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors"><code>Vector.Angle</code></a></dd>
-<dd><code>p</code> - the rounding point</dd>
+<dd><code>p</code> - the rounding decimals</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an array of cosines with respect to axiom.</dd>
 </dl>
@@ -754,8 +754,8 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <div class="block">If the given vector is orthogonal to the current vector, then it returns true;
  otherwise it would be false.
  <p>
- Orthogonality is known as a vector that is perpendicular to the given matrix,
- i.e. if the vector makes the 90 degrees angle with the current matrix.</div>
+ Orthogonality is known as a vector that is perpendicular to the given matrixOld,
+ i.e. if the vector makes the 90 degrees angle with the current matrixOld.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Vector.html#isOrthogonal(org.katpara.mathematica.linears.vectors.Vector)">isOrthogonal</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
@@ -835,7 +835,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - the another vector to calculate</dd>
 <dd><code>a</code> - the angle either in degree or radian, See, <a href="Vector.Angle.html" title="enum in org.katpara.mathematica.linears.vectors"><code>Vector.Angle</code></a></dd>
-<dd><code>p</code> - the decimal point you want to round up to</dd>
+<dd><code>p</code> - the decimal decimals you want to round up to</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the angle in degrees or radian.</dd>
 </dl>
@@ -1032,7 +1032,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dd><code><a href="Vector.html#dot(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.commons.Rounding.POINT)">dot</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - the second vector</dd>
-<dd><code>p</code> - the rounding point, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
+<dd><code>p</code> - the rounding decimals, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -1114,7 +1114,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dd><code><a href="Vector.html#scalarProjection(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.commons.Rounding.POINT)">scalarProjection</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>v</code> - the projecting vector</dd>
-<dd><code>p</code> - the rounding point, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
+<dd><code>p</code> - the rounding decimals, <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons"><code>Rounding.POINT</code></a></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the projected scalar</dd>
 </dl>

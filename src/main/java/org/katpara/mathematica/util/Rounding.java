@@ -1,4 +1,4 @@
-package org.katpara.mathematica.commons;
+package org.katpara.mathematica.util;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -14,7 +14,7 @@ public class Rounding {
     /**
      * Some of the constants used for rounding.
      */
-    public enum POINT {
+    public enum Decimals {
         ZERO("0"),
         ONE("0.0"),
         TWO("0.00"),
@@ -31,7 +31,7 @@ public class Rounding {
 
         private final String value;
 
-        POINT(final String value) {
+        Decimals(final String value) {
             this.value = value;
         }
 
@@ -53,7 +53,7 @@ public class Rounding {
      * @return the rounded number until 4 decimal places
      */
     public static String round(final Number n) {
-        return round(n, POINT.FOUR);
+        return round(n, Decimals.FOUR);
     }
 
     /**
@@ -65,17 +65,17 @@ public class Rounding {
      *
      * @return the rounded point
      */
-    public static String round(final Number n, final POINT p) {
+    public static String round(final Number n, final Decimals p) {
         f.applyPattern(p.getValue());
         f.setRoundingMode(RoundingMode.HALF_UP);
         return f.format(n);
     }
 
     @Deprecated
-    public static Number roundToDouble(final Number n, final POINT p) {
+    public static Number roundToDouble(final Number n, final Decimals p) {
         f.applyPattern(p.getValue());
 
-        if (p == POINT.ZERO) {
+        if (p == Decimals.ZERO) {
             return Integer.parseInt(f.format(n));
         } else {
             f.setRoundingMode(RoundingMode.HALF_UP);

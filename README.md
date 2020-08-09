@@ -145,7 +145,7 @@ It throws __InvalidVectorDimensionException__ when, both vectors have different 
 // To get an angle in degrees
 double angle = v.angle(w, Vector.Angle.DEGREE);
 
-// To get an angle in Radian, with 3 decimal point
+// To get an angle in Radian, with 3 decimal decimals
 double angle = v.angle(w, Vector.Angle.RADIAN, Rounding.POINT.THREE);
 ```
 It throws __InvalidVectorDimensionException__ when, both vectors have different dimensions.

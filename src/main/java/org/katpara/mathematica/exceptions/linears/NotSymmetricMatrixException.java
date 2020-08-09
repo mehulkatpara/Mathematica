@@ -1,27 +1,17 @@
 package org.katpara.mathematica.exceptions.linears;
 
-/**
- * The exception is useful when dealing with Matrices. It is usually
- * thrown when the matrices are not on the same dimensions.
- *
- * @author Mehul Katpara
- * @since 1.0.0
- */
-public class InvalidMatrixDimensionException extends RuntimeException {
-    private static final long serialVersionUID = 8141142525669921693L;
+import org.katpara.mathematica.exceptions.ExceptionMessages;
 
-    /**
-     * The default message in case of the specialized message is not provided.
-     */
-    private static final String MESSAGE = "The matrix dimension is invalid";
+public final class NotSymmetricMatrixException extends RuntimeException {
+    private static final long serialVersionUID = 789225729285800489L;
 
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public InvalidMatrixDimensionException() {
-        super(MESSAGE);
+    public NotSymmetricMatrixException() {
+        super(ExceptionMessages.NOT_SYMMETRIC_MATRIX_MESSAGE);
     }
 
     /**
@@ -32,7 +22,7 @@ public class InvalidMatrixDimensionException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public InvalidMatrixDimensionException(final String message) {
+    public NotSymmetricMatrixException(final String message) {
         super(message);
     }
 }

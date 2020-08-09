@@ -131,10 +131,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <hr>
 <pre>public interface <span class="typeNameLabel">Matrix</span></pre>
 <div class="block">The interface defines a Matrix in the system, and it's operations.
- Mathematically A matrix is an rectangular object of numbers, which
+ Mathematically A matrixOld is an rectangular object of numbers, which
  has rows and columns.
  <p>
- The mathematical application of a matrix is
+ The mathematical application of a matrixOld is
  to perform a learning transformation of a space. It can scale up or
  down, turn and twist the space. That can lead to deformation of
  vectors as well.
@@ -169,21 +169,21 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a></span></code></th>
 <td class="colLast">
-<div class="block">The type of matrix created by the sytem.</div>
+<div class="block">The type of matrixOld created by the sytem.</div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Matrix.PascalMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.PascalMatrixType</a></span></code></th>
 <td class="colLast">
-<div class="block">The Enum is used to create a type of pascal matrix.</div>
+<div class="block">The Enum is used to create a type of pascal matrixOld.</div>
 </td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="Matrix.ShiftMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.ShiftMatrixType</a></span></code></th>
 <td class="colLast">
-<div class="block">The enum is used to create a type of shift matrix.</div>
+<div class="block">The enum is used to create a type of shift matrixOld.</div>
 </td>
 </tr>
 </table>
@@ -208,15 +208,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#determinant()">determinant</a></span>()</code></th>
 <td class="colLast">
-<div class="block">A determinant is a scalar value computed for a square matrix; that
- encodes many properties of the linear algebra described by the matrix.</div>
+<div class="block">A determinant is a scalar value computed for a square matrixOld; that
+ encodes many properties of the linear algebra described by the matrixOld.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#exchangeArrayMatrix(int)">exchangeArrayMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+<div class="block">An exchange matrixOld is a square matrixOld whose counterdiagonal is always 1 and the
  rest of the elements are 0.</div>
 </td>
 </tr>
@@ -224,28 +224,28 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>int[]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getDimension()">getDimension</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns the dimension of a matrix.</div>
+<div class="block">The method returns the dimension of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#getType()">getType</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns the type of a matrix.</div>
+<div class="block">The method returns the type of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#hilbertArrayMatrix(int)">hilbertArrayMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A Hilbert matrix is a square matrix with entries being the unit fractions.</div>
+<div class="block">A Hilbert matrixOld is a square matrixOld with entries being the unit fractions.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#identityArrayMatrix(int)">identityArrayMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">The identity matrix is a square matrix whose diagonal is always 1 and all the
+<div class="block">The identity matrixOld is a square matrixOld whose diagonal is always 1 and all the
  other elements are 0.</div>
 </td>
 </tr>
@@ -253,7 +253,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isColumnVector()">isColumnVector</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  column vector, which is n x 1.</div>
 </td>
 </tr>
@@ -261,7 +261,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isRowVector()">isRowVector</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  row vector, which is 1 x n</div>
 </td>
 </tr>
@@ -269,15 +269,15 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>boolean</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#isSquareMatrix()">isSquareMatrix</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method will return true if the matrix is a
- square matrix, which is n x n.</div>
+<div class="block">The method will return true if the matrixOld is a
+ square matrixOld, which is n x n.</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#lehmerArrayMatrix(int)">lehmerArrayMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A lehmer matrix is a constant systematic square matrix.</div>
+<div class="block">A lehmer matrixOld is a constant systematic square matrixOld.</div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
@@ -285,45 +285,45 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#oneArrayMatrix(int,int)">oneArrayMatrix</a></span>&#8203;(int&nbsp;m,
               int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.</div>
+<div class="block">In mathematics, a matrixOld of one, or all-ones matrixOld is a matrixOld whose all elements are 1.</div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pascalArrayMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.PascalMatrixType)">pascalArrayMatrix</a></span>&#8203;(int&nbsp;n,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#pascalArrayMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.PascalMatrixType)">pascalArrayMatrix</a></span>&#8203;(int&nbsp;n,
                  <a href="Matrix.PascalMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.PascalMatrixType</a>&nbsp;t)</code></th>
 <td class="colLast">
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#rank()">rank</a></span>()</code></th>
 <td class="colLast">
-<div class="block">A rank of a matrix is independent rows of a matrix.</div>
+<div class="block">A rank of a matrixOld is independent rows of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#redhefferArrayMatrix(int)">redhefferArrayMatrix</a></span>&#8203;(int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.</div>
+<div class="block">A redheffer matrixOld is a (0-1) square matrixOld, whose entries are either 1 or 0.</div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a></code></td>
-<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftArrayMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.ShiftMatrixType)">shiftArrayMatrix</a></span>&#8203;(int&nbsp;n,
+<th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#shiftArrayMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.ShiftMatrixType)">shiftArrayMatrix</a></span>&#8203;(int&nbsp;n,
                 <a href="Matrix.ShiftMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.ShiftMatrixType</a>&nbsp;t)</code></th>
 <td class="colLast">
-<div class="block">The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
- super diagonal matrix, or lower diagonal matrix.</div>
+<div class="block">The shift matrixOld is a matrixOld whose diagonal has shifted one level up or down, known as
+ super diagonal matrixOld, or lower diagonal matrixOld.</div>
 </td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>java.lang.Number[][]</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#toArray()">toArray</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The method returns all the elements of a matrix.</div>
+<div class="block">The method returns all the elements of a matrixOld.</div>
 </td>
 </tr>
 <tr id="i16" class="altColor">
@@ -344,7 +344,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <td class="colFirst"><code>double</code></td>
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#trace()">trace</a></span>()</code></th>
 <td class="colLast">
-<div class="block">The trace of the matrix is defined as the sum of all the elements,
+<div class="block">The trace of the matrixOld is defined as the sum of all the elements,
  on the main diagonal.</div>
 </td>
 </tr>
@@ -353,7 +353,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <th class="colSecond" scope="row"><code><span class="memberNameLink"><a href="#zeroArrayMatrix(int,int)">zeroArrayMatrix</a></span>&#8203;(int&nbsp;m,
                int&nbsp;n)</code></th>
 <td class="colLast">
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 </td>
 </tr>
 </table>
@@ -380,10 +380,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getDimension</h4>
 <pre class="methodSignature">int[]&nbsp;getDimension()</pre>
-<div class="block">The method returns the dimension of a matrix.</div>
+<div class="block">The method returns the dimension of a matrixOld.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the dimension of the matrix</dd>
+<dd>the dimension of the matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -394,11 +394,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>getType</h4>
 <pre class="methodSignature"><a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.MatrixType</a>&nbsp;getType()</pre>
-<div class="block">The method returns the type of a matrix.
+<div class="block">The method returns the type of a matrixOld.
  For more details see <a href="Matrix.MatrixType.html" title="enum in org.katpara.mathematica.linears.matrices"><code>Matrix.MatrixType</code></a></div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the type of matrix</dd>
+<dd>the type of matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -409,10 +409,10 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>toArray</h4>
 <pre class="methodSignature">java.lang.Number[][]&nbsp;toArray()</pre>
-<div class="block">The method returns all the elements of a matrix.</div>
+<div class="block">The method returns all the elements of a matrixOld.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements</dd>
+<dd>the matrixOld elements</dd>
 </dl>
 </li>
 </ul>
@@ -426,7 +426,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">The method returns all the elements as a list of lists.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements as a list of lists</dd>
+<dd>the matrixOld elements as a list of lists</dd>
 </dl>
 </li>
 </ul>
@@ -440,7 +440,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <div class="block">The method returns the list of Vectors.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the matrix elements as a list of vectors</dd>
+<dd>the matrixOld elements as a list of vectors</dd>
 </dl>
 </li>
 </ul>
@@ -451,7 +451,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isRowVector</h4>
 <pre class="methodSignature">boolean&nbsp;isRowVector()</pre>
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  row vector, which is 1 x n</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -466,7 +466,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isColumnVector</h4>
 <pre class="methodSignature">boolean&nbsp;isColumnVector()</pre>
-<div class="block">The method will return true if the matrix is a
+<div class="block">The method will return true if the matrixOld is a
  column vector, which is n x 1.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -481,11 +481,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>isSquareMatrix</h4>
 <pre class="methodSignature">boolean&nbsp;isSquareMatrix()</pre>
-<div class="block">The method will return true if the matrix is a
- square matrix, which is n x n.</div>
+<div class="block">The method will return true if the matrixOld is a
+ square matrixOld, which is n x n.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>true if it is a square matrix</dd>
+<dd>true if it is a square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -496,13 +496,13 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>trace</h4>
 <pre class="methodSignature">double&nbsp;trace()</pre>
-<div class="block">The trace of the matrix is defined as the sum of all the elements,
+<div class="block">The trace of the matrixOld is defined as the sum of all the elements,
  on the main diagonal.
  <p>
- The trace only exist for a square matrix.</div>
+ The trace only exist for a square matrixOld.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the trace of the square matrix</dd>
+<dd>the trace of the square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -513,11 +513,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>rank</h4>
 <pre class="methodSignature">int&nbsp;rank()</pre>
-<div class="block">A rank of a matrix is independent rows of a matrix. That shows that how many
- rows of a matrix are totally independent, or co-dependent on other rows.</div>
+<div class="block">A rank of a matrixOld is independent rows of a matrixOld. That shows that how many
+ rows of a matrixOld are totally independent, or co-dependent on other rows.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the rank of matrix</dd>
+<dd>the rank of matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -528,12 +528,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>determinant</h4>
 <pre class="methodSignature">double&nbsp;determinant()</pre>
-<div class="block">A determinant is a scalar value computed for a square matrix; that
- encodes many properties of the linear algebra described by the matrix.
- It is denoted as det(A), where A is a matrix or |A|.</div>
+<div class="block">A determinant is a scalar value computed for a square matrixOld; that
+ encodes many properties of the linear algebra described by the matrixOld.
+ It is denoted as det(A), where A is a matrixOld or |A|.</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the determinant of the square matrix</dd>
+<dd>the determinant of the square matrixOld</dd>
 </dl>
 </li>
 </ul>
@@ -545,7 +545,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>zeroArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;zeroArrayMatrix&#8203;(int&nbsp;m,
                                    int&nbsp;n)</pre>
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - the number of rows</dd>
@@ -567,19 +567,19 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>oneArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;oneArrayMatrix&#8203;(int&nbsp;m,
                                   int&nbsp;n)</pre>
-<div class="block">In mathematics, a matrix of one, or all-ones matrix is a matrix whose all elements are 1.</div>
+<div class="block">In mathematics, a matrixOld of one, or all-ones matrixOld is a matrixOld whose all elements are 1.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - the number of rows</dd>
 <dd><code>n</code> - the number of columns</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>a one matrix</dd>
+<dd>a one matrixOld</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when m + n &lt; 2</dd>
 </dl>
 </li>
 </ul>
-<a id="pascalArrayMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.PascalMatrixType)">
+<a id="pascalArrayMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.PascalMatrixType)">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -587,14 +587,14 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>pascalArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;pascalArrayMatrix&#8203;(int&nbsp;n,
                                      <a href="Matrix.PascalMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.PascalMatrixType</a>&nbsp;t)</pre>
-<div class="block">The method will return a zero or null matrix, whose all the elements are zero.</div>
+<div class="block">The method will return a zero or null matrixOld, whose all the elements are zero.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
-<dd><code>t</code> - the type of matrix;
+<dd><code>t</code> - the type of matrixOld;
           LOWER       - Lover triangular
           UPPER       - Upper triangular
-          SYMMETRIC   - a symmetric matrix</dd>
+          SYMMETRIC   - a symmetric matrixOld</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a Pascal's <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -609,7 +609,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>lehmerArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;lehmerArrayMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A lehmer matrix is a constant systematic square matrix.</div>
+<div class="block">A lehmer matrixOld is a constant systematic square matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
@@ -625,7 +625,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>identityArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;identityArrayMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">The identity matrix is a square matrix whose diagonal is always 1 and all the
+<div class="block">The identity matrixOld is a square matrixOld whose diagonal is always 1 and all the
  other elements are 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -644,7 +644,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>hilbertArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;hilbertArrayMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A Hilbert matrix is a square matrix with entries being the unit fractions.</div>
+<div class="block">A Hilbert matrixOld is a square matrixOld with entries being the unit fractions.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
@@ -662,11 +662,11 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>exchangeArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;exchangeArrayMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">An exchange matrix is a square matrix whose counterdiagonal is always 1 and the
+<div class="block">An exchange matrixOld is a square matrixOld whose counterdiagonal is always 1 and the
  rest of the elements are 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>n</code> - the square matrix</dd>
+<dd><code>n</code> - the square matrixOld</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an exchange <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -681,8 +681,8 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <li class="blockList">
 <h4>redhefferArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;redhefferArrayMatrix&#8203;(int&nbsp;n)</pre>
-<div class="block">A redheffer matrix is a (0-1) square matrix, whose entries are either 1 or 0.
- The matrix is calculated as if n is divisible by m, then it's 1 otherwise it's 0.</div>
+<div class="block">A redheffer matrixOld is a (0-1) square matrixOld, whose entries are either 1 or 0.
+ The matrixOld is calculated as if n is divisible by m, then it's 1 otherwise it's 0.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
@@ -693,7 +693,7 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 </dl>
 </li>
 </ul>
-<a id="shiftArrayMatrix(int,org.katpara.mathematica.linears.matrices.Matrix.ShiftMatrixType)">
+<a id="shiftArrayMatrix(int,org.katpara.mathematica.linears.matrices.dep.Matrix_Old.ShiftMatrixType)">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -701,12 +701,12 @@ $('.navPadding').css('padding-top', $('.fixedNav').css("height"));
 <h4>shiftArrayMatrix</h4>
 <pre class="methodSignature">static&nbsp;<a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices">ArrayMatrix</a>&nbsp;shiftArrayMatrix&#8203;(int&nbsp;n,
                                     <a href="Matrix.ShiftMatrixType.html" title="enum in org.katpara.mathematica.linears.matrices">Matrix.ShiftMatrixType</a>&nbsp;t)</pre>
-<div class="block">The shift matrix is a matrix whose diagonal has shifted one level up or down, known as
- super diagonal matrix, or lower diagonal matrix.</div>
+<div class="block">The shift matrixOld is a matrixOld whose diagonal has shifted one level up or down, known as
+ super diagonal matrixOld, or lower diagonal matrixOld.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>n</code> - the number of rows and columns</dd>
-<dd><code>t</code> - the type of matrix, i.e UPPER or LOWER</dd>
+<dd><code>t</code> - the type of matrixOld, i.e UPPER or LOWER</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a shift <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
