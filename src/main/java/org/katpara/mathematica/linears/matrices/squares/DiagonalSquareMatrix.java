@@ -53,6 +53,16 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     }
 
     /**
+     * The method returns truw if the matrix is diagonal.
+     *
+     * @return true if the matrix is diagonal
+     */
+    @Override
+    public boolean isDiagonal() {
+        return true;
+    }
+
+    /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many
      * rows of a matrix are totally independent, or co-dependent on other rows.
      *

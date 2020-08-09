@@ -40,10 +40,51 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isSymmetric() {
-        for (int i = 0; i < d.length; i++)
-            for (int j = 0; j < d[0].length; j++)
-                if (d[i][j].doubleValue() != d[j][i].doubleValue())
+        for (int i = 0; i < d.length; i++) {
+            for (int j = 0; j < d[0].length; j++) {
+                if (d[i][j].doubleValue() != d[j][i].doubleValue()) {
                     return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The method returns truw if the matrix is diagonal.
+     *
+     * @return true if the matrix is diagonal
+     */
+    @Override
+    public boolean isDiagonal() {
+        for (int i = 0; i < d.length; i++) {
+            for (int j = 0; j < d[0].length; j++) {
+                if (i != j && d[i][j].doubleValue() != 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The method returns true if the matrix is an identity matrix.
+     *
+     * @return true if it's an identity matrix
+     */
+    @Override
+    public boolean isIdentity() {
+        for (int i = 0; i < d.length; i++) {
+            if (d[i][i].doubleValue() != 1)
+                return false;
+
+            for (int j = 0; j < d[0].length; j++) {
+                if (i != j && d[i][j].doubleValue() != 0)
+                    return false;
+            }
+        }
 
         return true;
     }

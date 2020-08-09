@@ -36,6 +36,16 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
     }
 
     /**
+     * The method returns true if the matrix is an identity matrix.
+     *
+     * @return true if it's an identity matrix
+     */
+    @Override
+    public boolean isIdentity() {
+        return true;
+    }
+
+    /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many
      * rows of a matrix are totally independent, or co-dependent on other rows.
      *

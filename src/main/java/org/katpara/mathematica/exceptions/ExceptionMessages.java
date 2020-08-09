@@ -23,4 +23,5 @@ public final class ExceptionMessages {
     public static final String NOT_SYMMETRIC_MATRIX_MESSAGE = "The data are not symmetric.";
     public static final String NOT_INVERTIBLE_MATRIX_MESSAGE = "The matrix are non-invertible.";
     public static final String NOT_IDENTITY_MATRIX_MESSAGE = "The matrix are non-identity.";
+    public static final String NOT_LOWER_TRIANGUALR_MATRIX_MESSAGE = "The matrix are lower triangular.";
 }

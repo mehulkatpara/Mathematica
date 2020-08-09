@@ -2,8 +2,13 @@ package org.katpara.mathematica.linears.matrices.squares;
 
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
-import org.katpara.mathematica.util.Rounding;
 
+/**
+ * An abstract class holding all the square matrices together.
+ *
+ * @author Mehul Katpara
+ * @since 1.0.0
+ */
 public abstract class SquareMatrix extends AbstractMatrix {
 
     /**
@@ -63,4 +68,18 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return true if symmetric, otherwise false
      */
     public abstract boolean isSymmetric();
+
+    /**
+     * The method returns truw if the matrix is diagonal.
+     *
+     * @return true if the matrix is diagonal
+     */
+    public abstract boolean isDiagonal();
+
+    /**
+     * The method returns true if the matrix is an identity matrix.
+     *
+     * @return true if it's an identity matrix
+     */
+    public abstract boolean isIdentity();
 }
