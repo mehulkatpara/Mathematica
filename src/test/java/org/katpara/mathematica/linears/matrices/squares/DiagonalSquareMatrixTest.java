@@ -68,11 +68,6 @@ class DiagonalSquareMatrixTest {
     }
 
     @Test
-    void copy() {
-        assertNotEquals(m.hashCode(), m.copy().hashCode());
-    }
-
-    @Test
     void addMatrix() {
         assertEquals(new DiagonalSquareMatrix(new Number[]{3, 5, 7, 9, 11}), m.add(m1));
     }

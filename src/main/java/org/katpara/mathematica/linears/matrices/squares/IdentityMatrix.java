@@ -2,7 +2,6 @@ package org.katpara.mathematica.linears.matrices.squares;
 
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.NotIdentityMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.util.Rounding;
 
@@ -53,34 +52,6 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      */
     @Override
     public int getRank() {
-        return d.length;
-    }
-
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @return the trace of the square matrix
-     */
-    @Override
-    public double getTrace() {
-        return d.length;
-    }
-
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @param decimals the decimal points of accuracy
-     *
-     * @return the trace of the square matrix
-     */
-    @Override
-    public double getTrace(final Rounding.Decimals decimals) {
         return d.length;
     }
 

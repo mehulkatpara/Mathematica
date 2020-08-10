@@ -1,10 +1,7 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.util.Rounding;
-
-import java.util.Arrays;
 
 /**
  * The class represents any N x N square matrix. This is the most general class.
@@ -22,6 +19,7 @@ public class AnySquareMatrix extends SquareMatrix {
      * Requires to chain down the construction
      */
     protected AnySquareMatrix() {
+        super();
     }
 
     /**
@@ -29,12 +27,12 @@ public class AnySquareMatrix extends SquareMatrix {
      *
      * @param d the matrix elements.
      */
-    protected AnySquareMatrix(final Number[][] d) {
+    public AnySquareMatrix(final Number[][] d) {
         super(d);
     }
 
     /**
-     * The method checks if the matrix is symmetric.
+     * The method checks if the data is symmetric.
      *
      * @return true if symmetric, otherwise false
      */
@@ -52,7 +50,7 @@ public class AnySquareMatrix extends SquareMatrix {
     }
 
     /**
-     * The method returns truw if the matrix is diagonal.
+     * The method returns true if the matrix is diagonal.
      *
      * @return true if the matrix is diagonal
      */
@@ -90,42 +88,37 @@ public class AnySquareMatrix extends SquareMatrix {
     }
 
     /**
-     * A rank of a matrix is independent rows of a matrix. That shows that how many
-     * rows of a matrix are totally independent, or co-dependent on other rows.
+     * the method returns true if the matrix is a lower triangular matrix
      *
-     * @return the rank of matrix
+     * @return true if it's a lower triangular
      */
     @Override
-    public int getRank() {
-        return 0;
+    public boolean isLowerTriangular() {
+        for (int i = 0; i < d.length; i++) {
+            for (int j = 0; j < d[0].length; j++) {
+                if (j > i && d[i][j].doubleValue() != 0)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
+     * the method returns true if the matrix is an upper triangular matrix
      *
-     * @return the trace of the square matrix
+     * @return true if it's a upper triangular
      */
     @Override
-    public double getTrace() {
-        return 0;
-    }
+    public boolean isUpperTriangular() {
+        for (int i = 0; i < d.length; i++) {
+            for (int j = 0; j < d[0].length; j++) {
+                if (j < i && d[i][j].doubleValue() != 0)
+                    return false;
+            }
+        }
 
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @param decimals the decimal points of accuracy
-     *
-     * @return the trace of the square matrix
-     */
-    @Override
-    public double getTrace(final Rounding.Decimals decimals) {
-        return 0;
+        return true;
     }
 
     /**
@@ -155,23 +148,24 @@ public class AnySquareMatrix extends SquareMatrix {
     }
 
     /**
+     * A rank of a matrix is independent rows of a matrix. That shows that how many
+     * rows of a matrix are totally independent, or co-dependent on other rows.
+     *
+     * @return the rank of matrix
+     */
+    @Override
+    public int getRank() {
+        return 0;
+    }
+
+    /**
      * The method transposes the matrix.
      *
      * @return the transposed matrix
      */
     @Override
     public Matrix transpose() {
-        return null;
-    }
-
-    /**
-     * The method perform deep-cloning.
-     *
-     * @return the cloned matrix
-     */
-    @Override
-    public Matrix copy() {
-        return null;
+        return new AnySquareMatrix(super.doTranspose());
     }
 
     /**
@@ -182,15 +176,8 @@ public class AnySquareMatrix extends SquareMatrix {
      * @return the element
      */
     @Override
-    public Matrix add(final double scalar) {
-        var n = new Number[d.length][d.length];
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d.length; j++) {
-                n[i][j] = d[i][j].doubleValue() + scalar;
-            }
-        }
-
-        return new AnySquareMatrix(n);
+    public final Matrix add(final double scalar) {
+        return new AnySquareMatrix(super.doAdd(scalar));
     }
 
     /**
@@ -202,17 +189,7 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix add(final Matrix m) {
-        if (!Arrays.equals(this.getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        Number[][] _d = m.toArray(), n = new Number[d.length][d.length];
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d.length; j++) {
-                n[i][j] = d[i][j].doubleValue() + _d[i][j].doubleValue();
-            }
-        }
-
-        return new AnySquareMatrix(n);
+        return new AnySquareMatrix(super.doAdd(m));
     }
 
     /**
@@ -224,17 +201,7 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix subtract(final Matrix m) {
-        if (!Arrays.equals(this.getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        Number[][] _d = m.toArray(), n = new Number[d.length][d.length];
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d.length; j++) {
-                n[i][j] = d[i][j].doubleValue() - _d[i][j].doubleValue();
-            }
-        }
-
-        return new AnySquareMatrix(n);
+        return new AnySquareMatrix(super.doSubtract(m));
     }
 
     /**
@@ -246,31 +213,31 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix multiply(final double scalar) {
-        return null;
+        return new AnySquareMatrix(super.doMultiply(scalar));
     }
 
     /**
      * The multiplication of two elements.
      *
-     * @param e the element
+     * @param m the element
      *
      * @return the element
      */
     @Override
-    public Matrix multiply(final Matrix e) {
-        return null;
+    public Matrix multiply(final Matrix m) {
+        return new AnySquareMatrix(super.doMultiply(m));
     }
 
     /**
      * The division of two elements.
      *
-     * @param e the element
+     * @param m the element
      *
      * @return the element
      */
     @Override
-    public Matrix divide(final Matrix e) {
-        return null;
+    public Matrix divide(final Matrix m) {
+        return new AnySquareMatrix(super.doMultiply(m.multiplicativeInverse()));
     }
 
     /**
@@ -290,7 +257,7 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix additiveInverse() {
-        return null;
+        return new AnySquareMatrix(super.doAdditiveInverse());
     }
 
     /**

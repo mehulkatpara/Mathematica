@@ -6,20 +6,20 @@ import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 
 /**
- * The class represents a lower triangular matrix, where all the elements
- * above the main-diagonal is zero.
+ * The class represents an upper triangular matrix, where all the elements
+ * below the main-diagonal is zero.
  *
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
+public final class UpperTriangularMatrix extends DiagonalSquareMatrix {
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    public LowerTriangularMatrix(final Number[][] d) {
+    public UpperTriangularMatrix(final Number[][] d) {
         if (d == null)
             throw new NullArgumentProvidedException();
 
@@ -31,7 +31,7 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
                 if (d[i][j] == null)
                     throw new NullArgumentProvidedException();
 
-                if (j > i && d[i][j].doubleValue() != 0)
+                if (j < i && d[i][j].doubleValue() != 0)
                     throw new NotLowerTriangularMatrixException();
             }
         }
@@ -51,7 +51,7 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
     }
 
     /**
-     * The method returns truw if the matrix is diagonal.
+     * The method returns true if the matrix is diagonal.
      *
      * @return true if the matrix is diagonal
      */
@@ -67,7 +67,7 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
      */
     @Override
     public boolean isLowerTriangular() {
-        return true;
+        return false;
     }
 
     /**
@@ -87,7 +87,7 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
      */
     @Override
     public Matrix transpose() {
-        return new UpperTriangularMatrix(super.doTranspose());
+        return new LowerTriangularMatrix(super.doTranspose());
     }
 
     /**
@@ -100,7 +100,7 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
     @Override
     public Matrix add(final Matrix m) {
         if (m instanceof DiagonalSquareMatrix) {
-            return new LowerTriangularMatrix(super.doAdd(m));
+            return new UpperTriangularMatrix(super.doAdd(m));
         }
 
         return super.add(m);
@@ -116,21 +116,9 @@ public final class LowerTriangularMatrix extends DiagonalSquareMatrix {
     @Override
     public Matrix subtract(final Matrix m) {
         if (m instanceof DiagonalSquareMatrix) {
-            return new LowerTriangularMatrix(super.doSubtract(m));
+            return new UpperTriangularMatrix(super.doSubtract(m));
         }
 
         return super.subtract(m);
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
-        return new LowerTriangularMatrix(super.doMultiply(scalar));
     }
 }

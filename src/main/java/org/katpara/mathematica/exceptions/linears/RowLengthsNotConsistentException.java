@@ -2,16 +2,16 @@ package org.katpara.mathematica.exceptions.linears;
 
 import org.katpara.mathematica.exceptions.ExceptionMessages;
 
-public final class NotLowerTriangularMatrixException extends RuntimeException {
-    private static final long serialVersionUID = 786653691413629307L;
+public final class RowLengthsNotConsistentException extends RuntimeException {
+    private static final long serialVersionUID = 841718963340856695L;
 
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public NotLowerTriangularMatrixException() {
-        super(ExceptionMessages.NOT_LOWER_TRIANGULAR_MATRIX_MESSAGE);
+    public RowLengthsNotConsistentException() {
+        super(ExceptionMessages.ROW_LENGTH_NOT_CONSISTENT_MESSAGE);
     }
 
     /**
@@ -22,7 +22,7 @@ public final class NotLowerTriangularMatrixException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public NotLowerTriangularMatrixException(final String message) {
+    public RowLengthsNotConsistentException(final String message) {
         super(message);
     }
 }

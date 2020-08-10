@@ -2,9 +2,9 @@ package org.katpara.mathematica.linears.matrices.squares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class IdentityMatrixTest {
 
@@ -12,6 +12,13 @@ class IdentityMatrixTest {
     @BeforeEach
     void setUp() {
         m = new IdentityMatrix(5);
+    }
+
+    @Test
+    void testConstructor() {
+        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> new IdentityMatrix(0));
+        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> new IdentityMatrix(-1));
+        System.out.println(new IdentityMatrix(1));
     }
 
     @Test

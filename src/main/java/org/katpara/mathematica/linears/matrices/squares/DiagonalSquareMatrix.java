@@ -1,8 +1,8 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
+import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.NonInvertibleMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.util.Rounding;
 
@@ -19,7 +19,9 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     /**
      * Required for extending classes
      */
-    public DiagonalSquareMatrix() { }
+    public DiagonalSquareMatrix() {
+        super();
+    }
 
     /**
      * creates a diagonal square matrix from an array of data.
@@ -53,12 +55,32 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     }
 
     /**
-     * The method returns truw if the matrix is diagonal.
+     * The method returns true if the matrix is diagonal.
      *
      * @return true if the matrix is diagonal
      */
     @Override
     public boolean isDiagonal() {
+        return true;
+    }
+
+    /**
+     * the method returns true if the matrix is a lower triangular matrix
+     *
+     * @return true if it's a lower triangular
+     */
+    @Override
+    public boolean isLowerTriangular() {
+        return true;
+    }
+
+    /**
+     * the method returns true if the matrix is an upper triangular matrix
+     *
+     * @return true if it's a upper triangular
+     */
+    @Override
+    public boolean isUpperTriangular() {
         return true;
     }
 
@@ -77,39 +99,6 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
                 rank -= 1;
 
         return rank;
-    }
-
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @return the trace of the square matrix
-     */
-    @Override
-    public double getTrace() {
-        return getTrace(Rounding.Decimals.FOUR);
-    }
-
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @param decimals the decimal points of accuracy
-     *
-     * @return the trace of the square matrix
-     */
-    @Override
-    public double getTrace(final Rounding.Decimals decimals) {
-        var sum = 0.0;
-
-        for (int i = 0; i < d.length; i++)
-            sum += d[i][i].doubleValue();
-
-        return Double.parseDouble(Rounding.round(sum, decimals));
     }
 
     /**
@@ -154,20 +143,6 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     }
 
     /**
-     * The method perform deep-cloning.
-     *
-     * @return the cloned matrix
-     */
-    @Override
-    public Matrix copy() {
-        var n = new Number[d.length];
-        for (int i = 0; i < d.length; i++)
-            n[i] = d[i][i];
-
-        return new DiagonalSquareMatrix(n);
-    }
-
-    /**
      * The addition of two elements.
      *
      * @param m the element
@@ -176,6 +151,12 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      */
     @Override
     public Matrix add(final Matrix m) {
+        if(m instanceof LowerTriangularMatrix) {
+            return new LowerTriangularMatrix(super.doAdd(m));
+        }
+        if(m instanceof UpperTriangularMatrix) {
+            return new UpperTriangularMatrix(super.doAdd(m));
+        }
         if (m instanceof DiagonalSquareMatrix) {
             var _d = m.toArray();
             if (d.length != _d.length)
@@ -293,7 +274,7 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
             if ((v = d[i][i].doubleValue()) != 0) {
                 n[i] = 1 / v;
             } else {
-                throw new NonInvertibleMatrixException();
+                throw new NotInvertibleException();
             }
         }
 

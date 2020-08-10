@@ -82,58 +82,9 @@ public interface Matrix extends Element<Matrix> {
     int getRank();
 
     /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @return the trace of the square matrix
-     */
-    double getTrace();
-
-    /**
-     * The trace of the matrix is defined as the sum of all the elements,
-     * on the main diagonal.
-     * <p>
-     * The trace only exist for a square matrix.
-     *
-     * @param decimals the decimal points of accuracy
-     *
-     * @return the trace of the square matrix
-     */
-    double getTrace(final Rounding.Decimals decimals);
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @return the determinant of the square matrix
-     */
-    double getDeterminant();
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @param decimals the decimal decimals accuracy
-     *
-     * @return the determinant of the square matrix
-     */
-    double getDeterminant(final Rounding.Decimals decimals);
-
-    /**
      * The method transposes the matrix.
      *
      * @return the transposed matrix
      */
     Matrix transpose();
-
-    /**
-     * The method perform deep-cloning.
-     *
-     * @return the cloned matrix
-     */
-    Matrix copy();
 }
