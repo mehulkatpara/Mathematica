@@ -1,8 +1,12 @@
-package org.katpara.mathematica.linears.matrices.rectangulars;
+package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
+import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
+import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
+import org.katpara.mathematica.util.Rounding;
 
 import java.util.Arrays;
 
@@ -12,18 +16,44 @@ import java.util.Arrays;
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public final class NullMatrix extends AnyRectangularMatrix {
+public final class NullMatrix extends AbstractMatrix {
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    protected NullMatrix(final Number[][] d) {
+    private NullMatrix(final Number[][] d) {
         super(d);
     }
 
+    /**
+     * The class method creates a square null matrix of provided rows.
+     *
+     * @param row the dimensions of rows and columns.
+     *
+     * @return the null matrix
+     *
+     * @throws InvalidMatrixDimensionProvidedException when row <= 0
+     */
+    public static NullMatrix getInstance(final int row) {
+        return getInstance(row, row);
+    }
+
+    /**
+     * The class method creates a rectangular null matrix of given row and columns.
+     *
+     * @param row    the row dimensions
+     * @param column the column dimensions
+     *
+     * @return the null matrix
+     *
+     * @throws InvalidMatrixDimensionProvidedException when row && column is 0 or less.
+     */
     public static NullMatrix getInstance(final int row, final int column) {
+        if (row <= 0 || column <= 0)
+            throw new InvalidMatrixDimensionProvidedException();
+
         Number[][] n = new Number[row][column];
         for (int i = 0; i < row; i++) {
             Arrays.fill(n[i], 0);
@@ -62,10 +92,13 @@ public final class NullMatrix extends AnyRectangularMatrix {
      */
     @Override
     public Matrix add(final double scalar) {
-        if(scalar == 0)
+        if (scalar == 0)
             return this;
 
-        return super.add(scalar);
+        if (this.isSquareMatrix())
+            return new AnySquareMatrix(super.doAdd(scalar));
+        else
+            return new AnyRectangularMatrix(super.doAdd(scalar));
     }
 
     /**
@@ -136,7 +169,20 @@ public final class NullMatrix extends AnyRectangularMatrix {
      */
     @Override
     public Matrix divide(final Matrix m) {
+        if (!m.isSquareMatrix())
+            throw new NotSquareMatrixException();
+
         return this.multiply(m.multiplicativeInverse());
+    }
+
+    /**
+     * The multiplicative inverse of the elements.
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix multiplicativeInverse() {
+        throw new NotInvertibleException();
     }
 
     /**
@@ -147,5 +193,42 @@ public final class NullMatrix extends AnyRectangularMatrix {
     @Override
     public Matrix additiveInverse() {
         return this;
+    }
+
+    /**
+     * The power of an element.
+     *
+     * @param power the exponent
+     *
+     * @return the value after applying power
+     */
+    @Override
+    public Matrix power(final double power) {
+        if (!this.isSquareMatrix())
+            throw new NotSquareMatrixException();
+
+        return this;
+    }
+
+    /**
+     * The absolute value of an element.
+     *
+     * @return the absolute value
+     */
+    @Override
+    public Number abs() {
+        return 0;
+    }
+
+    /**
+     * The absolute value of an element.
+     *
+     * @param decimals rounding to given decimal places
+     *
+     * @return the absolute value
+     */
+    @Override
+    public Number abs(final Rounding.Decimals decimals) {
+        return 0;
     }
 }

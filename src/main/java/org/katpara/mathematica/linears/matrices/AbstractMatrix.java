@@ -72,6 +72,39 @@ public abstract class AbstractMatrix implements Matrix {
     }
 
     /**
+     * The method will return true if the matrix is a
+     * row vector, which is 1 x n
+     *
+     * @return true if it is a row vector
+     */
+    @Override
+    public boolean isRowVector() {
+        return s[0] == 1 && s[1] > 1;
+    }
+
+    /**
+     * The method will return true if the matrix is a
+     * column vector, which is n x 1.
+     *
+     * @return true if it is a column vector
+     */
+    @Override
+    public boolean isColumnVector() {
+        return s[0] > 1 && s[1] == 1;
+    }
+
+    /**
+     * The method will return true if the matrix is a
+     * square matrix, which is n x n.
+     *
+     * @return true if it is a square matrix
+     */
+    @Override
+    public boolean isSquareMatrix() {
+        return s[0] == s[1];
+    }
+
+    /**
      * The method returns the row elements of a Matrix.
      *
      * @param row the row index

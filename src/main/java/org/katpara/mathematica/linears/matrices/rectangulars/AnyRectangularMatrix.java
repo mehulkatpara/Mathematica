@@ -1,8 +1,8 @@
 package org.katpara.mathematica.linears.matrices.rectangulars;
 
-import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 import org.katpara.mathematica.linears.matrices.squares.IdentityMatrix;
 

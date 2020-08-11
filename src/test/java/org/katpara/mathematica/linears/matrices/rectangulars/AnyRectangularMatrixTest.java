@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linears.NotRectangularMatrixException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 import org.katpara.mathematica.linears.matrices.squares.IdentityMatrix;
 
@@ -31,7 +33,13 @@ class AnyRectangularMatrixTest {
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(null)),
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{null})),
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{{null}})),
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{{1, 2}, {null, 1}}))
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{{1, 2}, {null, 1}})),
+                () -> assertThrows(NotRectangularMatrixException.class, () -> new AnyRectangularMatrix(new Number[][]{
+                        {1, 2, 3, 4},
+                        {5, 9, 9, 7},
+                        {2, 13, 8, 17},
+                        {1, 2, 3, 4}
+                }))
         );
     }
 
@@ -54,7 +62,7 @@ class AnyRectangularMatrixTest {
 
     @Test
     void multiplicativeInverse() {
-        assertThrows(NotInvertibleException.class, () -> m.multiplicativeInverse());
+        assertThrows(NotSquareMatrixException.class, () -> m.multiplicativeInverse());
     }
 
     @Test

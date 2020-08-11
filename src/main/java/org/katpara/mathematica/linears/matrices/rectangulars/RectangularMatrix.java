@@ -1,11 +1,10 @@
 package org.katpara.mathematica.linears.matrices.rectangulars;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
+import org.katpara.mathematica.exceptions.linears.NotRectangularMatrixException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 public abstract class RectangularMatrix extends AbstractMatrix {
@@ -17,28 +16,9 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      */
     protected RectangularMatrix(final Number[][] d) {
         super(d);
-    }
 
-    /**
-     * The method will return true if the matrix is a
-     * row vector, which is 1 x n
-     *
-     * @return true if it is a row vector
-     */
-    @Override
-    public final boolean isRowVector() {
-        return this.s[0] == 1 && this.s[1] > 1;
-    }
-
-    /**
-     * The method will return true if the matrix is a
-     * column vector, which is n x 1.
-     *
-     * @return true if it is a column vector
-     */
-    @Override
-    public final boolean isColumnVector() {
-        return this.s[0] > 1 && this.s[1] == 1;
+        if(super.isSquareMatrix())
+            throw new NotRectangularMatrixException();
     }
 
     /**
@@ -59,7 +39,7 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      */
     @Override
     public final Matrix multiplicativeInverse() {
-        throw new NotInvertibleException();
+        throw new NotSquareMatrixException();
     }
 
     /**
