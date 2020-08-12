@@ -82,19 +82,4 @@ public abstract class TriangularMatrix extends AnySquareMatrix {
 
         return rank;
     }
-
-    /**
-     * The scalar addition of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public final Matrix add(final double scalar) {
-        if (scalar == 0)
-            return this;
-
-        return new AnySquareMatrix(super.doAdd(scalar));
-    }
 }

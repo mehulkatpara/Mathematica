@@ -4,8 +4,8 @@ import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
+import org.katpara.mathematica.linears.matrices.squares.triangulars.TriangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.UpperTriangularMatrix;
 import org.katpara.mathematica.util.Rounding;
 
@@ -152,18 +152,6 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     }
 
     /**
-     * The scalar addition of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public final Matrix add(final double scalar) {
-        return super.add(scalar);
-    }
-
-    /**
      * The addition of two elements.
      *
      * @param m the element
@@ -172,28 +160,28 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      */
     @Override
     public final Matrix add(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
+        if (m instanceof TriangularMatrix || m instanceof DiagonalSquareMatrix) {
+            if (!Arrays.equals(getSize(), m.getSize()))
+                throw new MatrixDimensionMismatchException();
 
-        if (m instanceof NullMatrix)
-            return this;
+            if (m instanceof DiagonalSquareMatrix) {
+                var _d = m.toArray();
+                var n = new double[s[0]];
+                for (int i = 0; i < s[0]; i++)
+                    n[i] = d[i][i] + _d[i][i];
 
-        var _d = m.toArray();
-        if (m instanceof LowerTriangularMatrix)
-            return new LowerTriangularMatrix(super.doAdd(_d));
+                return getInstance(n);
+            }
 
-        if (m instanceof UpperTriangularMatrix)
-            return new UpperTriangularMatrix(super.doAdd(_d));
+            var n = super.doAdd(m.toArray());
+            if (m instanceof LowerTriangularMatrix)
+                return new LowerTriangularMatrix(n);
 
-        if (m instanceof DiagonalSquareMatrix) {
-            var n = new double[s[0]];
-            for (int i = 0; i < s[0]; i++)
-                n[i] = d[i][i] + _d[i][i];
-
-            return getInstance(n);
+            if (m instanceof UpperTriangularMatrix)
+                return new UpperTriangularMatrix(n);
         }
 
-        return new AnySquareMatrix(super.doAdd(_d));
+        return super.add(m);
     }
 
     /**
@@ -205,31 +193,28 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      */
     @Override
     public final Matrix subtract(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
+        if (m instanceof TriangularMatrix || m instanceof DiagonalSquareMatrix) {
+            if (!Arrays.equals(getSize(), m.getSize()))
+                throw new MatrixDimensionMismatchException();
 
-        if (this == m)
-            return NullMatrix.getInstance(s[0]);
+            if (m instanceof DiagonalSquareMatrix) {
+                var _d = m.toArray();
+                var n = new double[s[0]];
+                for (int i = 0; i < s[0]; i++)
+                    n[i] = d[i][i] - _d[i][i];
 
-        if (m instanceof NullMatrix)
-            return this;
+                return getInstance(n);
+            }
 
-        var _d = m.toArray();
-        if (m instanceof LowerTriangularMatrix)
-            return new LowerTriangularMatrix(super.doSubtract(_d));
+            var n = super.doSubtract(m.toArray());
+            if (m instanceof LowerTriangularMatrix)
+                return new LowerTriangularMatrix(n);
 
-        if (m instanceof UpperTriangularMatrix)
-            return new UpperTriangularMatrix(super.doSubtract(_d));
-
-        if (m instanceof DiagonalSquareMatrix) {
-            var n = new double[s[0]];
-            for (int i = 0; i < s[0]; i++)
-                n[i] = d[i][i] - _d[i][i];
-
-            return getInstance(n);
+            if (m instanceof UpperTriangularMatrix)
+                return new UpperTriangularMatrix(n);
         }
 
-        return new AnySquareMatrix(super.doSubtract(_d));
+        return super.subtract(m);
     }
 
     /**
@@ -243,9 +228,10 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     public final Matrix multiply(final double scalar) {
         if (scalar == 0)
             return NullMatrix.getInstance(s[0]);
-
         if (scalar == 1)
             return this;
+        if (scalar == -1)
+            return this.additiveInverse();
 
         var n = new double[s[0]];
         for (int i = 0; i < s[0]; i++) {
@@ -264,35 +250,16 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      */
     @Override
     public Matrix multiply(final Matrix m) {
-        var _s = m.getSize();
+        if (m instanceof TriangularMatrix ||
+                    m instanceof DiagonalSquareMatrix) {
+            if (s[1] != m.getSize()[0])
+                throw new MatrixDimensionMismatchException();
 
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof NullMatrix)
-            return NullMatrix.getInstance(s[0]);
-
-        if (m instanceof IdentityMatrix)
-            return this;
-
-        var n = super.doMultiply(m.toArray());
-
-        if (m instanceof LowerTriangularMatrix)
-            return new LowerTriangularMatrix(n);
-
-        if (m instanceof UpperTriangularMatrix)
-            return new UpperTriangularMatrix(n);
-
-        if (m instanceof DiagonalSquareMatrix) {
-            var _n = new double[s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                _n[i] = n[i][i];
-            }
-
-            return getInstance(_n);
+            var n = super.doMultiply(m.toArray());
+            return mul(m, n);
         }
 
-        return new AnySquareMatrix(n);
+        return super.multiply(m);
     }
 
     /**
@@ -304,15 +271,40 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      */
     @Override
     public Matrix divide(final Matrix m) {
-        var _s = m.getSize();
+        if (m instanceof TriangularMatrix ||
+                    m instanceof DiagonalSquareMatrix) {
+            if (s[1] != m.getSize()[0])
+                throw new MatrixDimensionMismatchException();
 
-        if(this == m)
-            return IdentityMatrix.getInstance(s[0]);
+            var n = super.doMultiply(m.multiplicativeInverse().toArray());
+            return mul(m, n);
+        }
 
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
+        return super.divide(m);
+    }
 
-        return this.multiply(m.multiplicativeInverse());
+    /**
+     * The method implements some multiplication logic.
+     *
+     * @param m the matrix to multiply
+     * @param n the matrix data
+     *
+     * @return the matrix
+     */
+    protected Matrix mul(final Matrix m, final double[][] n) {
+        if (m instanceof LowerTriangularMatrix)
+            return new LowerTriangularMatrix(n);
+
+        if (m instanceof UpperTriangularMatrix)
+            return new UpperTriangularMatrix(n);
+
+
+        var _n = new double[s[0]];
+        for (int i = 0; i < s[0]; i++) {
+            _n[i] = n[i][i];
+        }
+
+        return getInstance(_n);
     }
 
     /**
@@ -324,7 +316,7 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
     public Matrix multiplicativeInverse() {
         var n = new double[s[0]];
         for (int i = 0; i < s[0]; i++) {
-            n[i] = 1 / d[i][i];
+            n[i] = 1.0 / d[i][i];
         }
 
         return DiagonalSquareMatrix.getInstance(n);
