@@ -53,7 +53,7 @@ public interface Matrix extends Element<Matrix> {
      *
      * @return the matrix elements
      */
-    Number[][] toArray();
+    double[][] toArray();
 
     /**
      * The method returns the row elements of a Matrix.
@@ -62,7 +62,7 @@ public interface Matrix extends Element<Matrix> {
      *
      * @return the matrix elements as a list of vectors
      */
-    Number[] getRow(final int row);
+    double[] getRow(final int row);
 
     /**
      * The method returns the column elements of a Matrix.
@@ -71,7 +71,7 @@ public interface Matrix extends Element<Matrix> {
      *
      * @return the matrix elements as a list of vectors
      */
-    Number[] getColumn(final int column);
+    double[] getColumn(final int column);
 
     /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many

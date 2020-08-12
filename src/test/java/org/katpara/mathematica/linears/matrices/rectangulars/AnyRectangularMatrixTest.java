@@ -8,9 +8,9 @@ import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchExcepti
 import org.katpara.mathematica.exceptions.linears.NotRectangularMatrixException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.NullMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
-import org.katpara.mathematica.linears.matrices.squares.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,7 +20,7 @@ class AnyRectangularMatrixTest {
 
     @BeforeEach
     void setUp() {
-        m = new AnyRectangularMatrix(new Number[][]{
+        m = new AnyRectangularMatrix(new double[][]{
                 {1, 2, 3, 4},
                 {5, 9, 9, 7},
                 {2, 13, 8, 17}
@@ -31,10 +31,8 @@ class AnyRectangularMatrixTest {
     void constructor() {
         assertAll(
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(null)),
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{null})),
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{{null}})),
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new Number[][]{{1, 2}, {null, 1}})),
-                () -> assertThrows(NotRectangularMatrixException.class, () -> new AnyRectangularMatrix(new Number[][]{
+                () -> assertThrows(NullArgumentProvidedException.class, () -> new AnyRectangularMatrix(new double[][]{null})),
+                () -> assertThrows(NotRectangularMatrixException.class, () -> new AnyRectangularMatrix(new double[][]{
                         {1, 2, 3, 4},
                         {5, 9, 9, 7},
                         {2, 13, 8, 17},
@@ -46,13 +44,13 @@ class AnyRectangularMatrixTest {
     @Test
     void isRowVector() {
         assertFalse(m.isRowVector());
-        assertTrue(new AnyRectangularMatrix(new Number[][]{{1, 2, 3}}).isRowVector());
+        assertTrue(new AnyRectangularMatrix(new double[][]{{1, 2, 3}}).isRowVector());
     }
 
     @Test
     void isColumnVector() {
         assertFalse(m.isColumnVector());
-        assertTrue(new AnyRectangularMatrix(new Number[][]{{1}, {2}, {3}}).isColumnVector());
+        assertTrue(new AnyRectangularMatrix(new double[][]{{1}, {2}, {3}}).isColumnVector());
     }
 
     @Test
@@ -82,12 +80,12 @@ class AnyRectangularMatrixTest {
 
     @Test
     void getRow() {
-        assertArrayEquals(new Number[]{5, 9, 9, 7}, m.getRow(1));
+        assertArrayEquals(new double[]{5, 9, 9, 7}, m.getRow(1));
     }
 
     @Test
     void getColumn() {
-        assertArrayEquals(new Number[]{1, 5, 2}, m.getColumn(0));
+        assertArrayEquals(new double[]{1, 5, 2}, m.getColumn(0));
     }
 
     @Test
@@ -97,7 +95,7 @@ class AnyRectangularMatrixTest {
 
     @Test
     void transpose() {
-        Matrix i = new AnyRectangularMatrix(new Number[][]{
+        Matrix i = new AnyRectangularMatrix(new double[][]{
                 {1, 5, 2},
                 {2, 9, 13},
                 {3, 9, 8},
@@ -109,7 +107,7 @@ class AnyRectangularMatrixTest {
 
     @Test
     void addScalar() {
-        Matrix s = new AnyRectangularMatrix(new Number[][]{
+        Matrix s = new AnyRectangularMatrix(new double[][]{
                 {11, 12, 13, 14},
                 {15, 19, 19, 17},
                 {12, 23, 18, 27}
@@ -121,16 +119,16 @@ class AnyRectangularMatrixTest {
 
     @Test
     void testAdd() {
-        Matrix m2 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m2 = new AnyRectangularMatrix(new double[][]{
                 {11, 12, 13, 14},
                 {15, 19, 19, 17}
         });
-        Matrix m3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m3 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
         });
-        Matrix r3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix r3 = new AnyRectangularMatrix(new double[][]{
                 {11, 12, 13, 14},
                 {15, 19, 19, 17},
                 {12, 23, 18, 27}
@@ -144,16 +142,16 @@ class AnyRectangularMatrixTest {
 
     @Test
     void subtract() {
-        Matrix m2 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m2 = new AnyRectangularMatrix(new double[][]{
                 {11, 12, 13, 14},
                 {15, 19, 19, 17}
         });
-        Matrix m3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m3 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
         });
-        Matrix r3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix r3 = new AnyRectangularMatrix(new double[][]{
                 {-9, -8, -7, -6},
                 {-5, -1, -1, -3},
                 {-8, 3, -2, 7}
@@ -168,7 +166,7 @@ class AnyRectangularMatrixTest {
 
     @Test
     void multiplyScalar() {
-        Matrix r = new AnyRectangularMatrix(new Number[][]{
+        Matrix r = new AnyRectangularMatrix(new double[][]{
                 {10, 20, 30, 40},
                 {50, 90, 90, 70},
                 {20, 130, 80, 170}
@@ -184,23 +182,23 @@ class AnyRectangularMatrixTest {
 
     @Test
     void multiplyMatrix() {
-        Matrix m2 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m2 = new AnyRectangularMatrix(new double[][]{
                 {1, 2, 3},
                 {1, 2, 3},
                 {1, 2, 3},
                 {1, 2, 3}
         });
 
-        Matrix r = new AnySquareMatrix(new Number[][]{
-                {1, 2, 3},
-                {10, 18, 18},
-                {6, 39, 24}
+        Matrix r = new AnySquareMatrix(new double[][]{
+                {10, 20, 30},
+                {30, 60, 90},
+                {40, 80, 120}
         });
 
         assertAll(
                 () -> assertThrows(MatrixDimensionMismatchException.class, () -> m.multiply(NullMatrix.getInstance(5, 2))),
                 () -> assertEquals(NullMatrix.getInstance(3, 2), m.multiply(NullMatrix.getInstance(4, 2))),
-                () -> assertEquals(m, m.multiply(new IdentityMatrix(4))),
+                () -> assertEquals(m, m.multiply(IdentityMatrix.getInstance(4))),
                 () -> assertEquals(r, m.multiply(m2))
         );
     }
@@ -212,7 +210,7 @@ class AnyRectangularMatrixTest {
 
     @Test
     void additiveInverse() {
-        Matrix r = new AnyRectangularMatrix(new Number[][]{
+        Matrix r = new AnyRectangularMatrix(new double[][]{
                 {-1, -2, -3, -4},
                 {-5, -9, -9, -7},
                 {-2, -13, -8, -17}

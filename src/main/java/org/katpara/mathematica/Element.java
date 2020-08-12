@@ -93,7 +93,7 @@ public interface Element<T> {
      *
      * @return the absolute value
      */
-    Number abs();
+    double abs();
 
     /**
      * The absolute value of an element.
@@ -102,7 +102,7 @@ public interface Element<T> {
      *
      * @return the absolute value
      */
-    Number abs(final Rounding.Decimals decimals);
+    double abs(final Rounding.Decimals decimals);
 
     /**
      * The element should be able to print at given decimal places.

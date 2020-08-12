@@ -1,7 +1,13 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
+import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
+import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.util.Rounding;
+
+import java.util.Arrays;
 
 /**
  * The class represents any N x N square matrix. This is the most general class.
@@ -16,18 +22,11 @@ public class AnySquareMatrix extends SquareMatrix {
     private static final long serialVersionUID = 978698801528776001L;
 
     /**
-     * Requires to chain down the construction
-     */
-    protected AnySquareMatrix() {
-        super();
-    }
-
-    /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    public AnySquareMatrix(final Number[][] d) {
+    public AnySquareMatrix(final double[][] d) {
         super(d);
     }
 
@@ -40,7 +39,7 @@ public class AnySquareMatrix extends SquareMatrix {
     public boolean isSymmetric() {
         for (int i = 0; i < d.length; i++) {
             for (int j = 0; j < d[0].length; j++) {
-                if (d[i][j].doubleValue() != d[j][i].doubleValue()) {
+                if (d[i][j] != d[j][i]) {
                     return false;
                 }
             }
@@ -58,7 +57,7 @@ public class AnySquareMatrix extends SquareMatrix {
     public boolean isDiagonal() {
         for (int i = 0; i < d.length; i++) {
             for (int j = 0; j < d[0].length; j++) {
-                if (i != j && d[i][j].doubleValue() != 0) {
+                if (i != j && d[i][j] != 0) {
                     return false;
                 }
             }
@@ -75,11 +74,11 @@ public class AnySquareMatrix extends SquareMatrix {
     @Override
     public boolean isIdentity() {
         for (int i = 0; i < d.length; i++) {
-            if (d[i][i].doubleValue() != 1)
+            if (d[i][i] != 1)
                 return false;
 
             for (int j = 0; j < d[0].length; j++) {
-                if (i != j && d[i][j].doubleValue() != 0)
+                if (i != j && d[i][j] != 0)
                     return false;
             }
         }
@@ -96,7 +95,7 @@ public class AnySquareMatrix extends SquareMatrix {
     public boolean isLowerTriangular() {
         for (int i = 0; i < d.length; i++) {
             for (int j = 0; j < d[0].length; j++) {
-                if (j > i && d[i][j].doubleValue() != 0)
+                if (j > i && d[i][j] != 0)
                     return false;
             }
         }
@@ -113,24 +112,12 @@ public class AnySquareMatrix extends SquareMatrix {
     public boolean isUpperTriangular() {
         for (int i = 0; i < d.length; i++) {
             for (int j = 0; j < d[0].length; j++) {
-                if (j < i && d[i][j].doubleValue() != 0)
+                if (j < i && d[i][j] != 0)
                     return false;
             }
         }
 
         return true;
-    }
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @return the determinant of the square matrix
-     */
-    @Override
-    public double getDeterminant() {
-        return 0;
     }
 
     /**
@@ -169,54 +156,6 @@ public class AnySquareMatrix extends SquareMatrix {
     }
 
     /**
-     * The scalar addition of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public final Matrix add(final double scalar) {
-        return new AnySquareMatrix(super.doAdd(scalar));
-    }
-
-    /**
-     * The addition of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix add(final Matrix m) {
-        return new AnySquareMatrix(super.doAdd(m));
-    }
-
-    /**
-     * The subtraction of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix subtract(final Matrix m) {
-        return new AnySquareMatrix(super.doSubtract(m));
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
-        return new AnySquareMatrix(super.doMultiply(scalar));
-    }
-
-    /**
      * The multiplication of two elements.
      *
      * @param m the element
@@ -225,7 +164,12 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix multiply(final Matrix m) {
-        return new AnySquareMatrix(super.doMultiply(m));
+        var _s = m.getSize();
+
+        if (s[1] != _s[0])
+            throw new MatrixDimensionMismatchException();
+
+        return mul(m, _s);
     }
 
     /**
@@ -237,7 +181,105 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix divide(final Matrix m) {
-        return new AnySquareMatrix(super.doMultiply(m.multiplicativeInverse()));
+        var _s = m.getSize();
+
+        if (s[1] != _s[0])
+            throw new MatrixDimensionMismatchException();
+
+        return mul(m.multiplicativeInverse(), _s);
+    }
+
+    /**
+     * Method multiplies two matrices.
+     *
+     * @param m  the matrix to multiply
+     * @param _s the size of the matrix
+     *
+     * @return the matrix
+     */
+    private Matrix mul(final Matrix m, final int[] _s) {
+        if (m instanceof IdentityMatrix)
+            return this;
+
+        if (m instanceof NullMatrix)
+            return NullMatrix.getInstance(s[0], _s[1]);
+
+        var n = super.doMultiply(m.toArray());
+        return (n.length == n[0].length) ? getMatrix(n) :
+                       new AnyRectangularMatrix(n);
+    }
+
+    /**
+     * The scalar addition of the element.
+     *
+     * @param scalar the scalar
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix add(final double scalar) {
+        if (scalar == 0)
+            return this;
+
+        return getMatrix(super.doAdd(scalar));
+    }
+
+    /**
+     * The addition of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix add(final Matrix m) {
+        if (!Arrays.equals(getSize(), m.getSize()))
+            throw new MatrixDimensionMismatchException();
+
+        if (m instanceof NullMatrix)
+            return this;
+
+        return getMatrix(super.doAdd(m.toArray()));
+    }
+
+    /**
+     * The subtraction of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix subtract(final Matrix m) {
+        if (!Arrays.equals(getSize(), m.getSize()))
+            throw new MatrixDimensionMismatchException();
+
+        if (this == m)
+            return NullMatrix.getInstance(s[0]);
+
+        if (m instanceof NullMatrix)
+            return this;
+
+        return getMatrix(super.doSubtract(m.toArray()));
+    }
+
+    /**
+     * The scalar multiplication of the element.
+     *
+     * @param scalar the scalar
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix multiply(final double scalar) {
+        if (scalar == 0)
+            return NullMatrix.getInstance(s[0]);
+        if (scalar == 1)
+            return this;
+        if (scalar == -1)
+            return this.additiveInverse();
+
+        return getMatrix(super.doMultiply(scalar));
     }
 
     /**
@@ -257,7 +299,7 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix additiveInverse() {
-        return new AnySquareMatrix(super.doAdditiveInverse());
+        return getMatrix(super.doAdditiveInverse());
     }
 
     /**
@@ -269,6 +311,24 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix power(final double power) {
-        return null;
+        if (power == 0)
+            return IdentityMatrix.getInstance(s[0]);
+
+        if (power == 1)
+            return this;
+
+        return getMatrix(doPower(power));
+    }
+
+    /**
+     * The method returns a customized matrix based on the array size.
+     *
+     * @param n the matrix data
+     *
+     * @return the square matrix
+     */
+    private Matrix getMatrix(final double[][] n) {
+        // TODO: More detailed such as 2x2 and 3x3
+        return new AnySquareMatrix(n);
     }
 }

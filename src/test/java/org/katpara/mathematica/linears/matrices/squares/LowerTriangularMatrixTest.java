@@ -7,6 +7,8 @@ import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchExcepti
 import org.katpara.mathematica.exceptions.linears.NotLowerTriangularMatrixException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +18,7 @@ class LowerTriangularMatrixTest {
 
     @BeforeEach
     void setUp() {
-        m = new LowerTriangularMatrix(new Number[][]{
+        m = new LowerTriangularMatrix(new double[][]{
                 {1, 0, 0, 0, 0},
                 {1, 2, 0, 0, 0},
                 {1, 2, 3, 0, 0},
@@ -29,19 +31,13 @@ class LowerTriangularMatrixTest {
     void testConstructor() {
         assertAll(
                 () -> assertThrows(NullArgumentProvidedException.class, () -> new LowerTriangularMatrix(null)),
-                () -> assertThrows(NotSquareMatrixException.class, () -> new LowerTriangularMatrix(new Number[][]{
+                () -> assertThrows(NotSquareMatrixException.class, () -> new LowerTriangularMatrix(new double[][]{
                         {1, 0, 0, 0, 0},
                         {1, 2, 0, 0, 0},
                         {1, 2, 3, 0, 0},
                         {1, 2, 3, 4, 0}
                 })),
-                () -> assertThrows(NotSquareMatrixException.class, () -> new LowerTriangularMatrix(new Number[][]{
-                        {1, 0, 0, 0, 0},
-                        {1, null, 0, 0, 0},
-                        {1, null, 3, 0, 0},
-                        {1, 2, 3, null, 5}
-                })),
-                () -> assertThrows(NotLowerTriangularMatrixException.class, () -> new LowerTriangularMatrix(new Number[][]{
+                () -> assertThrows(NotLowerTriangularMatrixException.class, () -> new LowerTriangularMatrix(new double[][]{
                         {1, 0, 2, 0, 0},
                         {1, 2, 0, 1, 0},
                         {1, 2, 3, 0, 0},
@@ -53,7 +49,7 @@ class LowerTriangularMatrixTest {
 
     @Test
     void testTranspose() {
-        SquareMatrix m1 = new AnySquareMatrix(new Number[][]{
+        SquareMatrix m1 = new AnySquareMatrix(new double[][]{
                 {1, 1, 1, 1, 1},
                 {0, 2, 2, 2, 2},
                 {0, 0, 3, 3, 3},
@@ -75,50 +71,50 @@ class LowerTriangularMatrixTest {
 
     @Test
     void testAddMatrix() {
-        Matrix m1 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m1 = new LowerTriangularMatrix(new double[][]{
                 {10, 0, 0, 0},
                 {10, 20, 0, 0},
                 {10, 20, 30, 0},
                 {10, 20, 30, 40},
         });
-        Matrix m2 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m2 = new LowerTriangularMatrix(new double[][]{
                 {10, 0, 0, 0, 0},
                 {10, 20, 0, 0, 0},
                 {10, 20, 30, 0, 0},
                 {10, 20, 30, 40, 0},
                 {10, 20, 30, 40, 50}
         });
-        Matrix m3 = new AnySquareMatrix(new Number[][]{
+        Matrix m3 = new AnySquareMatrix(new double[][]{
                 {10, 40, 40, 40, 40},
                 {10, 20, 30, 30, 30},
                 {10, 20, 30, 20, 20},
                 {10, 20, 30, 40, 10},
                 {10, 20, 30, 40, 50}
         });
-        Matrix m4 = new DiagonalSquareMatrix(new Number[]{10, 20, 30, 40, 50});
-        Matrix m5 = new IdentityMatrix(5);
-        Matrix r2 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m4 = DiagonalSquareMatrix.getInstance(new double[]{10, 20, 30, 40, 50});
+        Matrix m5 = IdentityMatrix.getInstance(5);
+        Matrix r2 = new LowerTriangularMatrix(new double[][]{
                 {11, 0, 0, 0, 0},
                 {11, 22, 0, 0, 0},
                 {11, 22, 33, 0, 0},
                 {11, 22, 33, 44, 0},
                 {11, 22, 33, 44, 55}
         });
-        Matrix r3 = new AnySquareMatrix(new Number[][]{
+        Matrix r3 = new AnySquareMatrix(new double[][]{
                 {11, 40, 40, 40, 40},
                 {11, 22, 30, 30, 30},
                 {11, 22, 33, 20, 20},
                 {11, 22, 33, 44, 10},
                 {11, 22, 33, 44, 55},
         });
-        Matrix r4 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r4 = new LowerTriangularMatrix(new double[][]{
                 {11, 0, 0, 0, 0},
                 {1, 22, 0, 0, 0},
                 {1, 2, 33, 0, 0},
                 {1, 2, 3, 44, 0},
                 {1, 2, 3, 4, 55}
         });
-        Matrix r5 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r5 = new LowerTriangularMatrix(new double[][]{
                 {2, 0, 0, 0, 0},
                 {1, 3, 0, 0, 0},
                 {1, 2, 4, 0, 0},
@@ -142,50 +138,50 @@ class LowerTriangularMatrixTest {
 
     @Test
     void testSubtractMatrix() {
-        Matrix m1 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m1 = new LowerTriangularMatrix(new double[][]{
                 {10, 0, 0, 0},
                 {10, 20, 0, 0},
                 {10, 20, 30, 0},
                 {10, 20, 30, 40},
         });
-        Matrix m2 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m2 = new LowerTriangularMatrix(new double[][]{
                 {10, 0, 0, 0, 0},
                 {10, 20, 0, 0, 0},
                 {10, 20, 30, 0, 0},
                 {10, 20, 30, 40, 0},
                 {10, 20, 30, 40, 50}
         });
-        Matrix m3 = new AnySquareMatrix(new Number[][]{
+        Matrix m3 = new AnySquareMatrix(new double[][]{
                 {10, 40, 40, 40, 40},
                 {10, 20, 30, 30, 30},
                 {10, 20, 30, 20, 20},
                 {10, 20, 30, 40, 10},
                 {10, 20, 30, 40, 50}
         });
-        Matrix m4 = new DiagonalSquareMatrix(new Number[]{10, 20, 30, 40, 50});
-        Matrix m5 = new IdentityMatrix(5);
-        Matrix r2 = new LowerTriangularMatrix(new Number[][]{
+        Matrix m4 = DiagonalSquareMatrix.getInstance(new double[]{10, 20, 30, 40, 50});
+        Matrix m5 = IdentityMatrix.getInstance(5);
+        Matrix r2 = new LowerTriangularMatrix(new double[][]{
                 {-9, 0, 0, 0, 0},
                 {-9, -18, 0, 0, 0},
                 {-9, -18, -27, 0, 0},
                 {-9, -18, -27, -36, 0},
                 {-9, -18, -27, -36, -45}
         });
-        Matrix r3 = new AnySquareMatrix(new Number[][]{
+        Matrix r3 = new AnySquareMatrix(new double[][]{
                 {-9, -40, -40, -40, -40},
                 {-9, -18, -30, -30, -30},
                 {-9, -18, -27, -20, -20},
                 {-9, -18, -27, -36, -10},
                 {-9, -18, -27, -36, -45},
         });
-        Matrix r4 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r4 = new LowerTriangularMatrix(new double[][]{
                 {-9, 0, 0, 0, 0},
                 {1, -18, 0, 0, 0},
                 {1, 2, -27, 0, 0},
                 {1, 2, 3, -36, 0},
                 {1, 2, 3, 4, -45}
         });
-        Matrix r5 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r5 = new LowerTriangularMatrix(new double[][]{
                 {0, 0, 0, 0, 0},
                 {1, 1, 0, 0, 0},
                 {1, 2, 2, 0, 0},
@@ -208,7 +204,7 @@ class LowerTriangularMatrixTest {
 
     @Test
     void testScalarMultiplication() {
-        Matrix r1 = new AnySquareMatrix(new Number[][]{
+        Matrix r1 = new AnySquareMatrix(new double[][]{
                 {0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0},
                 {0, 0, 0, 0, 0},
@@ -216,7 +212,7 @@ class LowerTriangularMatrixTest {
                 {0, 0, 0, 0, 0}
         });
 
-        Matrix r2 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r2 = new LowerTriangularMatrix(new double[][]{
                 {-1, 0, 0, 0, 0},
                 {-1, -2, 0, 0, 0},
                 {-1, -2, -3, 0, 0},
@@ -224,7 +220,7 @@ class LowerTriangularMatrixTest {
                 {-1, -2, -3, -4, -5}
         });
 
-        Matrix r3 = new LowerTriangularMatrix(new Number[][]{
+        Matrix r3 = new LowerTriangularMatrix(new double[][]{
                 {10, 0, 0, 0, 0},
                 {10, 20, 0, 0, 0},
                 {10, 20, 30, 0, 0},

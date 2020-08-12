@@ -2,20 +2,21 @@ package org.katpara.mathematica.linears.matrices.rectangulars;
 
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.NullMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
-import org.katpara.mathematica.linears.matrices.squares.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 
 import java.util.Arrays;
 
 public class AnyRectangularMatrix extends RectangularMatrix {
+    private static final long serialVersionUID = 693420854170444322L;
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    public AnyRectangularMatrix(final Number[][] d) {
+    public AnyRectangularMatrix(final double[][] d) {
         super(d);
     }
 
@@ -103,16 +104,14 @@ public class AnyRectangularMatrix extends RectangularMatrix {
      */
     @Override
     public Matrix multiply(final double scalar) {
-        if(scalar == 1)
+        if (scalar == 1)
             return this;
-
-        if(scalar == 0)
+        else if (scalar == 0)
             return NullMatrix.getInstance(s[0], s[1]);
-
-        if(scalar == -1)
+        else if (scalar == -1)
             return this.additiveInverse();
-
-        return new AnyRectangularMatrix(super.doMultiply(scalar));
+        else
+            return new AnyRectangularMatrix(super.doMultiply(scalar));
     }
 
     /**
@@ -128,11 +127,9 @@ public class AnyRectangularMatrix extends RectangularMatrix {
 
         if (s[1] != _s[0])
             throw new MatrixDimensionMismatchException();
-
-        if(m instanceof IdentityMatrix)
+        else if (m instanceof IdentityMatrix)
             return this;
-
-        if(m instanceof NullMatrix)
+        else if (m instanceof NullMatrix)
             return NullMatrix.getInstance(s[0], m.getSize()[1]);
 
         var n = super.doMultiply(m.toArray());

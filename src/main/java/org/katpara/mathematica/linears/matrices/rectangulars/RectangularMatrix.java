@@ -8,18 +8,21 @@ import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.util.Rounding;
 
 public abstract class RectangularMatrix extends AbstractMatrix {
+    private static final long serialVersionUID = 864206708158951432L;
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    protected RectangularMatrix(final Number[][] d) {
+    protected RectangularMatrix(final double[][] d) {
         super(d);
 
-        if(super.isSquareMatrix())
+        if(s[0] == s[1])
             throw new NotRectangularMatrixException();
     }
+
+
 
     /**
      * The method will return true if the matrix is a
@@ -60,7 +63,7 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public final Number abs() {
+    public final double abs() {
         throw new NotSquareMatrixException();
     }
 
@@ -72,7 +75,7 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public final Number abs(final Rounding.Decimals decimals) {
+    public final double abs(final Rounding.Decimals decimals) {
         throw new NotSquareMatrixException();
     }
 }

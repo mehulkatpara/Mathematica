@@ -1,9 +1,11 @@
-package org.katpara.mathematica.linears.matrices;
+package org.katpara.mathematica.linears.matrices.constants;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.linears.matrices.AbstractMatrix;
+import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 import org.katpara.mathematica.util.Rounding;
@@ -17,13 +19,14 @@ import java.util.Arrays;
  * @since 1.0.0
  */
 public final class NullMatrix extends AbstractMatrix {
+    private static final long serialVersionUID = 632803417168479305L;
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    private NullMatrix(final Number[][] d) {
+    private NullMatrix(final double[][] d) {
         super(d);
     }
 
@@ -54,7 +57,7 @@ public final class NullMatrix extends AbstractMatrix {
         if (row <= 0 || column <= 0)
             throw new InvalidMatrixDimensionProvidedException();
 
-        Number[][] n = new Number[row][column];
+        double[][] n = new double[row][column];
         for (int i = 0; i < row; i++) {
             Arrays.fill(n[i], 0);
         }
@@ -216,7 +219,7 @@ public final class NullMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public Number abs() {
+    public double abs() {
         return 0;
     }
 
@@ -228,7 +231,7 @@ public final class NullMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public Number abs(final Rounding.Decimals decimals) {
+    public double abs(final Rounding.Decimals decimals) {
         return 0;
     }
 }

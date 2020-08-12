@@ -1,8 +1,10 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 /**
@@ -12,24 +14,18 @@ import org.katpara.mathematica.util.Rounding;
  * @since 1.0.0
  */
 public abstract class SquareMatrix extends AbstractMatrix {
-
-    /**
-     * Requires to chain down the construction
-     */
-    protected SquareMatrix() {
-        super();
-    }
+    private static final long serialVersionUID = 876020393125503520L;
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    protected SquareMatrix(final Number[][] d) {
+    protected SquareMatrix(final double[][] d) {
         super(d);
 
-        if (d.length != d[0].length)
-            throw new InvalidMatrixDimensionProvidedException();
+        if (s[0] != s[1])
+            throw new NotSquareMatrixException();
     }
 
     /**
@@ -90,27 +86,21 @@ public abstract class SquareMatrix extends AbstractMatrix {
     public final double getTrace(final Rounding.Decimals decimals) {
         var sum = 0.0;
 
-        for (int i = 0; i < d.length; i++)
-            sum += d[i][i].doubleValue();
+        for (int i = 0; i < s[0]; i++)
+            sum += d[i][i];
 
         return Double.parseDouble(Rounding.round(sum, decimals));
     }
 
     /**
-     * The power of an element.
+     * A determinant is a scalar value computed for a square matrix; that
+     * encodes many properties of the linear algebra described by the matrix.
+     * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param power the exponent
-     *
-     * @return the value after applying power
+     * @return the determinant of the square matrix
      */
-    @Override
-    public Matrix power(final double power) {
-        if (power == 0) {
-            return this;
-        } else {
-            //TODO: Implement The rest
-            return null;
-        }
+    public final double getDeterminant() {
+        return this.getDeterminant(Rounding.Decimals.FOUR);
     }
 
     /**
@@ -119,8 +109,8 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public final Number abs() {
-        return this.getDeterminant();
+    public final double abs() {
+        return this.getDeterminant(Rounding.Decimals.FOUR);
     }
 
     /**
@@ -131,8 +121,26 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return the absolute value
      */
     @Override
-    public final Number abs(final Rounding.Decimals decimals) {
+    public final double abs(final Rounding.Decimals decimals) {
         return this.getDeterminant(decimals);
+    }
+
+    /**
+     * The method calculates the power of a given matrix.
+     *
+     * @param power the exp value
+     *
+     * @return the resulting data
+     */
+    protected final double[][] doPower(final double power) {
+        var n = new double[s[0]][s[1]];
+        for (int i = 0; i < s[0]; i++) {
+            System.arraycopy(d[i], 0, n[i], 0, s[1]);
+        }
+        for (int i = 0; i < power - 1; i++) {
+            n = super.doMultiply(n);
+        }
+        return n;
     }
 
     /**
@@ -169,15 +177,6 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return true if it's a upper triangular
      */
     public abstract boolean isUpperTriangular();
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @return the determinant of the square matrix
-     */
-    public abstract double getDeterminant();
 
     /**
      * A determinant is a scalar value computed for a square matrix; that

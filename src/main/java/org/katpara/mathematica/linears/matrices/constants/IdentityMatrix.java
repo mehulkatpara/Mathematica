@@ -1,11 +1,9 @@
-package org.katpara.mathematica.linears.matrices.squares;
+package org.katpara.mathematica.linears.matrices.constants;
 
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
 import org.katpara.mathematica.util.Rounding;
-
-import java.util.Arrays;
 
 /**
  * The class represent an identity matrix.
@@ -15,23 +13,34 @@ import java.util.Arrays;
  * @since 1.0.0
  */
 public final class IdentityMatrix extends DiagonalSquareMatrix {
+    private static final long serialVersionUID = 7196575322083508L;
+
+    /**
+     * The general constructor to build a matrix in the system.
+     *
+     * @param d the matrix elements.
+     */
+    private IdentityMatrix(final double[][] d) {
+        super(d);
+    }
 
     /**
      * creates a diagonal square matrix from an array of data.
      *
      * @param row the number of rows
      */
-    public IdentityMatrix(final int row) {
+    public static IdentityMatrix getInstance(final int row) {
         if(row <= 0)
             throw new InvalidMatrixDimensionProvidedException();
 
-        d = new Number[row][row];
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d.length; j++) {
-                d[i][j] = (i == j) ? 1 : 0;
+        var n = new double[row][row];
+        for (int i = 0; i < n.length; i++) {
+            for (int j = 0; j < n.length; j++) {
+                n[i][j] = (i == j) ? 1 : 0;
             }
         }
-        s = new int[]{d.length, d.length};
+
+        return new IdentityMatrix(n);
     }
 
     /**
@@ -60,18 +69,6 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @return the determinant of the square matrix
-     */
-    @Override
-    public double getDeterminant() {
-        return 1;
-    }
-
-    /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
      * @param decimals the decimal decimals accuracy
      *
      * @return the determinant of the square matrix
@@ -79,55 +76,6 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
     @Override
     public double getDeterminant(final Rounding.Decimals decimals) {
         return 1;
-    }
-
-    /**
-     * The addition of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix add(final Matrix m) {
-        if (m instanceof IdentityMatrix) {
-            if(!Arrays.equals(this.getSize(), m.getSize()))
-                throw new MatrixDimensionMismatchException();
-
-            var n = new Number[d.length];
-            Arrays.fill(n, 2);
-            return new DiagonalSquareMatrix(n);
-        }
-
-        return super.add(m);
-    }
-
-    /**
-     * The subtraction of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix subtract(final Matrix m) {
-        return super.subtract(m);
-        //TODO: When you have zero matrix implemented, redo this.
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
-        var n = new Number[d.length];
-        Arrays.fill(n, scalar);
-
-        return new DiagonalSquareMatrix(n);
     }
 
     /**
@@ -162,19 +110,6 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
     @Override
     public Matrix multiplicativeInverse() {
         return this;
-    }
-
-    /**
-     * The additive inverse of the elements.
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix additiveInverse() {
-        var n = new Number[d.length];
-        Arrays.fill(n, -1);
-
-        return new DiagonalSquareMatrix(n);
     }
 
     /**

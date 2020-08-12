@@ -13,16 +13,15 @@ class DiagonalSquareMatrixTest {
 
     @BeforeEach
     void setUp() {
-        m = new DiagonalSquareMatrix(new Number[]{1, 2, 3, 4, 5});
-        m1 = new DiagonalSquareMatrix(new Number[]{2, 3, 4, 5, 6});
-        m2 = new DiagonalSquareMatrix(new Number[]{1, 2.34, 3.3, 4.92837, 5.888822});
+        m = DiagonalSquareMatrix.getInstance(new double[]{1, 2, 3, 4, 5});
+        m1 = DiagonalSquareMatrix.getInstance(new double[]{2, 3, 4, 5, 6});
+        m2 = DiagonalSquareMatrix.getInstance(new double[]{1, 2.34, 3.3, 4.92837, 5.888822});
     }
 
     @Test
     void testConstructor() {
         assertAll(
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new DiagonalSquareMatrix(null)),
-                () -> assertThrows(NullArgumentProvidedException.class, () -> new DiagonalSquareMatrix(new Number[]{null, null})),
+                () -> assertThrows(NullArgumentProvidedException.class, () -> DiagonalSquareMatrix.getInstance(null)),
                 () -> assertArrayEquals(new int[]{5, 5}, m.getSize())
         );
     }
@@ -69,12 +68,12 @@ class DiagonalSquareMatrixTest {
 
     @Test
     void addMatrix() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{3, 5, 7, 9, 11}), m.add(m1));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{3, 5, 7, 9, 11}), m.add(m1));
     }
 
     @Test
     void addScalar() {
-        assertEquals(new AnySquareMatrix(new Number[][]{
+        assertEquals(new AnySquareMatrix(new double[][]{
                 {11, 10, 10, 10, 10},
                 {10, 12, 10, 10, 10},
                 {10, 10, 13, 10, 10},
@@ -84,37 +83,37 @@ class DiagonalSquareMatrixTest {
 
     @Test
     void subtract() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{1, 1, 1, 1, 1}), m1.subtract(m));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{1, 1, 1, 1, 1}), m1.subtract(m));
     }
 
     @Test
     void multiplyMatrix() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{2, 6, 12, 20, 30}), m.multiply(m1));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{2, 6, 12, 20, 30}), m.multiply(m1));
     }
 
     @Test
     void multiplyScalar() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{10, 20, 30, 40, 50}), m.multiply(10));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{10, 20, 30, 40, 50}), m.multiply(10));
     }
 
     @Test
     void divide() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{1, 1, 1, 1, 1}), m.divide(m));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{1, 1, 1, 1, 1}), m.divide(m));
     }
 
     @Test
     void multiplicativeInverse() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{1, 0.5, 1/3d, 0.25, 0.2}), m.multiplicativeInverse());
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{1, 0.5, 1/3d, 0.25, 0.2}), m.multiplicativeInverse());
     }
 
     @Test
     void additiveInverse() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{-1, -2, -3, -4, -5}), m.additiveInverse());
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{-1, -2, -3, -4, -5}), m.additiveInverse());
     }
 
     @Test
     void power() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{1, 4, 9, 16, 25}), m.power(2));
-        assertEquals(new DiagonalSquareMatrix(new Number[]{1, 0.5, 1/3d, 0.25, 0.2}), m.power(-1));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{1, 4, 9, 16, 25}), m.power(2));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{1, 0.5, 1/3d, 0.25, 0.2}), m.power(-1));
     }
 }

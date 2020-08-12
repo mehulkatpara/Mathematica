@@ -1,8 +1,13 @@
-package org.katpara.mathematica.linears.matrices.squares;
+package org.katpara.mathematica.linears.matrices.constants;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
+import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
+import org.katpara.mathematica.linears.matrices.squares.SquareMatrix;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,14 +16,14 @@ class IdentityMatrixTest {
     private SquareMatrix m;
     @BeforeEach
     void setUp() {
-        m = new IdentityMatrix(5);
+        m = IdentityMatrix.getInstance(5);
     }
 
     @Test
     void testConstructor() {
-        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> new IdentityMatrix(0));
-        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> new IdentityMatrix(-1));
-        System.out.println(new IdentityMatrix(1));
+        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> IdentityMatrix.getInstance(0));
+        assertThrows(InvalidMatrixDimensionProvidedException.class, () -> IdentityMatrix.getInstance(-1));
+        System.out.println(IdentityMatrix.getInstance(1));
     }
 
     @Test
@@ -39,25 +44,25 @@ class IdentityMatrixTest {
     @Test
     void add() {
         assertAll(
-                () -> assertEquals(new AnySquareMatrix(new Number[][]{
+                () -> Assertions.assertEquals(new AnySquareMatrix(new double[][]{
                         {11, 10, 10, 10, 10},
                         {10, 11, 10, 10, 10},
                         {10, 10, 11, 10, 10},
                         {10, 10, 10, 11, 10},
                         {10, 10, 10, 10, 11}
                 }), m.add(10)),
-                () -> assertEquals(new DiagonalSquareMatrix(new Number[]{2, 2, 2, 2, 2}), m.add(m))
+                () -> Assertions.assertEquals(DiagonalSquareMatrix.getInstance(new double[]{2, 2, 2, 2, 2}), m.add(m))
         );
     }
 
     @Test
     void subtract() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{0, 0, 0, 0, 0}), m.subtract(m));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{0, 0, 0, 0, 0}), m.subtract(m));
     }
 
     @Test
     void multiplyMatrix() {
-        SquareMatrix m1 = new AnySquareMatrix(new Number[][]{
+        SquareMatrix m1 = new AnySquareMatrix(new double[][]{
                 {11, 10, 10, 10, 10},
                 {10, 11, 10, 10, 10},
                 {10, 10, 11, 10, 10},
@@ -69,7 +74,7 @@ class IdentityMatrixTest {
 
     @Test
     void multiplyScalar() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{2, 2, 2, 2, 2}), m.multiply(2));
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{2, 2, 2, 2, 2}), m.multiply(2));
     }
 
     @Test
@@ -84,7 +89,7 @@ class IdentityMatrixTest {
 
     @Test
     void additiveInverse() {
-        assertEquals(new DiagonalSquareMatrix(new Number[]{-1, -1, -1, -1, -1}), m.additiveInverse());
+        assertEquals(DiagonalSquareMatrix.getInstance(new double[]{-1, -1, -1, -1, -1}), m.additiveInverse());
     }
 
     @Test

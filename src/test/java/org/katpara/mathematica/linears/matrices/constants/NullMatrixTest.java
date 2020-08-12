@@ -1,4 +1,4 @@
-package org.katpara.mathematica.linears.matrices;
+package org.katpara.mathematica.linears.matrices.constants;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,8 @@ import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
 import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 
@@ -53,13 +55,13 @@ class NullMatrixTest {
     @Test
     void addScalar() {
 
-        Matrix r1 = new AnyRectangularMatrix(new Number[][]{
+        Matrix r1 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
         });
 
-        Matrix r2 = new AnySquareMatrix(new Number[][]{
+        Matrix r2 = new AnySquareMatrix(new double[][]{
                 {10, 10, 10},
                 {10, 10, 10},
                 {10, 10, 10}
@@ -76,13 +78,13 @@ class NullMatrixTest {
 
     @Test
     void addMatrix() {
-        Matrix m3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m3 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
         });
 
-        Matrix r3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix r3 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
@@ -97,13 +99,13 @@ class NullMatrixTest {
 
     @Test
     void subtract() {
-        Matrix m3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix m3 = new AnyRectangularMatrix(new double[][]{
                 {10, 10, 10, 10},
                 {10, 10, 10, 10},
                 {10, 10, 10, 10}
         });
 
-        Matrix r3 = new AnyRectangularMatrix(new Number[][]{
+        Matrix r3 = new AnyRectangularMatrix(new double[][]{
                 {-10, -10, -10, -10},
                 {-10, -10, -10, -10},
                 {-10, -10, -10, -10}

@@ -17,35 +17,26 @@ import java.util.HashMap;
  * @see 1.0.0
  */
 public abstract class AbstractMatrix implements Matrix {
+    private static final long serialVersionUID = 75155210358302303L;
+
     /**
      * The field holds matrix data
      */
-    protected Number[][] d;
+    protected final double[][] d;
 
     /**
      * The dimension of the matrix
      */
-    protected int[] s;
-
-    /**
-     * Requires to chain down the construction
-     */
-    protected AbstractMatrix() {
-    }
+    protected final int[] s;
 
     /**
      * The general constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
-    protected AbstractMatrix(final Number[][] d) {
+    protected AbstractMatrix(final double[][] d) {
         if (d == null || d[0] == null || (d.length + d[0].length) < 2)
             throw new NullArgumentProvidedException();
-
-        for (Number[] row: d)
-            for (Number e: row)
-                if (e == null)
-                    throw new NullArgumentProvidedException();
 
         this.d = d;
         this.s = new int[]{d.length, d[0].length};
@@ -67,7 +58,7 @@ public abstract class AbstractMatrix implements Matrix {
      * @return the matrix elements
      */
     @Override
-    public final Number[][] toArray() {
+    public final double[][] toArray() {
         return d;
     }
 
@@ -112,11 +103,11 @@ public abstract class AbstractMatrix implements Matrix {
      * @return the matrix elements as a list of vectors
      */
     @Override
-    public final Number[] getRow(final int row) {
+    public final double[] getRow(final int row) {
         if (row < 0 || row > d.length)
             throw new RowOutOfBoundException();
 
-        var n = new Number[s[1]];
+        var n = new double[s[1]];
         System.arraycopy(d[row], 0, n, 0, s[1]);
         return n;
     }
@@ -129,11 +120,11 @@ public abstract class AbstractMatrix implements Matrix {
      * @return the matrix elements as a list of vectors
      */
     @Override
-    public final Number[] getColumn(final int column) {
+    public final double[] getColumn(final int column) {
         if (column < 0 || column > d[0].length)
             throw new ColumnOutOfBoundException();
 
-        var n = new Number[s[0]];
+        var n = new double[s[0]];
         for (int i = 0; i < s[0]; i++) {
             n[i] = d[i][column];
         }
@@ -146,8 +137,8 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @return transposed array data
      */
-    protected final Number[][] doTranspose() {
-        var n = new Number[s[1]][s[0]];
+    protected final double[][] doTranspose() {
+        var n = new double[s[1]][s[0]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
                 n[j][i] = d[i][j];
@@ -164,62 +155,13 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @return the added scalar array
      */
-    protected final Number[][] doAdd(final double scalar) {
-        var n = new Number[s[0]][s[1]];
+    protected final double[][] doAdd(final double scalar) {
+        var n = new double[s[0]][s[1]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() + scalar;
+                n[i][j] = d[i][j] + scalar;
             }
         }
-        return n;
-    }
-
-    /**
-     * The method adds two matrix arrays.
-     *
-     * @param m the matrix to add
-     *
-     * @return the added arrays
-     *
-     * @throws MatrixDimensionMismatchException when two matrix have different dimensions
-     */
-    @Deprecated
-    protected final Number[][] doAdd(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        Number[][] n = new Number[s[0]][s[1]], _d = m.toArray();
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() + _d[i][j].doubleValue();
-            }
-        }
-
-        return n;
-    }
-
-    /**
-     * The subtraction of two matrix arrays.
-     *
-     * @param m the element
-     *
-     * @return the subtracted array
-     *
-     * @throws MatrixDimensionMismatchException when two matrix have different dimensions
-     */
-    @Deprecated
-    protected final Number[][] doSubtract(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        Number[][] n = new Number[s[0]][s[1]], _d = m.toArray();
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() - _d[i][j].doubleValue();
-            }
-        }
-
-
         return n;
     }
 
@@ -230,35 +172,11 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @return the multiplied array
      */
-    protected final Number[][] doMultiply(final double scalar) {
-        var n = new Number[s[0]][s[1]];
+    protected final double[][] doMultiply(final double scalar) {
+        var n = new double[s[0]][s[1]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() * scalar;
-            }
-        }
-
-        return n;
-    }
-
-    /**
-     * The method multiplies two matrices and returns the resulting array.
-     *
-     * @param m the matrix to multiply
-     *
-     * @return the multiplied array
-     */
-    @Deprecated
-    protected final Number[][] doMultiply(final Matrix m) {
-        var _s = m.getSize();
-
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-
-        Number[][] n = new Number[s[0]][_s[1]], _d = m.toArray();
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < _s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() * _d[j][i].doubleValue();
+                n[i][j] = d[i][j] * scalar;
             }
         }
 
@@ -274,11 +192,11 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @throws MatrixDimensionMismatchException when two matrix have different dimensions
      */
-    protected final Number[][] doSubtract(final Number[][] _d) {
-        Number[][] n = new Number[s[0]][s[1]];
+    protected final double[][] doSubtract(final double[][] _d) {
+        double[][] n = new double[s[0]][s[1]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() - _d[i][j].doubleValue();
+                n[i][j] = d[i][j] - _d[i][j];
             }
         }
 
@@ -295,11 +213,11 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @throws MatrixDimensionMismatchException when two matrix have different dimensions
      */
-    protected final Number[][] doAdd(final Number[][] _d) {
-        Number[][] n = new Number[s[0]][s[1]];
+    protected final double[][] doAdd(final double[][] _d) {
+        double[][] n = new double[s[0]][s[1]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j].doubleValue() + _d[i][j].doubleValue();
+                n[i][j] = d[i][j] + _d[i][j];
             }
         }
 
@@ -313,22 +231,25 @@ public abstract class AbstractMatrix implements Matrix {
      *
      * @return the multiplied array
      */
-    protected final Number[][] doMultiply(final Number[][] _d) {
-        Number[][] n = new Number[s[0]][_d[0].length];
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < _d[0].length; j++) {
-                n[i][j] = d[i][j].doubleValue() * _d[j][i].doubleValue();
+    protected final double[][] doMultiply(final double[][] _d) {
+        double[][] n = new double[s[0]][_d[0].length];
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = 0; j < _d[0].length; j++) {
+                n[i][j] = 0;
+                for (var k = 0; k < s[1]; k++) {
+                    n[i][j] = n[i][j] + (d[i][k] * _d[k][j]);
+                }
             }
         }
 
         return n;
     }
 
-    protected final Number[][] doAdditiveInverse() {
-        var n = new Number[s[0]][s[1]];
+    protected final double[][] doAdditiveInverse() {
+        var n = new double[s[0]][s[1]];
         for (int i = 0; i < s[0]; i++) {
             for (int j = 0; j < s[1]; j++) {
-                n[i][j] = -d[i][j].doubleValue();
+                n[i][j] = -d[i][j];
             }
         }
 
@@ -385,9 +306,9 @@ public abstract class AbstractMatrix implements Matrix {
     @Override
     public final String toString(final Rounding.Decimals decimals) {
         StringBuilder s = new StringBuilder();
-        for (Number[] row: d) {
+        for (double[] row: d) {
             s.append("|");
-            for (Number col: row) {
+            for (double col: row) {
                 s.append(Rounding.round(col, decimals));
                 s.append(" ");
             }
@@ -494,7 +415,7 @@ public abstract class AbstractMatrix implements Matrix {
         if (!Arrays.equals(this.getSize(), that.getSize())) return false;
         for (var j = 0; j < this.d.length; j++)
             for (var k = 0; k < d[j].length; k++)
-                if (d[j][k].doubleValue() != o[j][k].doubleValue())
+                if (d[j][k] != o[j][k])
                     return false;
 
         return true;
