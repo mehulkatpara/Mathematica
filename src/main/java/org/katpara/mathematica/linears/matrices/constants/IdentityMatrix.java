@@ -99,7 +99,7 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      */
     @Override
     public Matrix divide(final Matrix m) {
-        return (m instanceof IdentityMatrix) ? this : super.divide(m);
+        return (m instanceof IdentityMatrix) ? this : m.multiplicativeInverse();
     }
 
     /**
