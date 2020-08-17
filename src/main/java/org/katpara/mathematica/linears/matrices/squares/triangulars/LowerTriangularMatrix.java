@@ -92,7 +92,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
             var n = new double[s[0]][s[0]];
             for (int i = 0; i < s[0]; i++) {
                 for (int j = 0; j <= i; j++) {
-                    n[j][i] = d[i][j] + _d[i][j];
+                    n[i][j] = d[i][j] + _d[i][j];
                 }
             }
 
@@ -101,10 +101,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
             var n = new double[s[0]][s[0]];
             for (int i = 0; i < s[0]; i++) {
                 n[i][i] = d[i][i] + _d[i][i];
-
-                for (int j = 0; j < i; j++) {
-                    n[j][i] = d[i][j];
-                }
+                System.arraycopy(d[i], 0, n[i], 0, i);
             }
 
             return new LowerTriangularMatrix(n);
@@ -136,7 +133,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
             var n = new double[s[0]][s[0]];
             for (int i = 0; i < s[0]; i++) {
                 for (int j = 0; j <= i; j++) {
-                    n[j][i] = d[i][j] - _d[i][j];
+                    n[i][j] = d[i][j] - _d[i][j];
                 }
             }
 
@@ -145,10 +142,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
             var n = new double[s[0]][s[0]];
             for (int i = 0; i < s[0]; i++) {
                 n[i][i] = d[i][i] - _d[i][i];
-
-                for (int j = 0; j < i; j++) {
-                    n[j][i] = d[i][j];
-                }
+                System.arraycopy(d[i], 0, n[i], 0, i);
             }
 
             return new LowerTriangularMatrix(n);
