@@ -81,15 +81,36 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix add(final Matrix m) {
-        if(m instanceof LowerTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if(!Arrays.equals(getSize(), m.getSize()))
-                throw new MatrixDimensionMismatchException();
+        if (!Arrays.equals(getSize(), m.getSize()))
+            throw new MatrixDimensionMismatchException();
 
-            return new LowerTriangularMatrix(super.doAdd(m.toArray()));
+        if (m instanceof NullMatrix)
+            return this;
+
+        var _d = m.toArray();
+        if (m instanceof LowerTriangularMatrix) {
+            var n = new double[s[0]][s[0]];
+            for (int i = 0; i < s[0]; i++) {
+                for (int j = 0; j <= i; j++) {
+                    n[j][i] = d[i][j] + _d[i][j];
+                }
+            }
+
+            return new LowerTriangularMatrix(n);
+        } else if (m instanceof DiagonalSquareMatrix) {
+            var n = new double[s[0]][s[0]];
+            for (int i = 0; i < s[0]; i++) {
+                n[i][i] = d[i][i] + _d[i][i];
+
+                for (int j = 0; j < i; j++) {
+                    n[j][i] = d[i][j];
+                }
+            }
+
+            return new LowerTriangularMatrix(n);
         }
 
-        return super.add(m);
+        return getSquareMatrix(super.doAdd(_d));
     }
 
     /**
@@ -101,18 +122,39 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix subtract(final Matrix m) {
-        if(m instanceof LowerTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if (!Arrays.equals(getSize(), m.getSize()))
-                throw new MatrixDimensionMismatchException();
+        if (this == m)
+            return NullMatrix.getInstance(s[0]);
 
-            if (this == m)
-                return NullMatrix.getInstance(s[0]);
+        if (!Arrays.equals(getSize(), m.getSize()))
+            throw new MatrixDimensionMismatchException();
 
-            return new LowerTriangularMatrix(super.doSubtract(m.toArray()));
+        if (m instanceof NullMatrix)
+            return this;
+
+        var _d = m.toArray();
+        if (m instanceof LowerTriangularMatrix) {
+            var n = new double[s[0]][s[0]];
+            for (int i = 0; i < s[0]; i++) {
+                for (int j = 0; j <= i; j++) {
+                    n[j][i] = d[i][j] - _d[i][j];
+                }
+            }
+
+            return new LowerTriangularMatrix(n);
+        } else if (m instanceof DiagonalSquareMatrix) {
+            var n = new double[s[0]][s[0]];
+            for (int i = 0; i < s[0]; i++) {
+                n[i][i] = d[i][i] - _d[i][i];
+
+                for (int j = 0; j < i; j++) {
+                    n[j][i] = d[i][j];
+                }
+            }
+
+            return new LowerTriangularMatrix(n);
         }
 
-        return super.subtract(m);
+        return getSquareMatrix(super.doSubtract(_d));
     }
 
     /**
