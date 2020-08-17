@@ -2,13 +2,16 @@ package org.katpara.mathematica.linears.matrices.squares;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.NotLowerTriangularMatrixException;
-import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotLowerTriangularMatrixException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
+import org.katpara.mathematica.util.Rounding;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -233,6 +236,87 @@ class LowerTriangularMatrixTest {
                 () -> assertEquals(r1, m.multiply(0)),
                 () -> assertEquals(r2, m.multiply(-1)),
                 () -> assertEquals(r3, m.multiply(10))
+        );
+    }
+
+    @Test
+    void testMultiplicativeInverse() {
+        Matrix m2 = new LowerTriangularMatrix(new double[][]{
+                {2, 0, 0},
+                {4, 0, 0},
+                {9, 5, 7}
+        });
+
+        Matrix m3 = new LowerTriangularMatrix(new double[][]{
+                {2, 0, 0},
+                {4, 6, 0},
+                {9, 5, 7}
+        });
+
+        Matrix r3 = new LowerTriangularMatrix(new double[][]{
+                {0.5000, 0.0000, 0.0000},
+                {-0.3333, 0.1667, 0.0000},
+                {-0.4048, -0.1190, 0.1429}
+        });
+
+        assertAll(
+                () -> assertThrows(NotInvertibleException.class, m2::multiplicativeInverse),
+                () -> assertEquals(r3.toString(), m3.multiplicativeInverse().toString(Rounding.Decimals.FOUR))
+        );
+    }
+
+    @Test
+    void testPower() {
+        Matrix m2 = new LowerTriangularMatrix(new double[][]{
+                {2, 0, 0},
+                {4, 6, 0},
+                {9, 5, 7}
+        });
+        Matrix r2 = new LowerTriangularMatrix(new double[][]{
+                {8, 0, 0},
+                {208, 216, 0},
+                {903, 635, 343}
+        });
+        Matrix r3 = new LowerTriangularMatrix(new double[][]{
+                {0.5000, 0.0000, 0.0000},
+                {-0.3333, 0.1667, 0.0000},
+                {-0.4048, -0.1190, 0.1429}
+        });
+
+        assertAll(
+                () -> assertEquals(IdentityMatrix.getInstance(3), m2.power(0)),
+                () -> assertEquals(m2, m2.power(1)),
+                () -> assertEquals(r3.toString(), m2.power(-1).toString()),
+                () -> assertEquals(r2, m2.power(3))
+        );
+    }
+
+    @Test
+    void testDivide() {
+        Matrix m2 = new LowerTriangularMatrix(new double[][]{
+                {2, 0, 0},
+                {4, 6, 0},
+                {9, 5, 7}
+        });
+
+        Matrix m3 = new LowerTriangularMatrix(new double[][]{
+                {7, 0, 0},
+                {0, 3, 0},
+                {0, 0, 5}
+        });
+
+        Matrix r3 = new LowerTriangularMatrix(new double[][]{
+                {0.2857, 0.0000, 0.0000},
+                {0.5714, 2.0000, 0.0000},
+                {1.2857, 1.6667, 1.4000}
+        });
+
+        assertAll(
+                () -> assertThrows(MatrixDimensionMismatchException.class, () -> m2.divide(IdentityMatrix.getInstance(4))),
+                () -> assertThrows(NotInvertibleException.class, () -> m2.divide(NullMatrix.getInstance(3))),
+                () -> assertEquals(IdentityMatrix.getInstance(3), m2.divide(m2)),
+                () -> assertEquals(m2, m2.divide(IdentityMatrix.getInstance(3))),
+                () -> assertEquals(r3.toString(), m2.divide(m3).toString())
         );
     }
 }

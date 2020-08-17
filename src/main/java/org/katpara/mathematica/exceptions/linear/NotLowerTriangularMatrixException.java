@@ -1,4 +1,4 @@
-package org.katpara.mathematica.exceptions.linears;
+package org.katpara.mathematica.exceptions.linear;
 
 import org.katpara.mathematica.exceptions.ExceptionMessages;
 

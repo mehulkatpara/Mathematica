@@ -1,8 +1,7 @@
 package org.katpara.mathematica.linears.matrices.squares.triangulars;
 
-import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
-import org.katpara.mathematica.linears.matrices.squares.SquareMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 public abstract class TriangularMatrix extends AnySquareMatrix {
@@ -33,7 +32,7 @@ public abstract class TriangularMatrix extends AnySquareMatrix {
      */
     @Override
     public final boolean isDiagonal() {
-        return false;
+        return super.isDiagonal();
     }
 
     /**
@@ -43,7 +42,7 @@ public abstract class TriangularMatrix extends AnySquareMatrix {
      */
     @Override
     public final boolean isIdentity() {
-        return false;
+        return super.isIdentity();
     }
 
     /**

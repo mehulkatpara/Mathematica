@@ -1,8 +1,7 @@
 package org.katpara.mathematica.linears.matrices.rectangulars;
 
-import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.linears.NotRectangularMatrixException;
-import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.linear.NotRectangularMatrixException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.util.Rounding;

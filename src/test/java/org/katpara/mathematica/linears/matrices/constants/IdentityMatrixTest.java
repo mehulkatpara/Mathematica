@@ -1,13 +1,13 @@
 package org.katpara.mathematica.linears.matrices.constants;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.exceptions.linear.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
 import org.katpara.mathematica.linears.matrices.squares.SquareMatrix;
+import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -43,15 +43,34 @@ class IdentityMatrixTest {
 
     @Test
     void add() {
+        Matrix m2 = m.add(m);
+        Matrix m3 = new LowerTriangularMatrix(new double[][]{
+                {1, 0, 0, 0, 0},
+                {2, 2, 0, 0, 0},
+                {3, 3, 3, 0, 0},
+                {4, 4, 4, 4, 0},
+                {5, 5, 5, 5, 5}
+        });
+        Matrix r3 = new LowerTriangularMatrix(new double[][]{
+                {2, 0, 0, 0, 0},
+                {2, 3, 0, 0, 0},
+                {3, 3, 4, 0, 0},
+                {4, 4, 4, 5, 0},
+                {5, 5, 5, 5, 6}
+        });
+
         assertAll(
-                () -> Assertions.assertEquals(new AnySquareMatrix(new double[][]{
+                () -> assertEquals(new AnySquareMatrix(new double[][]{
                         {11, 10, 10, 10, 10},
                         {10, 11, 10, 10, 10},
                         {10, 10, 11, 10, 10},
                         {10, 10, 10, 11, 10},
                         {10, 10, 10, 10, 11}
                 }), m.add(10)),
-                () -> Assertions.assertEquals(DiagonalSquareMatrix.getInstance(new double[]{2, 2, 2, 2, 2}), m.add(m))
+                () -> assertEquals(DiagonalSquareMatrix.getInstance(new double[]{2, 2, 2, 2, 2}), m2),
+                () -> assertEquals("DiagonalSquareMatrix", m2.getClass().getSimpleName()),
+                () -> assertEquals(r3, m.add(m3)),
+                () -> assertEquals("LowerTriangularMatrix", m.add(m3).getClass().getSimpleName())
         );
     }
 

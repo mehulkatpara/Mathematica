@@ -1,9 +1,9 @@
 package org.katpara.mathematica.linears.matrices;
 
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.ColumnOutOfBoundException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.RowOutOfBoundException;
+import org.katpara.mathematica.exceptions.linear.ColumnOutOfBoundException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.RowOutOfBoundException;
 import org.katpara.mathematica.util.Rounding;
 
 import java.util.Arrays;

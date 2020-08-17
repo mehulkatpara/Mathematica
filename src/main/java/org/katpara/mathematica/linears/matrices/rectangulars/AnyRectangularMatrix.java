@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.matrices.rectangulars;
 
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;

@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
@@ -291,7 +291,7 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      *
      * @return the matrix
      */
-    protected Matrix mul(final Matrix m, final double[][] n) {
+    private Matrix mul(final Matrix m, final double[][] n) {
         if (m instanceof LowerTriangularMatrix)
             return new LowerTriangularMatrix(n);
 

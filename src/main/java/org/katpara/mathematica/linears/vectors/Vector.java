@@ -2,8 +2,8 @@ package org.katpara.mathematica.linears.vectors;
 
 import org.katpara.mathematica.linears.matrices.dep.Matrix_Old;
 import org.katpara.mathematica.util.Rounding;
-import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorDimensionException;
-import org.katpara.mathematica.exceptions.linears.dep.InvalidVectorOperationException;
+import org.katpara.mathematica.exceptions.linear.dep.InvalidVectorDimensionException;
+import org.katpara.mathematica.exceptions.linear.dep.InvalidVectorOperationException;
 
 import java.io.Serializable;
 import java.util.List;

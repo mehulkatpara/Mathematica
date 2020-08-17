@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.matrices.dep;
 
 import org.katpara.mathematica.util.Rounding;
-import org.katpara.mathematica.exceptions.linears.dep.InvalidMatrixOperationException;
+import org.katpara.mathematica.exceptions.linear.dep.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.Vector;
 
 import java.util.List;

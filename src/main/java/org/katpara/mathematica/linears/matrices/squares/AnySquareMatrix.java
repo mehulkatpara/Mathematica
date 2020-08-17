@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
@@ -205,7 +205,7 @@ public class AnySquareMatrix extends SquareMatrix {
             return NullMatrix.getInstance(s[0], _s[1]);
 
         var n = super.doMultiply(m.toArray());
-        return (n.length == n[0].length) ? getMatrix(n) :
+        return (n.length == n[0].length) ? getSquareMatrix(n) :
                        new AnyRectangularMatrix(n);
     }
 
@@ -221,7 +221,7 @@ public class AnySquareMatrix extends SquareMatrix {
         if (scalar == 0)
             return this;
 
-        return getMatrix(super.doAdd(scalar));
+        return getSquareMatrix(super.doAdd(scalar));
     }
 
     /**
@@ -239,7 +239,7 @@ public class AnySquareMatrix extends SquareMatrix {
         if (m instanceof NullMatrix)
             return this;
 
-        return getMatrix(super.doAdd(m.toArray()));
+        return getSquareMatrix(super.doAdd(m.toArray()));
     }
 
     /**
@@ -260,7 +260,7 @@ public class AnySquareMatrix extends SquareMatrix {
         if (m instanceof NullMatrix)
             return this;
 
-        return getMatrix(super.doSubtract(m.toArray()));
+        return getSquareMatrix(super.doSubtract(m.toArray()));
     }
 
     /**
@@ -279,7 +279,7 @@ public class AnySquareMatrix extends SquareMatrix {
         if (scalar == -1)
             return this.additiveInverse();
 
-        return getMatrix(super.doMultiply(scalar));
+        return getSquareMatrix(super.doMultiply(scalar));
     }
 
     /**
@@ -299,7 +299,7 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public Matrix additiveInverse() {
-        return getMatrix(super.doAdditiveInverse());
+        return getSquareMatrix(super.doAdditiveInverse());
     }
 
     /**
@@ -317,7 +317,7 @@ public class AnySquareMatrix extends SquareMatrix {
         if (power == 1)
             return this;
 
-        return getMatrix(doPower(power));
+        return getSquareMatrix(doPower(power));
     }
 
     /**
@@ -327,7 +327,7 @@ public class AnySquareMatrix extends SquareMatrix {
      *
      * @return the square matrix
      */
-    private Matrix getMatrix(final double[][] n) {
+    protected Matrix getSquareMatrix(final double[][] n) {
         // TODO: More detailed such as 2x2 and 3x3
         return new AnySquareMatrix(n);
     }

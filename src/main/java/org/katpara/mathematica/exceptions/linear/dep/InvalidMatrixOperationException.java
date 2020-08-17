@@ -1,27 +1,27 @@
-package org.katpara.mathematica.exceptions.linears.dep;
+package org.katpara.mathematica.exceptions.linear.dep;
 
 /**
- * The exception is thrown when the program wants to create a vector
- * with invalid dimensions, or when two or more vectors are interacting
- * with each other and they are in different dimensions.
+ * The exception is useful when you are trying to perform an operation on
+ * a matrix that is not allowed or doable.
+ * For example, calculating a trace on a rectangular matrix.
  *
  * @author Mehul Katpara
  * @since 1.0.0
  */
-public class InvalidVectorDimensionException extends RuntimeException {
-    private static final long serialVersionUID = 2151811694623431211L;
+public class InvalidMatrixOperationException extends RuntimeException {
+    private static final long serialVersionUID = 3852013709139213781L;
 
     /**
      * The default message in case of the specialized message is not provided.
      */
-    private static final String MESSAGE = "The vector dimension is invalid";
+    private static final String MESSAGE = "The operation can't be performed on the matrix";
 
     /**
      * Constructs a new runtime exception with {@code null} as its
      * detail message.  The cause is not initialized, and may subsequently be
      * initialized by a call to {@link #initCause}.
      */
-    public InvalidVectorDimensionException() {
+    public InvalidMatrixOperationException() {
         super(MESSAGE);
     }
 
@@ -33,7 +33,7 @@ public class InvalidVectorDimensionException extends RuntimeException {
      * @param message the detail message. The detail message is saved for
      *                later retrieval by the {@link #getMessage()} method.
      */
-    public InvalidVectorDimensionException(final String message) {
+    public InvalidMatrixOperationException(final String message) {
         super(message);
     }
 }

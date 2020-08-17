@@ -478,7 +478,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dd><code>e</code> - a two-dimensional elements array</dd>
 <dd><code>t</code> - a type of matrixOld</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
 <dd><code><a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions">NullArgumentProvidedException</a></code> - when the array has a null value</dd>
 </dl>
 </li>
@@ -497,7 +497,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vl</code> - the <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a> List</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if the list is empty,
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if the list is empty,
                                          when given vectors are on various dimensions</dd>
 </dl>
 </li>
@@ -516,7 +516,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vs</code> - a set of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if the set is empty,
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if the set is empty,
                                          when given vectors are on various dimensions</dd>
 </dl>
 </li>
@@ -539,7 +539,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vm</code> - a map of <a href="../vectors/Vector.html" title="interface in org.katpara.mathematica.linears.vectors"><code>Vector</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if the map is empty,
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if the map is empty,
                                          when given vectors are on various dimensions</dd>
 </dl>
 </li>
@@ -564,8 +564,8 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dd><code>lists</code> - the collection of list of numbers</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="../../exceptions/InvalidParameterProvidedException.html" title="class in org.katpara.mathematica.exceptions">InvalidParameterProvidedException</a></code> - when a collection is not a type of List or Set</dd>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when the collection is empty</dd>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when rows are of variable length</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when the collection is empty</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when rows are of variable length</dd>
 </dl>
 </li>
 </ul>
@@ -588,7 +588,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - the matrixOld array.</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when matrixOld doesn't have at least one element.</dd>
 <dd><code><a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions">NullArgumentProvidedException</a></code> - when the array has a null value</dd>
 </dl>
 </li>
@@ -805,7 +805,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an ArrayMatrix with all 0 entries</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when # of row + # of column &lt; 2;
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when # of row + # of column &lt; 2;
                                          this ensures that at least one element
                                          exist all the time.</dd>
 </dl>
@@ -827,7 +827,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>am ArrayMatrix with all 1 entries</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when m + n &lt; 2</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when m + n &lt; 2</dd>
 </dl>
 </li>
 </ul>
@@ -848,7 +848,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a Pascal's <a href="Matrix.html" title="interface in org.katpara.mathematica.linears.matrices"><code>Matrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - when n &lt; 1, at least one element should exist.</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - when n &lt; 1, at least one element should exist.</dd>
 </dl>
 </li>
 </ul>
@@ -866,7 +866,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the lehmer matrixOld</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>
@@ -884,7 +884,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a hilbert <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>
@@ -903,7 +903,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an identity <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>
@@ -922,7 +922,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an exchange <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>
@@ -941,7 +941,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a redheffer <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>
@@ -962,7 +962,7 @@ implements <a href="Matrix.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a shift <a href="ArrayMatrix.html" title="class in org.katpara.mathematica.linears.matrices"><code>ArrayMatrix</code></a></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
+<dd><code><a href="../../exceptions/linears/InvalidMatrixDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidMatrixDimensionException</a></code> - if n &lt; 1</dd>
 </dl>
 </li>
 </ul>

@@ -3,11 +3,10 @@ package org.katpara.mathematica.linears.matrices.constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.linear.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
 

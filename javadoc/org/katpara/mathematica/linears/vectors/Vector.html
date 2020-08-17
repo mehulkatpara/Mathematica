@@ -661,7 +661,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <pre class="methodSignature"><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;transpose&#8203;(int&nbsp;dimension)</pre>
 <div class="block">The method will transpose vector to another dimension. If the given dimension
  is less then 2 or the same as the vector's dimension then the method will
- throw <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception.
+ throw <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception.
  <p>
  If I have a two-dimensional vector V = (x, y) and if I transpose the dimension
  to the 5th dimension then the resulting vector will be, (x, y, 0, 0, 0); the
@@ -674,7 +674,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the transposed vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when the given dimension is less
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when the given dimension is less
                                          than 2 or the same as the given
                                          vector dimension</dd>
 </dl>
@@ -711,7 +711,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
 </dl>
 </li>
 </ul>
@@ -730,7 +730,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
 </dl>
 </li>
 </ul>
@@ -760,14 +760,14 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <pre class="methodSignature">double&nbsp;dot&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector)</pre>
 <div class="block">The method will return a dot product of two vectors.
  If both vectors are on different dimensions then
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the second vector</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both products are on different
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both products are on different
                                          dimensions.</dd>
 </dl>
 </li>
@@ -782,7 +782,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
            <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;decimals)</pre>
 <div class="block">The method will return a dot product of two vectors.
  If both vectors are on different dimensions then
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the second vector</dd>
@@ -790,7 +790,7 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both products are on different
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both products are on different
                                          dimensions.</dd>
 </dl>
 </li>
@@ -812,14 +812,14 @@ extends java.lang.Cloneable, java.io.Serializable</pre>
  would be in the opposite direction.
  <p>
  If given vectors are not in 3 dimensions then,
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> is thrown.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>vector</code> - the second 3 dimensional vector</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the cross product vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both vectors are in
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both vectors are in
                                          the third dimension.</dd>
 </dl>
 </li>

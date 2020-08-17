@@ -1,10 +1,12 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
-import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.NotInvertibleException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotLowerTriangularMatrixException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.linear.NotUpperTriangularMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 /**
@@ -79,14 +81,14 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * <p>
      * The trace only exist for a square matrix.
      *
-     * @param decimals the decimal points of accuracy
+     * @param decimals the decimal povars of accuracy
      *
      * @return the trace of the square matrix
      */
     public final double getTrace(final Rounding.Decimals decimals) {
         var sum = 0.0;
 
-        for (int i = 0; i < s[0]; i++)
+        for (var i = 0; i < s[0]; i++)
             sum += d[i][i];
 
         return Double.parseDouble(Rounding.round(sum, decimals));
@@ -134,10 +136,10 @@ public abstract class SquareMatrix extends AbstractMatrix {
      */
     protected final double[][] doPower(final double power) {
         var n = new double[s[0]][s[1]];
-        for (int i = 0; i < s[0]; i++) {
+        for (var i = 0; i < s[0]; i++) {
             System.arraycopy(d[i], 0, n[i], 0, s[1]);
         }
-        for (int i = 0; i < power - 1; i++) {
+        for (var i = 0; i < power - 1; i++) {
             n = super.doMultiply(n);
         }
         return n;
@@ -188,4 +190,72 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return the determinant of the square matrix
      */
     public abstract double getDeterminant(final Rounding.Decimals decimals);
+
+    /**
+     * The method will check if the given matrix is a lower triangular matrix.
+     * If so it will perform the forward substitution.
+     * <p>
+     * The method provides Ax = b solution.
+     * The x will be returned and b is provided.
+     *
+     * @param b the array to evaluate with
+     *
+     * @return the resulting array
+     *
+     * @throws NotLowerTriangularMatrixException if the matrix is not lower triangular
+     */
+    public double[] forwardSubstitution(final double[] b) {
+        if (!this.isLowerTriangular())
+            throw new NotLowerTriangularMatrixException();
+
+        return this.doForwardSubstitution(b);
+    }
+
+    /**
+     * The method performs forward substitution on a lower triangular matrix.
+     *
+     * @param b the substituting array
+     *
+     * @return the resulting array
+     */
+    protected double[] doForwardSubstitution(final double[] b) {
+        if (b.length != s[0])
+            throw new MatrixDimensionMismatchException();
+
+        if (d[0][0] == 0)
+            throw new NotInvertibleException();
+
+        var n = new double[s[0]];
+        n[0] = b[0] / d[0][0];
+
+        for (var i = 1; i < s[0]; i++) {
+            if (d[i][i] == 0)
+                throw new NotInvertibleException();
+
+            var sum = 0D;
+            for (var j = 0; j < i; j++)
+                sum += d[i][j] * n[j];
+
+            n[i] = (b[i] - sum) / d[i][i];
+        }
+
+        return n;
+    }
+
+    /**
+     * The method will check if the given matrix is a upper triangular matrix.
+     * If so it will perform the backward substitution.
+     * <p>
+     * The method provides Ax = b solution.
+     * The x will be returned and b is provided.
+     *
+     * @param b the array to evaluate with
+     *
+     * @return the resulting array
+     *
+     * @throws NotUpperTriangularMatrixException if the matrix is not lower triangular
+     */
+    public double[] backwardSubstitution(final double[] b) {
+        return null;
+    }
 }

@@ -1,6 +1,6 @@
 package org.katpara.mathematica.linears.matrices.constants;
 
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.exceptions.linear.InvalidMatrixDimensionProvidedException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
 import org.katpara.mathematica.util.Rounding;

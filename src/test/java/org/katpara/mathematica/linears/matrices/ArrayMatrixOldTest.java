@@ -5,8 +5,8 @@ import org.katpara.mathematica.linears.matrices.dep.ArrayMatrixOld;
 import org.katpara.mathematica.linears.matrices.dep.Matrix_Old;
 import org.katpara.mathematica.util.Rounding;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linears.dep.InvalidMatrixDimensionException;
-import org.katpara.mathematica.exceptions.linears.dep.InvalidMatrixOperationException;
+import org.katpara.mathematica.exceptions.linear.dep.InvalidMatrixDimensionException;
+import org.katpara.mathematica.exceptions.linear.dep.InvalidMatrixOperationException;
 import org.katpara.mathematica.linears.vectors.ArrayVector;
 import org.katpara.mathematica.linears.vectors.Vector;
 

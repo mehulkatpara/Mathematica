@@ -22,7 +22,9 @@ public final class ExceptionMessages {
     public static final String NOT_SYMMETRIC_MATRIX_MESSAGE = "The data are not symmetric.";
     public static final String NOT_IDENTITY_MATRIX_MESSAGE = "The matrix is non-identity.";
     public static final String NOT_LOWER_TRIANGULAR_MATRIX_MESSAGE = "The matrix is not lower triangular.";
+    public static final String NOT_UPPER_TRIANGULAR_MATRIX_MESSAGE = "The matrix is not upper triangular.";
     public static final String NOT_RECTANGULAR_MATRIX_MESSAGE = "The matrix is not rectangular.";
+    public static final String NOT_SQUARE_MATRIX_MESSAGE = "The matrix is not square.";
 
     // Matrix dimension exceptions
     public static final String MATRIX_DIMENSION_MISMATCH_MESSAGE = "The matrices dimensions mismatch.";

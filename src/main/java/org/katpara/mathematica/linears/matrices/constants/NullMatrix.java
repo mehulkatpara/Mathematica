@@ -1,9 +1,9 @@
 package org.katpara.mathematica.linears.matrices.constants;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.linears.InvalidMatrixDimensionProvidedException;
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.dep.NotSquareMatrixException;
+import org.katpara.mathematica.exceptions.linear.InvalidMatrixDimensionProvidedException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;

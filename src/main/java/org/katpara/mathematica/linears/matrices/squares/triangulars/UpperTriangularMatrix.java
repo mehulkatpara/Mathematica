@@ -1,7 +1,7 @@
 package org.katpara.mathematica.linears.matrices.squares.triangulars;
 
-import org.katpara.mathematica.exceptions.linears.MatrixDimensionMismatchException;
-import org.katpara.mathematica.exceptions.linears.NotLowerTriangularMatrixException;
+import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotUpperTriangularMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
@@ -27,10 +27,10 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     public UpperTriangularMatrix(final double[][] d) {
         super(d);
 
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d.length; j++) {
-                if (j < i && d[i][j] != 0)
-                    throw new NotLowerTriangularMatrixException();
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = 0; j < i; j++) {
+                if (d[i][j] != 0)
+                    throw new NotUpperTriangularMatrixException();
             }
         }
     }
@@ -62,47 +62,14 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix transpose() {
-        return new LowerTriangularMatrix(super.doTranspose());
-    }
-
-    /**
-     * The multiplication of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final Matrix m) {
-        if(m instanceof UpperTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if(s[0] != m.getSize()[1])
-                throw new MatrixDimensionMismatchException();
-
-            return new UpperTriangularMatrix(super.doMultiply(m.toArray()));
+        var n = new double[s[0]][s[0]];
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = i; j < s[0]; j++) {
+                n[j][i] = d[i][j];
+            }
         }
 
-        return super.multiply(m);
-    }
-
-    /**
-     * The division of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix divide(final Matrix m) {
-        if(m instanceof UpperTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if(s[0] != m.getSize()[1])
-                throw new MatrixDimensionMismatchException();
-
-            return new UpperTriangularMatrix(super.doMultiply(m.multiplicativeInverse().toArray()));
-        }
-
-        return super.divide(m);
+        return new LowerTriangularMatrix(n);
     }
 
     /**
@@ -114,9 +81,9 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix add(final Matrix m) {
-        if(m instanceof UpperTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if(!Arrays.equals(getSize(), m.getSize()))
+        if (m instanceof UpperTriangularMatrix ||
+                    m instanceof DiagonalSquareMatrix) {
+            if (!Arrays.equals(getSize(), m.getSize()))
                 throw new MatrixDimensionMismatchException();
 
             return new UpperTriangularMatrix(super.doAdd(m.toArray()));
@@ -134,10 +101,13 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix subtract(final Matrix m) {
-        if(m instanceof UpperTriangularMatrix ||
-                   m instanceof DiagonalSquareMatrix) {
-            if(!Arrays.equals(getSize(), m.getSize()))
+        if (m instanceof UpperTriangularMatrix ||
+                    m instanceof DiagonalSquareMatrix) {
+            if (!Arrays.equals(getSize(), m.getSize()))
                 throw new MatrixDimensionMismatchException();
+
+            if (this == m)
+                return NullMatrix.getInstance(s[0]);
 
             return new UpperTriangularMatrix(super.doSubtract(m.toArray()));
         }
@@ -161,7 +131,63 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
         if (scalar == -1)
             return this.additiveInverse();
 
-        return new UpperTriangularMatrix(super.doMultiply(scalar));
+        var n = new double[s[0]][s[0]];
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = i; j < s[1]; j++) {
+                n[i][j] = d[i][j] * scalar;
+            }
+        }
+
+        return new UpperTriangularMatrix(n);
+    }
+
+    /**
+     * The multiplication of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix multiply(final Matrix m) {
+        var _s = m.getSize();
+
+        if (s[0] != _s[1])
+            throw new MatrixDimensionMismatchException();
+
+        if (m instanceof IdentityMatrix)
+            return this;
+
+        if (m instanceof NullMatrix)
+            return NullMatrix.getInstance(s[0], _s[1]);
+
+        if (m instanceof UpperTriangularMatrix)
+            return new UpperTriangularMatrix(multiplyUpperTriangle(m.toArray()));
+
+        if (m instanceof DiagonalSquareMatrix)
+            return new LowerTriangularMatrix(multiplyDiagonalTriangle(m.toArray()));
+
+        return getSquareMatrix(super.doMultiply(m.toArray()));
+    }
+
+    /**
+     * The division of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public Matrix divide(final Matrix m) {
+        if(m instanceof UpperTriangularMatrix ||
+                   m instanceof DiagonalSquareMatrix) {
+            if(s[0] != m.getSize()[1])
+                throw new MatrixDimensionMismatchException();
+
+            return new UpperTriangularMatrix(super.doMultiply(m.multiplicativeInverse().toArray()));
+        }
+
+        return super.divide(m);
     }
 
     /**
@@ -182,7 +208,14 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix additiveInverse() {
-        return new UpperTriangularMatrix(super.doAdditiveInverse());
+        var n = new double[s[0]][s[0]];
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = i; j < s[0]; j++) {
+                n[i][j] = -d[i][j];
+            }
+        }
+
+        return new LowerTriangularMatrix(n);
     }
 
     /**
@@ -201,5 +234,46 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
             return this;
 
         return new LowerTriangularMatrix(super.doPower(power));
+    }
+
+    /**
+     * The method multiplies two upper matrix arrays.
+     *
+     * @param m the lower matrix array
+     *
+     * @return the resulting lower matrix array
+     */
+    private double[][] multiplyUpperTriangle(final double[][] m) {
+        var n = new double[s[0]][s[0]];
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = i; j < s[1]; j++) {
+                if (i == j) {
+                    n[i][j] = d[i][j] * m[i][j];
+                } else {
+                    for (int k = i; k < s[0]; k++) {
+                        n[i][j] += d[i][k] * m[k][j];
+                    }
+                }
+            }
+        }
+
+        return n;
+    }
+
+    /**
+     * The method multiplies the upper matrix array with diagonal matrix array
+     *
+     * @param m the diagonal matrix array
+     *
+     * @return the resulting lower matrix array
+     */
+    private double[][] multiplyDiagonalTriangle(final double[][] m) {
+        var n = new double[s[0]][s[0]];
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = i; j < s[0]; j++) {
+                n[i][j] = d[i][j] * m[j][j];
+            }
+        }
+        return n;
     }
 }

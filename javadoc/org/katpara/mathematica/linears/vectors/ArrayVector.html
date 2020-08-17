@@ -524,7 +524,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <div class="block">The constructor creates a vector from the given <code>Number</code> array.
  <p>
  The Number array has to have at least 2 or more elements to create a
- vector; otherwise the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.
+ vector; otherwise the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception is thrown.
  <p>
  All the elements in the array must be not-null; fail to do so will
  result in <a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions"><code>NullArgumentProvidedException</code></a> exception.</div>
@@ -532,7 +532,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>e</code> - the Number array</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - if the size of Number array is less than 2</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - if the size of Number array is less than 2</dd>
 <dd><code><a href="../../exceptions/NullArgumentProvidedException.html" title="class in org.katpara.mathematica.exceptions">NullArgumentProvidedException</a></code> - when the contains null values</dd>
 </dl>
 </li>
@@ -555,12 +555,12 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
  <code>Double</code>
  <p>
  The list must contain at least 2 Numbers or more; failed to comply
- will result in the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception.</div>
+ will result in the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>numbers</code> - the list of elements</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when the list have less than 2 elements</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when the list have less than 2 elements</dd>
 </dl>
 </li>
 </ul>
@@ -583,12 +583,12 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
  <code>Double</code>
  <p>
  The set must contain at least 2 kye-value pairs in the map or more; failed
- to comply will result in the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception.</div>
+ to comply will result in the <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>m</code> - the map of &lt;Any-key, Number&gt;</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when the map has less than 2 pairs</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when the map has less than 2 pairs</dd>
 </dl>
 </li>
 </ul>
@@ -895,7 +895,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <pre class="methodSignature">public&nbsp;<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;transpose&#8203;(int&nbsp;dimension)</pre>
 <div class="block">The method will transpose vector to another dimension. If the given dimension
  is less then 2 or the same as the vector's dimension then the method will
- throw <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception.
+ throw <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception.
  <p>
  If I have a two-dimensional vector V = (x, y) and if I transpose the dimension
  to the 5th dimension then the resulting vector will be, (x, y, 0, 0, 0); the
@@ -910,7 +910,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the transposed vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when the given dimension is less
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when the given dimension is less
                                          than 2 or the same as the given
                                          vector dimension</dd>
 </dl>
@@ -951,7 +951,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - if the vectors have different dimensions</dd>
 </dl>
 </li>
 </ul>
@@ -1002,7 +1002,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <pre class="methodSignature">public&nbsp;double&nbsp;dot&#8203;(<a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a>&nbsp;vector)</pre>
 <div class="block">The method will return a dot product of two vectors.
  If both vectors are on different dimensions then
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Vector.html#dot(org.katpara.mathematica.linears.vectors.Vector)">dot</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
@@ -1011,7 +1011,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both products are on different
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both products are on different
                                          dimensions.</dd>
 </dl>
 </li>
@@ -1026,7 +1026,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
                   <a href="../../commons/Rounding.POINT.html" title="enum in org.katpara.mathematica.commons">Rounding.POINT</a>&nbsp;p)</pre>
 <div class="block">The method will return a dot product of two vectors.
  If both vectors are on different dimensions then
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> exception is thrown.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Vector.html#dot(org.katpara.mathematica.linears.vectors.Vector,org.katpara.mathematica.commons.Rounding.POINT)">dot</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
@@ -1036,7 +1036,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the resulting dot product</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both products are on different
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both products are on different
                                          dimensions.</dd>
 </dl>
 </li>
@@ -1058,7 +1058,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
  would be in the opposite direction.
  <p>
  If given vectors are not in 3 dimensions then,
- <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears"><code>InvalidVectorDimensionException</code></a> is thrown.</div>
+ <a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear"><code>InvalidVectorDimensionException</code></a> is thrown.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="Vector.html#cross(org.katpara.mathematica.linears.vectors.Vector)">cross</a></code>&nbsp;in interface&nbsp;<code><a href="Vector.html" title="interface in org.katpara.mathematica.linears.vectors">Vector</a></code></dd>
@@ -1067,7 +1067,7 @@ implements <a href="Vector.html" title="interface in org.katpara.mathematica.lin
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the cross product vector</dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linears">InvalidVectorDimensionException</a></code> - when both vectors are in
+<dd><code><a href="../../exceptions/linears/InvalidVectorDimensionException.html" title="class in org.katpara.mathematica.exceptions.linear">InvalidVectorDimensionException</a></code> - when both vectors are in
                                          the third dimension.</dd>
 </dl>
 </li>
