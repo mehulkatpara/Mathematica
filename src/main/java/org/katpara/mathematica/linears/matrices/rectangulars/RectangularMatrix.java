@@ -52,7 +52,7 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      * @return the value after applying power
      */
     @Override
-    public final Matrix power(final double power) {
+    public final Matrix power(final int power) {
         throw new NotSquareMatrixException();
     }
 

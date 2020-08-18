@@ -206,7 +206,7 @@ public final class NullMatrix extends AbstractMatrix {
      * @return the value after applying power
      */
     @Override
-    public Matrix power(final double power) {
+    public Matrix power(final int power) {
         if (!this.isSquareMatrix())
             throw new NotSquareMatrixException();
 

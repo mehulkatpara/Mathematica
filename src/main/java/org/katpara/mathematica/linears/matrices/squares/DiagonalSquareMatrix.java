@@ -345,7 +345,7 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      * @return the value after applying power
      */
     @Override
-    public Matrix power(final double power) {
+    public Matrix power(final int power) {
         var n = new double[d.length];
         for (int i = 0; i < d.length; i++)
             n[i] = Math.pow(d[i][i], power);

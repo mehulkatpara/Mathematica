@@ -188,7 +188,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     public Matrix multiply(final Matrix m) {
         var _s = m.getSize();
 
-        if (s[0] != _s[1])
+        if (s[1] != _s[0])
             throw new MatrixDimensionMismatchException();
 
         if (m instanceof IdentityMatrix)
@@ -218,8 +218,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
         if(m == this)
             return IdentityMatrix.getInstance(s[0]);
 
-        var _s = m.getSize();
-        if (s[0] != _s[1])
+        if (s[1] != m.getSize()[0])
             throw new MatrixDimensionMismatchException();
 
         if (m instanceof IdentityMatrix)
@@ -241,28 +240,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
      */
     @Override
     public Matrix multiplicativeInverse() {
-        for (var i = 0; i < s[0]; i++) {
-            if (d[i][i] == 0)
-                throw new NotInvertibleException();
-        }
-
-        var n = new double[s[0]][s[0]];
-        for (var i = 0; i < s[0]; i++) {
-            for (var j = 0; j <= i; j++) {
-                if (i == j) {
-                    n[i][i] = 1 / d[i][i];
-                } else {
-                    var sum = 0.0;
-                    for (var k = 0; k <= i; k++) {
-                        sum += d[i][k] * n[k][j];
-                    }
-
-                    n[i][j] = -sum / d[i][i];
-                }
-            }
-        }
-
-        return new LowerTriangularMatrix(n);
+        return new LowerTriangularMatrix(doMultiplicativeInverse(d));
     }
 
     /**
@@ -290,7 +268,7 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
      * @return the value after applying power
      */
     @Override
-    public Matrix power(final double power) {
+    public Matrix power(final int power) {
         if (power == 1)
             return this;
         if (power == 0)
@@ -300,9 +278,12 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
 
         var n = new double[s[0]][s[0]];
         System.arraycopy(d, 0, n, 0, s[0]);
-
-        for (int i = 1; i < power; i++) {
+        for (int i = 1; i < Math.abs(power); i++) {
             n = multiplyLowerTriangle(n);
+        }
+
+        if (power < 0) {
+            n = doMultiplicativeInverse(n);
         }
 
         return new LowerTriangularMatrix(n);
@@ -347,6 +328,39 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
             }
         }
 
+        return n;
+    }
+
+    /**
+     * The method calculates the multiplicative inverse of the matrix.
+     *
+     * @param m the matrix data
+     *
+     * @return the inverse data
+     *
+     * @throws NotInvertibleException if the inversion is not possible
+     */
+    private double[][] doMultiplicativeInverse(final double[][] m) {
+        for (var i = 0; i < s[0]; i++) {
+            if (m[i][i] == 0)
+                throw new NotInvertibleException();
+        }
+
+        var n = new double[s[0]][s[0]];
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = 0; j <= i; j++) {
+                if (i == j) {
+                    n[i][i] = 1 / d[i][i];
+                } else {
+                    var sum = 0.0;
+                    for (var k = 0; k <= i; k++) {
+                        sum += d[i][k] * n[k][j];
+                    }
+
+                    n[i][j] = -sum / d[i][i];
+                }
+            }
+        }
         return n;
     }
 

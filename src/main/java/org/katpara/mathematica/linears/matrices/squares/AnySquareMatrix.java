@@ -310,7 +310,7 @@ public class AnySquareMatrix extends SquareMatrix {
      * @return the value after applying power
      */
     @Override
-    public Matrix power(final double power) {
+    public Matrix power(final int power) {
         if (power == 0)
             return IdentityMatrix.getInstance(s[0]);
 

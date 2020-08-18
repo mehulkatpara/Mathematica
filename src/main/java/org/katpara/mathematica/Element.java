@@ -86,7 +86,7 @@ public interface Element<T> {
      *
      * @return the value after applying power
      */
-    T power(final double power);
+    T power(final int power);
 
     /**
      * The absolute value of an element.

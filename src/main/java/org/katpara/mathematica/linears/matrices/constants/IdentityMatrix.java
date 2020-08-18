@@ -120,7 +120,7 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      * @return the value after applying power
      */
     @Override
-    public Matrix power(final double power) {
+    public Matrix power(final int power) {
         return this;
     }
 }
