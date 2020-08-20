@@ -7,6 +7,7 @@ import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.exceptions.linear.NotUpperTriangularMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 /**
@@ -128,21 +129,22 @@ public abstract class SquareMatrix extends AbstractMatrix {
     }
 
     /**
-     * The method calculates the power of a given matrix.
+     * The power of an element.
      *
-     * @param power the exp value
+     * @param power the exponent
      *
-     * @return the resulting data
+     * @return the value after applying power
      */
-    protected final double[][] doPower(final double power) {
-        var n = new double[s[0]][s[1]];
-        for (var i = 0; i < s[0]; i++) {
-            System.arraycopy(d[i], 0, n[i], 0, s[1]);
-        }
-        for (var i = 0; i < power - 1; i++) {
-            n = super.doMultiply(n);
-        }
-        return n;
+    @Override
+    public final Matrix power(final int power) {
+        if (power == 1)
+            return this;
+        if (power == 0)
+            return IdentityMatrix.getInstance(s[0]);
+        if (power == -1)
+            return multiplicativeInverse();
+
+        return this.calculatePower(power);
     }
 
     /**
@@ -179,6 +181,15 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * @return true if it's a upper triangular
      */
     public abstract boolean isUpperTriangular();
+
+    /**
+     * The method calculates the power of a matrix.
+     *
+     * @param power the exponent
+     *
+     * @return the resulting square matrix
+     */
+    protected abstract Matrix calculatePower(final int power);
 
     /**
      * A determinant is a scalar value computed for a square matrix; that

@@ -1,12 +1,7 @@
 package org.katpara.mathematica.linears.matrices.rectangulars;
 
-import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
-
-import java.util.Arrays;
 
 public class AnyRectangularMatrix extends RectangularMatrix {
     private static final long serialVersionUID = 693420854170444322L;
@@ -42,115 +37,57 @@ public class AnyRectangularMatrix extends RectangularMatrix {
     }
 
     /**
-     * The scalar addition of the element.
+     * The method adds a scalar.
      *
-     * @param scalar the scalar
+     * @param scalar the scalar to add.
      *
-     * @return the element
+     * @return The square matrix
      */
     @Override
-    public Matrix add(final double scalar) {
-        if(scalar == 0)
-            return this;
-
+    protected Matrix addScalar(final double scalar) {
         return new AnyRectangularMatrix(super.doAdd(scalar));
     }
 
     /**
-     * The addition of two elements.
+     * The method adds two matrices.
      *
-     * @param m the element
+     * @param m the matrix to add
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix add(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if(m instanceof NullMatrix)
-            return this;
-
+    protected Matrix addMatrix(final Matrix m) {
         return new AnyRectangularMatrix(super.doAdd(m.toArray()));
     }
 
     /**
-     * The subtraction of two elements.
+     * The method multiplies a scalar.
      *
-     * @param m the element
+     * @param scalar the scalar to multiply
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix subtract(final Matrix m) {
-        if(this == m)
-            return NullMatrix.getInstance(s[0], s[1]);
-
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if(m instanceof NullMatrix)
-            return this;
-
-        return new AnyRectangularMatrix(super.doSubtract(m.toArray()));
+    protected Matrix multiplyScalar(final double scalar) {
+        return new AnyRectangularMatrix(super.doMultiply(scalar));
     }
 
     /**
-     * The scalar multiplication of the element.
+     * The method multiplies two matrices.
      *
-     * @param scalar the scalar
+     * @param m the matrix to multiply with
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix multiply(final double scalar) {
-        if (scalar == 1)
-            return this;
-        else if (scalar == 0)
-            return NullMatrix.getInstance(s[0], s[1]);
-        else if (scalar == -1)
-            return this.additiveInverse();
-        else
-            return new AnyRectangularMatrix(super.doMultiply(scalar));
-    }
-
-    /**
-     * The multiplication of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final Matrix m) {
-        var _s = m.getSize();
-
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-        else if (m instanceof IdentityMatrix)
-            return this;
-        else if (m instanceof NullMatrix)
-            return NullMatrix.getInstance(s[0], m.getSize()[1]);
-
+    protected Matrix multiplyMatrix(final Matrix m) {
         var n = super.doMultiply(m.toArray());
-        if(n.length == n[0].length) {
+        if (n.length == n[0].length) {
             return new AnySquareMatrix(n);
             //TODO: MORE SQUARE MATRIX IMPL, Like N == 2, N == 3
         }
 
         return new AnyRectangularMatrix(n);
-    }
-
-    /**
-     * The division of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix divide(final Matrix m) {
-        return this.multiply(m.multiplicativeInverse());
     }
 
     /**

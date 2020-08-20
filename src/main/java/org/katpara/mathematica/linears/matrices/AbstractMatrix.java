@@ -1,9 +1,13 @@
 package org.katpara.mathematica.linears.matrices;
 
+import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
 import org.katpara.mathematica.exceptions.linear.ColumnOutOfBoundException;
 import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
+import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.exceptions.linear.RowOutOfBoundException;
+import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
+import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.util.Rounding;
 
 import java.util.Arrays;
@@ -133,6 +137,154 @@ public abstract class AbstractMatrix implements Matrix {
     }
 
     /**
+     * The scalar addition of the element.
+     *
+     * @param scalar the scalar
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix add(final double scalar) {
+        if (scalar == 0)
+            return this;
+
+        return this.addScalar(scalar);
+    }
+
+    /**
+     * The addition of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix add(final Matrix m) {
+        if (!Arrays.equals(getSize(), m.getSize()))
+            throw new MatrixDimensionMismatchException();
+
+        if (m instanceof NullMatrix)
+            return this;
+
+        return this.addMatrix(m);
+    }
+
+    /**
+     * The subtraction of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix subtract(final Matrix m) {
+        if (this == m)
+            return NullMatrix.getInstance(s[0], s[1]);
+
+        return this.add(m.additiveInverse());
+    }
+
+    /**
+     * The scalar multiplication of the element.
+     *
+     * @param scalar the scalar
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix multiply(final double scalar) {
+        if (scalar == 0)
+            return NullMatrix.getInstance(s[0]);
+        if (scalar == 1)
+            return this;
+        if (scalar == -1)
+            return this.additiveInverse();
+
+        return this.multiplyScalar(scalar);
+    }
+
+    /**
+     * The multiplication of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     *
+     * @throws MatrixDimensionMismatchException if the number of columns of the first matrix,
+     *                                          doesn't match up with the number of rows of
+     *                                          the second matrix
+     */
+    @Override
+    public final Matrix multiply(final Matrix m) {
+        var _s = m.getSize();
+
+        if (s[1] != _s[0])
+            throw new MatrixDimensionMismatchException();
+
+        if (m instanceof IdentityMatrix)
+            return this;
+
+        if (m instanceof NullMatrix)
+            return NullMatrix.getInstance(s[0], _s[1]);
+
+        return this.multiplyMatrix(m);
+    }
+
+    /**
+     * The division of two elements.
+     *
+     * @param m the element
+     *
+     * @return the element
+     */
+    @Override
+    public final Matrix divide(final Matrix m) {
+        if(!m.isSquareMatrix())
+            throw new NotInvertibleException();
+
+        if(this == m)
+            return IdentityMatrix.getInstance(s[0]);
+
+        return this.multiply(m.multiplicativeInverse());
+    }
+
+    /**
+     * The method adds a scalar.
+     *
+     * @param scalar the scalar to add.
+     *
+     * @return The square matrix
+     */
+    protected abstract Matrix addScalar(final double scalar);
+
+    /**
+     * The method adds two matrices.
+     *
+     * @param m the matrix to add
+     *
+     * @return the resulting matrix
+     */
+    protected abstract Matrix addMatrix(final Matrix m);
+
+    /**
+     * The method multiplies a scalar.
+     *
+     * @param scalar the scalar to multiply
+     *
+     * @return the resulting matrix
+     */
+    protected abstract Matrix multiplyScalar(final double scalar);
+
+    /**
+     * The method multiplies two matrices.
+     *
+     * @param m the matrix to multiply with
+     *
+     * @return the resulting matrix
+     */
+    protected abstract Matrix multiplyMatrix(final Matrix m);
+
+    /**
      * The method transposes the data of the matrix.
      *
      * @return transposed array data
@@ -179,27 +331,6 @@ public abstract class AbstractMatrix implements Matrix {
                 n[i][j] = d[i][j] * scalar;
             }
         }
-
-        return n;
-    }
-
-    /**
-     * The subtraction of two matrix arrays.
-     *
-     * @param _d the elements
-     *
-     * @return the subtracted array
-     *
-     * @throws MatrixDimensionMismatchException when two matrix have different dimensions
-     */
-    protected final double[][] doSubtract(final double[][] _d) {
-        double[][] n = new double[s[0]][s[1]];
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < s[1]; j++) {
-                n[i][j] = d[i][j] - _d[i][j];
-            }
-        }
-
 
         return n;
     }

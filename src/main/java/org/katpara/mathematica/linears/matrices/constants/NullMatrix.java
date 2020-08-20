@@ -2,7 +2,6 @@ package org.katpara.mathematica.linears.matrices.constants;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.exceptions.linear.InvalidMatrixDimensionProvidedException;
-import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
@@ -87,95 +86,57 @@ public final class NullMatrix extends AbstractMatrix {
     }
 
     /**
-     * The scalar addition of the element.
+     * The method adds a scalar.
      *
-     * @param scalar the scalar
+     * @param scalar the scalar to add.
      *
-     * @return the element
+     * @return The square matrix
      */
     @Override
-    public Matrix add(final double scalar) {
-        if (scalar == 0)
-            return this;
+    protected Matrix addScalar(final double scalar) {
+        var n = super.doAdd(scalar);
+        if (n.length == n[0].length) {
+            return new AnySquareMatrix(n);
+            //TODO: MORE SQUARE MATRIX IMPL, Like N == 2, N == 3
+        }
 
-        if (this.isSquareMatrix())
-            return new AnySquareMatrix(super.doAdd(scalar));
-        else
-            return new AnyRectangularMatrix(super.doAdd(scalar));
+        return new AnyRectangularMatrix(n);
     }
 
     /**
-     * The addition of two elements.
+     * The method adds two matrices.
      *
-     * @param m the element
+     * @param m the matrix to add
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix add(final Matrix m) {
-        if(!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
+    protected Matrix addMatrix(final Matrix m) {
         return m;
     }
 
     /**
-     * The subtraction of two elements.
+     * The method multiplies a scalar.
      *
-     * @param m the element
+     * @param scalar the scalar to multiply
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix subtract(final Matrix m) {
-        if(!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        return m.additiveInverse();
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
+    protected Matrix multiplyScalar(final double scalar) {
         return this;
     }
 
     /**
-     * The multiplication of two elements.
+     * The method multiplies two matrices.
      *
-     * @param m the element
+     * @param m the matrix to multiply with
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix multiply(final Matrix m) {
-        var _s = m.getSize();
-
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-
-        return getInstance(s[0], _s[1]);
-    }
-
-    /**
-     * The division of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix divide(final Matrix m) {
-        if (!m.isSquareMatrix())
-            throw new NotSquareMatrixException();
-
-        return this.multiply(m.multiplicativeInverse());
+    protected Matrix multiplyMatrix(final Matrix m) {
+        return getInstance(s[0], m.getSize()[1]);
     }
 
     /**

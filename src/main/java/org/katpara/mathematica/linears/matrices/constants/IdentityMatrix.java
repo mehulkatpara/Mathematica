@@ -79,27 +79,27 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
     }
 
     /**
-     * The multiplication of two elements.
+     * The method multiplies two matrices.
      *
-     * @param m the element
+     * @param m the matrix to multiply with
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix multiply(final Matrix m) {
+    protected Matrix multiplyMatrix(final Matrix m) {
         return (m instanceof IdentityMatrix) ? this : m;
     }
 
     /**
-     * The division of two elements.
+     * The method calculates the power of a matrix.
      *
-     * @param m the element
+     * @param power the exponent
      *
-     * @return the element
+     * @return the resulting square matrix
      */
     @Override
-    public Matrix divide(final Matrix m) {
-        return (m instanceof IdentityMatrix) ? this : m.multiplicativeInverse();
+    protected Matrix calculatePower(final int power) {
+        return this;
     }
 
     /**
@@ -109,18 +109,6 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      */
     @Override
     public Matrix multiplicativeInverse() {
-        return this;
-    }
-
-    /**
-     * The power of an element.
-     *
-     * @param power the exponent
-     *
-     * @return the value after applying power
-     */
-    @Override
-    public Matrix power(final int power) {
         return this;
     }
 }

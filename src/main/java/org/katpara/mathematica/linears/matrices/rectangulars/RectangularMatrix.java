@@ -21,7 +21,27 @@ public abstract class RectangularMatrix extends AbstractMatrix {
             throw new NotRectangularMatrixException();
     }
 
+    /**
+     * The method will return true if the matrix is a
+     * row vector, which is 1 x n
+     *
+     * @return true if it is a row vector
+     */
+    @Override
+    public final boolean isRowVector() {
+        return super.isRowVector();
+    }
 
+    /**
+     * The method will return true if the matrix is a
+     * column vector, which is n x 1.
+     *
+     * @return true if it is a column vector
+     */
+    @Override
+    public final boolean isColumnVector() {
+        return super.isColumnVector();
+    }
 
     /**
      * The method will return true if the matrix is a

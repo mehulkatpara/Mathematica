@@ -1,14 +1,10 @@
 package org.katpara.mathematica.linears.matrices.squares.triangulars;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.exceptions.linear.NotUpperTriangularMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
+import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
-
-import java.util.Arrays;
 
 /**
  * The class represents an upper triangular matrix, where all the elements
@@ -28,8 +24,8 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     public UpperTriangularMatrix(final double[][] d) {
         super(d);
 
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = 0; j < i; j++) {
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = 0; j < i; j++) {
                 if (d[i][j] != 0)
                     throw new NotUpperTriangularMatrixException();
             }
@@ -64,8 +60,8 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     @Override
     public Matrix transpose() {
         var n = new double[s[0]][s[0]];
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = i; j < s[0]; j++) {
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = i; j < s[0]; j++) {
                 n[j][i] = d[i][j];
             }
         }
@@ -74,25 +70,19 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The addition of two elements.
+     * The method adds two matrices.
      *
-     * @param m the element
+     * @param m the matrix to add
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix add(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof NullMatrix)
-            return this;
-
+    protected Matrix addMatrix(final Matrix m) {
         var _d = m.toArray();
         if (m instanceof UpperTriangularMatrix) {
             var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                for (int j = i; j < s[1]; j++) {
+            for (var i = 0; i < s[0]; i++) {
+                for (var j = i; j < s[1]; j++) {
                     n[i][j] = d[i][j] + _d[i][j];
                 }
             }
@@ -100,7 +90,7 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
             return new UpperTriangularMatrix(n);
         } else if (m instanceof DiagonalSquareMatrix) {
             var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
+            for (var i = 0; i < s[0]; i++) {
                 n[i][i] = d[i][i] + _d[i][i];
 
                 var l = i + 1;
@@ -114,62 +104,14 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The subtraction of two elements.
+     * The method multiplies a scalar.
      *
-     * @param m the element
+     * @param scalar the scalar to multiply
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix subtract(final Matrix m) {
-        if (this == m)
-            return NullMatrix.getInstance(s[0]);
-
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof NullMatrix)
-            return this;
-
-        var _d = m.toArray();
-        if (m instanceof UpperTriangularMatrix) {
-            var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                for (int j = i; j < s[1]; j++) {
-                    n[i][j] = d[i][j] - _d[i][j];
-                }
-            }
-
-            return new UpperTriangularMatrix(n);
-        } else if (m instanceof DiagonalSquareMatrix) {
-            var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                n[i][i] = d[i][i] - _d[i][i];
-                System.arraycopy(d[i], i + 1, n[i], i + 1, s[0]);
-            }
-
-            return new UpperTriangularMatrix(n);
-        }
-
-        return getSquareMatrix(super.doSubtract(_d));
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
-        if (scalar == 0)
-            return NullMatrix.getInstance(s[0]);
-        if (scalar == 1)
-            return this;
-        if (scalar == -1)
-            return this.additiveInverse();
-
+    protected Matrix multiplyScalar(final double scalar) {
         var n = new double[s[0]][s[0]];
         for (var i = 0; i < s[0]; i++) {
             for (var j = i; j < s[1]; j++) {
@@ -181,60 +123,53 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The multiplication of two elements.
+     * The method multiplies two matrices.
      *
-     * @param m the element
+     * @param m the matrix to multiply with
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix multiply(final Matrix m) {
-        var _s = m.getSize();
-
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof IdentityMatrix)
-            return this;
-
-        if (m instanceof NullMatrix)
-            return NullMatrix.getInstance(s[0], _s[1]);
-
+    protected Matrix multiplyMatrix(final Matrix m) {
+        var _d = m.toArray();
         if (m instanceof UpperTriangularMatrix)
-            return new UpperTriangularMatrix(multiplyUpperTriangle(m.toArray()));
+            return new UpperTriangularMatrix(multiplyUpperTriangle(_d));
 
-        if (m instanceof DiagonalSquareMatrix)
-            return new LowerTriangularMatrix(multiplyDiagonalTriangle(m.toArray()));
+        if (m instanceof DiagonalSquareMatrix) {
+            var n = new double[s[0]][s[0]];
+            for (var i = 0; i < s[0]; i++) {
+                for (var j = i; j < s[0]; j++) {
+                    n[i][j] = d[i][j] * _d[j][j];
+                }
+            }
+            return new UpperTriangularMatrix(n);
+        }
 
-        return getSquareMatrix(super.doMultiply(m.toArray()));
+        var n = super.doMultiply(_d);
+        return (n.length == n[0].length) ? getSquareMatrix(n) :
+                       new AnyRectangularMatrix(n);
     }
 
     /**
-     * The division of two elements.
+     * The method calculates the power of a matrix.
      *
-     * @param m the element
+     * @param power the exponent
      *
-     * @return the element
+     * @return the resulting square matrix
      */
     @Override
-    public Matrix divide(final Matrix m) {
-        if (m == this)
-            return IdentityMatrix.getInstance(s[0]);
+    protected Matrix calculatePower(final int power) {
+        var n = new double[s[0]][s[0]];
+        System.arraycopy(d, 0, n, 0, s[0]);
+        for (var i = 1; i < Math.abs(power); i++) {
+            n = multiplyUpperTriangle(n);
+        }
 
-        var _s = m.getSize();
-        if (s[0] != _s[1])
-            throw new MatrixDimensionMismatchException();
+        if (power < 0) {
+            n = doMultiplicativeInverse(n);
+        }
 
-        if (m instanceof IdentityMatrix)
-            return this;
-
-        if (m instanceof UpperTriangularMatrix)
-            return new UpperTriangularMatrix(multiplyUpperTriangle(m.multiplicativeInverse().toArray()));
-
-        if (m instanceof DiagonalSquareMatrix)
-            return new UpperTriangularMatrix(multiplyDiagonalTriangle(m.multiplicativeInverse().toArray()));
-
-        return getSquareMatrix(super.doMultiply(m.multiplicativeInverse().toArray()));
+        return new UpperTriangularMatrix(n);
     }
 
     /**
@@ -255,39 +190,10 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
     @Override
     public Matrix additiveInverse() {
         var n = new double[s[0]][s[0]];
-        for (int i = 0; i < s[0]; i++) {
-            for (int j = i; j < s[0]; j++) {
+        for (var i = 0; i < s[0]; i++) {
+            for (var j = i; j < s[0]; j++) {
                 n[i][j] = -d[i][j];
             }
-        }
-
-        return new UpperTriangularMatrix(n);
-    }
-
-    /**
-     * The power of an element.
-     *
-     * @param power the exponent
-     *
-     * @return the value after applying power
-     */
-    @Override
-    public Matrix power(final int power) {
-        if (power == 1)
-            return this;
-        if (power == 0)
-            return IdentityMatrix.getInstance(s[0]);
-        if (power == -1)
-            return multiplicativeInverse();
-
-        var n = new double[s[0]][s[0]];
-        System.arraycopy(d, 0, n, 0, s[0]);
-        for (int i = 1; i < Math.abs(power); i++) {
-            n = multiplyUpperTriangle(n);
-        }
-
-        if (power < 0) {
-            n = doMultiplicativeInverse(n);
         }
 
         return new UpperTriangularMatrix(n);
@@ -307,30 +213,13 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
                 if (i == j) {
                     n[i][j] = d[i][j] * m[i][j];
                 } else {
-                    for (int k = i; k < s[0]; k++) {
+                    for (var k = i; k < s[0]; k++) {
                         n[i][j] += d[i][k] * m[k][j];
                     }
                 }
             }
         }
 
-        return n;
-    }
-
-    /**
-     * The method multiplies the upper matrix array with diagonal matrix array
-     *
-     * @param m the diagonal matrix array
-     *
-     * @return the resulting lower matrix array
-     */
-    private double[][] multiplyDiagonalTriangle(final double[][] m) {
-        var n = new double[s[0]][s[0]];
-        for (var i = 0; i < s[0]; i++) {
-            for (var j = i; j < s[0]; j++) {
-                n[i][j] = d[i][j] * m[j][j];
-            }
-        }
         return n;
     }
 
@@ -350,13 +239,13 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
         }
 
         var n = new double[s[0]][s[0]];
-        for (int i = s[0]; i >= 0; i--) {
-            for (int j = i; j < s[1]; j++) {
+        for (var i = s[0]; i >= 0; i--) {
+            for (var j = i; j < s[1]; j++) {
                 if (i == j) {
                     n[i][j] = 1 / m[i][j];
                 } else {
                     var sum = 0.0;
-                    for (int k = i + 1; k <= j; k++) {
+                    for (var k = i + 1; k <= j; k++) {
                         sum += m[i][k] * n[k][j];
                     }
                     n[i][j] = -sum / m[i][i];

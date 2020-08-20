@@ -1,14 +1,10 @@
 package org.katpara.mathematica.linears.matrices.squares.triangulars;
 
 import org.katpara.mathematica.exceptions.NotInvertibleException;
-import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.exceptions.linear.NotLowerTriangularMatrixException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
+import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.DiagonalSquareMatrix;
-
-import java.util.Arrays;
 
 /**
  * The class represents a lower triangular matrix, where all the elements
@@ -73,20 +69,14 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The addition of two elements.
+     * The method adds two matrices.
      *
-     * @param m the element
+     * @param m the matrix to add
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix add(final Matrix m) {
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof NullMatrix)
-            return this;
-
+    protected Matrix addMatrix(final Matrix m) {
         var _d = m.toArray();
         if (m instanceof LowerTriangularMatrix) {
             var n = new double[s[0]][s[0]];
@@ -111,62 +101,14 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The subtraction of two elements.
+     * The method multiplies a scalar.
      *
-     * @param m the element
+     * @param scalar the scalar to multiply
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix subtract(final Matrix m) {
-        if (this == m)
-            return NullMatrix.getInstance(s[0]);
-
-        if (!Arrays.equals(getSize(), m.getSize()))
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof NullMatrix)
-            return this;
-
-        var _d = m.toArray();
-        if (m instanceof LowerTriangularMatrix) {
-            var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                for (int j = 0; j <= i; j++) {
-                    n[i][j] = d[i][j] - _d[i][j];
-                }
-            }
-
-            return new LowerTriangularMatrix(n);
-        } else if (m instanceof DiagonalSquareMatrix) {
-            var n = new double[s[0]][s[0]];
-            for (int i = 0; i < s[0]; i++) {
-                n[i][i] = d[i][i] - _d[i][i];
-                System.arraycopy(d[i], 0, n[i], 0, i);
-            }
-
-            return new LowerTriangularMatrix(n);
-        }
-
-        return getSquareMatrix(super.doSubtract(_d));
-    }
-
-    /**
-     * The scalar multiplication of the element.
-     *
-     * @param scalar the scalar
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix multiply(final double scalar) {
-        if (scalar == 0)
-            return NullMatrix.getInstance(s[0]);
-        if (scalar == 1)
-            return this;
-        if (scalar == -1)
-            return this.additiveInverse();
-
+    protected Matrix multiplyScalar(final double scalar) {
         var n = new double[s[0]][s[0]];
         for (var i = 0; i < s[0]; i++) {
             for (var j = 0; j <= i; j++) {
@@ -178,59 +120,23 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The multiplication of two elements.
+     * The method multiplies two matrices.
      *
-     * @param m the element
+     * @param m the matrix to multiply with
      *
-     * @return the element
+     * @return the resulting matrix
      */
     @Override
-    public Matrix multiply(final Matrix m) {
-        var _s = m.getSize();
-
-        if (s[1] != _s[0])
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof IdentityMatrix)
-            return this;
-
-        if (m instanceof NullMatrix)
-            return NullMatrix.getInstance(s[0], _s[1]);
-
+    protected Matrix multiplyMatrix(final Matrix m) {
         if (m instanceof LowerTriangularMatrix)
             return new LowerTriangularMatrix(multiplyLowerTriangle(m.toArray()));
 
         if (m instanceof DiagonalSquareMatrix)
             return new LowerTriangularMatrix(multiplyDiagonalTriangle(m.toArray()));
 
-        return getSquareMatrix(super.doMultiply(m.toArray()));
-    }
-
-    /**
-     * The division of two elements.
-     *
-     * @param m the element
-     *
-     * @return the element
-     */
-    @Override
-    public Matrix divide(final Matrix m) {
-        if(m == this)
-            return IdentityMatrix.getInstance(s[0]);
-
-        if (s[1] != m.getSize()[0])
-            throw new MatrixDimensionMismatchException();
-
-        if (m instanceof IdentityMatrix)
-            return this;
-
-        if (m instanceof LowerTriangularMatrix)
-            return new LowerTriangularMatrix(multiplyLowerTriangle(m.multiplicativeInverse().toArray()));
-
-        if (m instanceof DiagonalSquareMatrix)
-            return new LowerTriangularMatrix(multiplyDiagonalTriangle(m.multiplicativeInverse().toArray()));
-
-        return getSquareMatrix(super.doMultiply(m.multiplicativeInverse().toArray()));
+        var n = super.doMultiply(m.toArray());
+        return (n.length == n[0].length) ? getSquareMatrix(n) :
+                       new AnyRectangularMatrix(n);
     }
 
     /**
@@ -261,21 +167,14 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     }
 
     /**
-     * The power of an element.
+     * The method calculates the power of a matrix.
      *
      * @param power the exponent
      *
-     * @return the value after applying power
+     * @return the resulting square matrix
      */
     @Override
-    public Matrix power(final int power) {
-        if (power == 1)
-            return this;
-        if (power == 0)
-            return IdentityMatrix.getInstance(s[0]);
-        if (power == -1)
-            return multiplicativeInverse();
-
+    protected Matrix calculatePower(final int power) {
         var n = new double[s[0]][s[0]];
         System.arraycopy(d, 0, n, 0, s[0]);
         for (int i = 1; i < Math.abs(power); i++) {
