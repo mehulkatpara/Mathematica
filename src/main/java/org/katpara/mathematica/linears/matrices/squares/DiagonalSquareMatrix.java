@@ -1,17 +1,11 @@
 package org.katpara.mathematica.linears.matrices.squares;
 
 import org.katpara.mathematica.exceptions.NullArgumentProvidedException;
-import org.katpara.mathematica.exceptions.linear.MatrixDimensionMismatchException;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
-import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.LowerTriangularMatrix;
-import org.katpara.mathematica.linears.matrices.squares.triangulars.TriangularMatrix;
 import org.katpara.mathematica.linears.matrices.squares.triangulars.UpperTriangularMatrix;
 import org.katpara.mathematica.util.Rounding;
-
-import java.util.Arrays;
 
 /**
  * The class represents a diagonal square matrix in the system.
@@ -260,7 +254,13 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
         var n = new double[s[0]];
         for (int i = 1; i < Math.abs(power); i++) {
             for (int j = 0; j < s[0]; j++) {
-                n[i] = Math.pow(d[i][i], power);
+                n[j] = Math.pow(d[j][j], power);
+            }
+        }
+
+        if (power < 0) {
+            for (var i = 0; i < s[0]; i++) {
+                n[i] = 1.0 / n[i];
             }
         }
 

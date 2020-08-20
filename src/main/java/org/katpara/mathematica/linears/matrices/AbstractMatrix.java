@@ -194,7 +194,7 @@ public abstract class AbstractMatrix implements Matrix {
     @Override
     public final Matrix multiply(final double scalar) {
         if (scalar == 0)
-            return NullMatrix.getInstance(s[0]);
+            return NullMatrix.getInstance(s[0], s[1]);
         if (scalar == 1)
             return this;
         if (scalar == -1)
