@@ -4,7 +4,6 @@ import org.katpara.mathematica.exceptions.linear.NotRectangularMatrixException;
 import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.linears.matrices.AbstractMatrix;
 import org.katpara.mathematica.linears.matrices.Matrix;
-import org.katpara.mathematica.util.Rounding;
 
 public abstract class RectangularMatrix extends AbstractMatrix {
     private static final long serialVersionUID = 864206708158951432L;
@@ -83,18 +82,6 @@ public abstract class RectangularMatrix extends AbstractMatrix {
      */
     @Override
     public final double abs() {
-        throw new NotSquareMatrixException();
-    }
-
-    /**
-     * The absolute value of an element.
-     *
-     * @param decimals rounding to given decimal places
-     *
-     * @return the absolute value
-     */
-    @Override
-    public final double abs(final Rounding.Decimals decimals) {
         throw new NotSquareMatrixException();
     }
 }

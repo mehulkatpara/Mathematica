@@ -158,12 +158,30 @@ class AnySquareMatrixTest {
 
     @Test
     void getDeterminant() {
-        //TODO: To be implemented
+        SquareMatrix m2 = new AnySquareMatrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+
+        assertAll(
+                () -> assertEquals(-3D, m1.getDeterminant()),
+                () -> assertEquals(-0.0, m2.getDeterminant())
+        );
     }
 
     @Test
     void getRank() {
-        // TODO: TO BE Implemented
+        SquareMatrix m2 = new AnySquareMatrix(new double[][]{
+                {1, 2, 3},
+                {4, 5, 6},
+                {7, 8, 9}
+        });
+
+        assertAll(
+                () -> assertEquals(3, m1.getRank()),
+                () -> assertEquals(2, m2.getRank())
+        );
     }
 
     @Test

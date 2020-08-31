@@ -1,8 +1,6 @@
 package org.katpara.mathematica.linears.matrices.squares.triangulars;
 
-import org.katpara.mathematica.exceptions.NotInvertibleException;
 import org.katpara.mathematica.linears.matrices.squares.AnySquareMatrix;
-import org.katpara.mathematica.util.Rounding;
 
 public abstract class TriangularMatrix extends AnySquareMatrix {
     private static final long serialVersionUID = 952182322882023415L;
@@ -50,20 +48,17 @@ public abstract class TriangularMatrix extends AnySquareMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param decimals the decimal decimals accuracy
-     *
      * @return the determinant of the square matrix
      */
     @Override
-    public final double getDeterminant(final Rounding.Decimals decimals) {
+    public final double getDeterminant() {
         var det = d[0][0];
 
         for (int i = 1; i < d.length; i++)
             det *= d[i][i];
 
-        return Double.parseDouble(Rounding.round(det, decimals));
+        return det;
     }
-
 
     /**
      * A rank of a matrix is independent rows of a matrix. That shows that how many

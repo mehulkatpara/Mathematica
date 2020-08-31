@@ -69,12 +69,10 @@ public final class IdentityMatrix extends DiagonalSquareMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param decimals the decimal decimals accuracy
-     *
      * @return the determinant of the square matrix
      */
     @Override
-    public double getDeterminant(final Rounding.Decimals decimals) {
+    public double getDeterminant() {
         return 1;
     }
 

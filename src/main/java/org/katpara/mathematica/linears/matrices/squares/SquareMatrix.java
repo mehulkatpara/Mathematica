@@ -96,36 +96,13 @@ public abstract class SquareMatrix extends AbstractMatrix {
     }
 
     /**
-     * A determinant is a scalar value computed for a square matrix; that
-     * encodes many properties of the linear algebra described by the matrix.
-     * It is denoted as det(A), where A is a matrix or |A|.
-     *
-     * @return the determinant of the square matrix
-     */
-    public final double getDeterminant() {
-        return this.getDeterminant(Rounding.Decimals.FOUR);
-    }
-
-    /**
      * The absolute value of an element.
      *
      * @return the absolute value
      */
     @Override
     public final double abs() {
-        return this.getDeterminant(Rounding.Decimals.FOUR);
-    }
-
-    /**
-     * The absolute value of an element.
-     *
-     * @param decimals rounding to given decimal places
-     *
-     * @return the absolute value
-     */
-    @Override
-    public final double abs(final Rounding.Decimals decimals) {
-        return this.getDeterminant(decimals);
+        return this.getDeterminant();
     }
 
     /**
@@ -196,11 +173,9 @@ public abstract class SquareMatrix extends AbstractMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param decimals the decimal decimals accuracy
-     *
      * @return the determinant of the square matrix
      */
-    public abstract double getDeterminant(final Rounding.Decimals decimals);
+    public abstract double getDeterminant();
 
     /**
      * The method will check if the given matrix is a lower triangular matrix.

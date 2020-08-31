@@ -8,6 +8,7 @@ import org.katpara.mathematica.exceptions.linear.NotSquareMatrixException;
 import org.katpara.mathematica.exceptions.linear.RowOutOfBoundException;
 import org.katpara.mathematica.linears.matrices.constants.IdentityMatrix;
 import org.katpara.mathematica.linears.matrices.constants.NullMatrix;
+import org.katpara.mathematica.linears.matrices.util.Decomposable;
 import org.katpara.mathematica.util.Rounding;
 
 import java.util.Arrays;
@@ -32,6 +33,11 @@ public abstract class AbstractMatrix implements Matrix {
      * The dimension of the matrix
      */
     protected final int[] s;
+
+    /**
+     * The property holds a reference to a decomposer
+     */
+    protected Decomposable dc;
 
     /**
      * The general constructor to build a matrix in the system.

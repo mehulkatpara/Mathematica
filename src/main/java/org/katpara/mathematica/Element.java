@@ -96,15 +96,6 @@ public interface Element<T> {
     double abs();
 
     /**
-     * The absolute value of an element.
-     *
-     * @param decimals rounding to given decimal places
-     *
-     * @return the absolute value
-     */
-    double abs(final Rounding.Decimals decimals);
-
-    /**
      * The element should be able to print at given decimal places.
      *
      * @param decimals the decimal places

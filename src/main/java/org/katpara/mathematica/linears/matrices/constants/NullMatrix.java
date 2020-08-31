@@ -183,16 +183,4 @@ public final class NullMatrix extends AbstractMatrix {
     public double abs() {
         return 0;
     }
-
-    /**
-     * The absolute value of an element.
-     *
-     * @param decimals rounding to given decimal places
-     *
-     * @return the absolute value
-     */
-    @Override
-    public double abs(final Rounding.Decimals decimals) {
-        return 0;
-    }
 }

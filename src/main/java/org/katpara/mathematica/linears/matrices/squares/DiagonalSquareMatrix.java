@@ -106,17 +106,15 @@ public class DiagonalSquareMatrix extends AnySquareMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param decimals the decimal decimals accuracy
-     *
      * @return the determinant of the square matrix
      */
     @Override
-    public double getDeterminant(final Rounding.Decimals decimals) {
+    public double getDeterminant() {
         var det = d[0][0];
         for (var i = 1; i < s[0]; i++)
             det *= d[i][i];
 
-        return Double.parseDouble(Rounding.round(det, decimals));
+        return det;
     }
 
     /**

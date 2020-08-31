@@ -22,12 +22,26 @@ public final class UpperTriangularMatrix extends TriangularMatrix {
      * @param d the matrix elements.
      */
     public UpperTriangularMatrix(final double[][] d) {
+        this(d, true);
+    }
+
+    /**
+     * The constructor performs the sanity check based on the parameter value.
+     *
+     * @param d     the array data
+     * @param check whether to check the sanity
+     *
+     * @throws NotUpperTriangularMatrixException when the sanity check fails
+     */
+    public UpperTriangularMatrix(final double[][] d, final boolean check) {
         super(d);
 
-        for (var i = 0; i < s[0]; i++) {
-            for (var j = 0; j < i; j++) {
-                if (d[i][j] != 0)
-                    throw new NotUpperTriangularMatrixException();
+        if (check) {
+            for (var i = 0; i < s[0]; i++) {
+                for (var j = 0; j < i; j++) {
+                    if (d[i][j] != 0)
+                        throw new NotUpperTriangularMatrixException();
+                }
             }
         }
     }

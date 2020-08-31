@@ -17,17 +17,31 @@ public final class LowerTriangularMatrix extends TriangularMatrix {
     private static final long serialVersionUID = 7196575322083508L;
 
     /**
-     * The general constructor to build a matrix in the system.
+     * The public constructor to build a matrix in the system.
      *
      * @param d the matrix elements.
      */
     public LowerTriangularMatrix(final double[][] d) {
+        this(d, false);
+    }
+
+    /**
+     * The constructor performs the snity check based on the boolean parameter.
+     *
+     * @param d     the array data
+     * @param check whether to check for sanity or no
+     *
+     * @throws NotLowerTriangularMatrixException when the sanity check fails
+     */
+    public LowerTriangularMatrix(final double[][] d, final boolean check) {
         super(d);
 
-        for (var i = 0; i < s[0]; i++) {
-            for (var j = i + 1; j < s[1]; j++) {
-                if (d[i][j] != 0)
-                    throw new NotLowerTriangularMatrixException();
+        if (check) {
+            for (var i = 0; i < s[0]; i++) {
+                for (var j = i + 1; j < s[1]; j++) {
+                    if (d[i][j] != 0)
+                        throw new NotLowerTriangularMatrixException();
+                }
             }
         }
     }

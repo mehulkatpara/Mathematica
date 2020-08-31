@@ -34,4 +34,7 @@ public final class ExceptionMessages {
     public static final String ROW_LENGTH_NOT_CONSISTENT_MESSAGE = "Provided rows are not consistent in length.";
     public static final String ROW_OUT_OF_BOUND_MESSAGE = "Can not access the row, the row out of bound.";
     public static final String COLUMN_OUT_OF_BOUND_MESSAGE = "Can not access the column, the column out of bound.";
+
+    // Matrix operational messages
+    public static final String CHOLESKY_DECOMPOSITION_NOT_POSSIBLE_MESSAGE = "The cholesky decomposition is not possible";
 }

@@ -58,7 +58,7 @@ class DiagonalSquareMatrixTest {
 
     @Test
     void testGetDeterminant() {
-        assertEquals(224.11, m2.getDeterminant(Rounding.Decimals.TWO));
+        assertEquals(224.11, Double.parseDouble(Rounding.round(m2.getDeterminant(), Rounding.Decimals.TWO)));
     }
 
     @Test

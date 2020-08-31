@@ -2,7 +2,8 @@ package org.katpara.mathematica.linears.matrices.squares;
 
 import org.katpara.mathematica.linears.matrices.Matrix;
 import org.katpara.mathematica.linears.matrices.rectangulars.AnyRectangularMatrix;
-import org.katpara.mathematica.util.Rounding;
+import org.katpara.mathematica.linears.matrices.util.Decomposable;
+import org.katpara.mathematica.linears.matrices.util.LUDecomposition;
 
 /**
  * The class represents any N x N square matrix. This is the most general class.
@@ -32,8 +33,8 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isSymmetric() {
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d[0].length; j++) {
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = 0; j < s[1]; j++) {
                 if (d[i][j] != d[j][i]) {
                     return false;
                 }
@@ -50,8 +51,8 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isDiagonal() {
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d[0].length; j++) {
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = 0; j < s[1]; j++) {
                 if (i != j && d[i][j] != 0) {
                     return false;
                 }
@@ -68,11 +69,11 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isIdentity() {
-        for (int i = 0; i < d.length; i++) {
+        for (int i = 0; i < s[0]; i++) {
             if (d[i][i] != 1)
                 return false;
 
-            for (int j = 0; j < d[0].length; j++) {
+            for (int j = 0; j < s[1]; j++) {
                 if (i != j && d[i][j] != 0)
                     return false;
             }
@@ -88,8 +89,8 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isLowerTriangular() {
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d[0].length; j++) {
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = 0; j < s[1]; j++) {
                 if (j > i && d[i][j] != 0)
                     return false;
             }
@@ -105,8 +106,8 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public boolean isUpperTriangular() {
-        for (int i = 0; i < d.length; i++) {
-            for (int j = 0; j < d[0].length; j++) {
+        for (int i = 0; i < s[0]; i++) {
+            for (int j = 0; j < s[1]; j++) {
                 if (j < i && d[i][j] != 0)
                     return false;
             }
@@ -139,14 +140,21 @@ public class AnySquareMatrix extends SquareMatrix {
      * encodes many properties of the linear algebra described by the matrix.
      * It is denoted as det(A), where A is a matrix or |A|.
      *
-     * @param decimals the decimal decimals accuracy
-     *
      * @return the determinant of the square matrix
      */
     @Override
-    public double getDeterminant(final Rounding.Decimals decimals) {
+    public double getDeterminant() {
+        var det = 0.0;
+        if (d[0][0] != 0) {
+            double[][] u = new LUDecomposition().decompose(this)[1];
+            det = u[0][0];
+            for (int i = 1; i < s[0]; i++) {
+                det *= u[i][i];
+            }
+        }
+
         //TODO: Implement This
-        return 0;
+        return det;
     }
 
     /**
@@ -157,9 +165,19 @@ public class AnySquareMatrix extends SquareMatrix {
      */
     @Override
     public int getRank() {
-        //TODO: Implement This
-        return 0;
+        var rank = s[0];
+
+        if (d[0][0] != 0) {
+            double[][] u = new LUDecomposition().decompose(this)[1];
+            for (int i = 1; i < s[0]; i++) {
+                if(u[i][i] == 0)
+                    rank -= 1;
+            }
+        }
+
+        return rank;
     }
+
 
     /**
      * The method transposes the matrix.
